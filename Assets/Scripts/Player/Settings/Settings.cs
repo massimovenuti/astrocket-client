@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake( )
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GameObject go = GameObject.Find("CameraTarget");
+        if (go == null)
+            Debug.LogError("Couldn't find camera target");
+        else
+            this.transform.LookAt(go.transform);
     }
 }
