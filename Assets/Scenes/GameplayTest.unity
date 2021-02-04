@@ -522,6 +522,8 @@ GameObject:
   - component: {fileID: 970618771}
   - component: {fileID: 970618770}
   - component: {fileID: 970618772}
+  - component: {fileID: 970618774}
+  - component: {fileID: 970618773}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -538,7 +540,7 @@ Rigidbody:
   m_GameObject: {fileID: 970618769}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.5
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -567,13 +569,53 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970618769}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1b2b7d1e4d9f6246b251595e1892c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spaceShip: {fileID: 364791112}
   _mainCamera: {fileID: 1204395851}
+--- !u!143 &970618773
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970618769}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &970618774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970618769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35ab4a4fef924d7438367097b2fe6bb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spaceShip: {fileID: 364791112}
+  _mainCamera: {fileID: 1204395851}
+  _speed: 20
+  _amount: 20
+  _body: {fileID: 970618770}
+  _movement: {x: 0, y: 0, z: 0}
+  _rotation: {x: 0, y: 0, z: 0}
+  rotationSpeed: 10
+  _rotationX: 0
+  _rotationY: 0
 --- !u!1 &1204395849
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,4 +744,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spaceShip: {fileID: 970618769}
-  _smoothTime: 0.1
+  _smoothTime: 0
