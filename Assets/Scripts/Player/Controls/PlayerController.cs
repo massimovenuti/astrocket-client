@@ -6,13 +6,16 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject _spaceShip;
     public Camera _mainCamera;
+    
+    private Plane groundPlane;
 
     private float _speed = 10.0f;
+    public float rotationSpeed;
     
     // Start is called before the first frame update
     private void Start()
     {
-
+        groundPlane = new Plane(Vector3.up, Vector3.zero);
     }
 
     // Update is called once per frame
@@ -37,14 +40,25 @@ public class PlayerController : MonoBehaviour
     private void LookAt()
     {
         Ray cameraRay = _mainCamera.ScreenPointToRay(Input.mousePosition); 
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         float rayLength;
 
         if(groundPlane.Raycast(cameraRay, out rayLength))
         {
-            Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+            Vector3 pointToLook = cameraRay.GetPoint(rayLength) + new Vector3(0f, transform.position.y, 0f);
             Debug.DrawLine(cameraRay.origin, pointToLook, Color.red);
-            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+            //transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+            Quaternion lockOnLook = Quaternion.LookRotation(pointToLook - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lockOnLook, rotationSpeed * Time.deltaTime);
         }
+    }
+
+    private void LookAtArthur()
+    {
+        Vector3 positionOnScreen = _mainCamera.WorldToViewportPoint(transform.position);
+        Vector3 mouseOnScreen = _mainCamera.ScreenToViewportPoint(Input.mousePosition);
+        float angle = Mathf.Atan2(positionOnScreen.y - mouseOnScreen.y, positionOnScreen.x - mouseOnScreen.x) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.Euler(new Vector3(0f, -angle - 90f, 0f));
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
     }
 }
