@@ -5,10 +5,11 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     public GameObject bullet;
-    public Transform barrel;
+    public GameObject barrel;
+    public GameObject bulletSpawn;
 
-    public float shootForce;
-    public float shootRate;
+    public float shootForce = 2000;
+    public float shootRate = 0.1f;
 
     private float lastShootingTimeRef;
 
@@ -25,8 +26,9 @@ public class GunController : MonoBehaviour
     {
         if(Time.time > lastShootingTimeRef) 
         {
-            GameObject go = (GameObject)Instantiate(bullet, barrel.position, barrel.rotation);
-            go.GetComponent<Rigidbody>().AddForce(barrel.forward * shootForce);
+            GameObject go = (GameObject)Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
+            go.transform.parent = bulletSpawn.transform;
+            go.GetComponent<Rigidbody>().AddForce(barrel.transform.forward * shootForce);
             lastShootingTimeRef = Time.time + shootRate;
         }
     }

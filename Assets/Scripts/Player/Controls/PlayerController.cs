@@ -51,14 +51,4 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lockOnLook, rotationSpeed * Time.deltaTime);
         }
     }
-
-    private void LookAtArthur()
-    {
-        Vector3 positionOnScreen = _mainCamera.WorldToViewportPoint(transform.position);
-        Vector3 mouseOnScreen = _mainCamera.ScreenToViewportPoint(Input.mousePosition);
-        float angle = Mathf.Atan2(positionOnScreen.y - mouseOnScreen.y, positionOnScreen.x - mouseOnScreen.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(new Vector3(0f, -angle - 90f, 0f));
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
-    }
 }

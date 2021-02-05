@@ -6,13 +6,12 @@ public class PlayerControlersRigidBody : MonoBehaviour
 {
     public GameObject _spaceShip;
     public Camera _mainCamera;
+
     public float _speed = 20.0f;
-    public Rigidbody _body;
-    public Vector3 _movement;
-    private Plane groundPlane;
     public float rotationSpeed;
 
-
+    private Rigidbody _body;
+    private Plane groundPlane;
     
     // Start is called before the first frame update
     void Start()
@@ -21,9 +20,12 @@ public class PlayerControlersRigidBody : MonoBehaviour
         groundPlane = new Plane(Vector3.up, Vector3.zero);
     }
 
-    private void FixedUpdate(){
-    
-        _movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+    private void FixedUpdate()
+    {  
+        float xAxis = Input.GetAxis("Horizontal");
+        float zAxis = Input.GetAxis("Vertical");
+        
+        Vector3 _movement = new Vector3(xAxis, 0, zAxis);
        
         LookAt();
         MovePlayer(_movement);
@@ -35,8 +37,6 @@ public class PlayerControlersRigidBody : MonoBehaviour
     {
        _body.AddForce(direction*_speed);
     }
-
-
 
     // Manage the position where the spaceship is looking at
     // Works by drawing a raycast on the ground while the spaceship is looking at raycast hit position

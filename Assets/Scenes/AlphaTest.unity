@@ -121,6 +121,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &311093567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 311093568}
+  m_Layer: 0
+  m_Name: BulletStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &311093568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311093567}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.2333245, y: -2.891642, z: 4.0013914}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &456697927
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +366,7 @@ Transform:
   m_Children:
   - {fileID: 456697928}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &970618769 stripped
 GameObject:
@@ -344,21 +374,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8367419062794152698}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &970618772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 970618769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1b2b7d1e4d9f6246b251595e1892c1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spaceShip: {fileID: 970618769}
-  _mainCamera: {fileID: 1204395851}
-  rotationSpeed: 10
 --- !u!1 &1204395849
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +502,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spaceShip: {fileID: 970618769}
-  _smoothTime: 0.1
+  _smoothTime: 0
+--- !u!1 &2031209705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8367419063151064722, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8367419062794152698}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8367419062794152698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -495,6 +516,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 970618772, guid: 3955cbcb3f5ee3c4d882255cbd4f123a, type: 3}
+      propertyPath: _mainCamera
+      value: 
+      objectReference: {fileID: 1204395851}
     - target: {fileID: 8367419062941588841, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
         type: 3}
       propertyPath: m_RootOrder
@@ -555,11 +580,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8367419062941588846, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
+    - target: {fileID: 8367419063151064720, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
         type: 3}
-      propertyPath: _mainCamera
+      propertyPath: barrel
       value: 
-      objectReference: {fileID: 1204395851}
-    m_RemovedComponents:
-    - {fileID: 8367419062941588846, guid: 3955cbcb3f5ee3c4d882255cbd4f123a, type: 3}
+      objectReference: {fileID: 2031209705}
+    - target: {fileID: 8367419063151064720, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
+        type: 3}
+      propertyPath: bulletSpawn
+      value: 
+      objectReference: {fileID: 311093567}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3955cbcb3f5ee3c4d882255cbd4f123a, type: 3}
