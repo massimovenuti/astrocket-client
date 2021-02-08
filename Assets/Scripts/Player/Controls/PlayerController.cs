@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Luminosity.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        float forwardInput = Input.GetAxis("Vertical");
-        float sideInput = Input.GetAxis("Horizontal");
+        float forwardInput = InputManager.GetAxis("Vertical");
+        float sideInput = InputManager.GetAxis("Horizontal");
 
         MovePlayer(forwardInput, sideInput);
         LookAt();
