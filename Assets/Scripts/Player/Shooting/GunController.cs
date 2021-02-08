@@ -7,16 +7,21 @@ using Luminosity.IO;
 public class GunController : MonoBehaviour
 {
     public GameObject bullet;
-    public GameObject barrel;
-    public GameObject bulletSpawn;
 
-
-    public float shootForce = 2000;
     public float shootRate = 0.1f;
+    public float shootForce = 2000;
 
+    private GameObject _barrel;
+    private GameObject _bulletStorage;
+    private float lastShootingTimeRef;
     [SerializeField]
     private string InputManagerShootAxis = $"Shoot";
-    private float lastShootingTimeRef;
+
+    private void Start( )
+    {
+        _barrel = gameObject.FindObjectByName("Barrel");
+        _bulletStorage = GameObject.Find("BulletStorage");
+    }
 
     // Update is called once per frame
     private void Update()
@@ -29,9 +34,9 @@ public class GunController : MonoBehaviour
     {
         if(Time.time > lastShootingTimeRef) 
         {
-            GameObject go = Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
-            go.transform.parent = bulletSpawn.transform;
-            go.GetComponent<Rigidbody>().AddForce(barrel.transform.forward * shootForce);
+            GameObject go = Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
+            go.transform.parent = _bulletStorage.transform;
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
             lastShootingTimeRef = Time.time + shootRate;
         }
     }
