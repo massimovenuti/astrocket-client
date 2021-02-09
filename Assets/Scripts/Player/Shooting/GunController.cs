@@ -8,8 +8,8 @@ public class GunController : MonoBehaviour
 {
     public GameObject bullet;
 
-    public float shootRate = 0.1f;
-    public float shootForce = 2000;
+    public float shootRate = 0.2f;
+    public float shootForce = 3000;
 
     private GameObject _barrel;
     private GameObject _bulletStorage;

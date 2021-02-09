@@ -4,8 +4,8 @@ using Luminosity.IO;
 public class PlayerControlersRigidBody : MonoBehaviour
 {
 
-    public float speed = 20.0f;
-    public float rotationSpeed = 12f;
+    public float speed = 12f;
+    public float rotationSpeed = 10f;
 
     public GameObject _spaceShip;
     public Camera _mainCamera;
