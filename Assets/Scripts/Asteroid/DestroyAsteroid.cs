@@ -5,48 +5,46 @@ using UnityEngine;
 public class DestroyAsteroid : MonoBehaviour
 {
     
-    public GameObject _Asteroid;
+    public GameObject _AsteroidTEMP;
     public Transform _SpawningRemains;
-    //public GameObject _InstanciateBullet;
+
+    private Rigidbody _rb;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
     }
+
 
     void OnTriggerEnter(Collider intruder)
     {
-        //pseudo-code
-        /*
-        vie_asteroid--;
-        if(vie_asteroid == 0)
-        {
-            Destruction();
-            DropPowerUP();
-        }
-        */
-        
-        //Pour le moment
         if(intruder.tag == "Bullet")
         {
-            Destruction();
-            DropPowerUP();
-
-            Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
-
-            //Que pour les gros astéroides :
-            //Remains();
+            DestructionAsteroid();
         }
 
+    }
+
+
+    void DestructionAsteroid()
+    {
+        Destroy(_AsteroidTEMP);
+        DropRemains();
+    }
+
+
+    void DropRemains()
+    {
+        Instantiate(_AsteroidTEMP, _SpawningRemains.position + new Vector3(0, 0, 0), _SpawningRemains.rotation);
 
     }
+
 
     //amené a etre modifier selon les choix sur les power up
     void DropPowerUP()
@@ -70,15 +68,7 @@ public class DestroyAsteroid : MonoBehaviour
         }
     }
 
-    void Remains()
-    {
 
-        GameObject fragment = (GameObject)Instantiate(_Asteroid, _Asteroid.transform.position, _Asteroid.transform.rotation);
-        fragment.name = "AsteroidTEMP";
-        //donner des directions aux débris
-        //10 est une valeur am odifier
-        
-    }
 
     void Destruction()
     {

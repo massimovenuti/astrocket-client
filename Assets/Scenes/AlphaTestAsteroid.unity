@@ -654,6 +654,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8367419062941588843, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8367419063151064720, guid: 3955cbcb3f5ee3c4d882255cbd4f123a,
         type: 3}
       propertyPath: barrel
