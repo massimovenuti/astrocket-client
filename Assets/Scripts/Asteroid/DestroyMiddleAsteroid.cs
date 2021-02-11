@@ -31,44 +31,30 @@ public class DestroyMiddleAsteroid : MonoBehaviour
         {
             DestructionMiddleAsteroid();
         }
+
+        if(intruder.tag == "Player")
+        {
+            HitByAsteroid();
+        }
+
     }
 
 
     void DestructionMiddleAsteroid()
     {
         Destroy(_MiddleAsteroid);
-        DropRemains(2);
-        DropPowerUP();
+        DropRemains();
     }
 
-    void DropRemains(int remains)
+    void DropRemains()
     {
-        int i;
-        for(i=0; i<remains; i++)
-        {
-            Instantiate(_LittleAsteroid, _SpawningLittleRemains.position + new Vector3(i*2, 0, i*2), _SpawningLittleRemains.rotation);
-        }
-
+        Instantiate(_LittleAsteroid, _SpawningLittleRemains.position /*+ new Vector3(0, 0, 0)*/, _SpawningLittleRemains.rotation);
     }
 
-    void DropPowerUP()
+    void HitByAsteroid()
     {
-       int dropRate = Random.Range(1,100);
-
-        if (dropRate <= 20)
-        {
-            if (dropRate <= 10)
-            {
-                print("Power-up : Regen vie");
-            }
-            if (dropRate > 10)
-            {
-                print("Power-up : Shield");
-            }
-        }
-        else
-        {
-            print("Pas de Power-up");
-        }
+        Destroy(_MiddleAsteroid);
+        print("Vaiseau -10 de vie");
     }
+
 }

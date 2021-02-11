@@ -32,43 +32,28 @@ public class DestroyBigAsteroid : MonoBehaviour
         {
             DestructionBigAsteroid();
         }
+
+        if(intruder.tag == "Player")
+        {
+            HitByAsteroid();
+        }
     }
 
     void DestructionBigAsteroid()
     {
         Destroy(_BigAsteroid);
-        DropRemains(2);
-        DropPowerUP();
+        DropRemains();
     }
 
-    void DropRemains(int remains)
+    void DropRemains()
     {
-        int i;
-        for(i=0; i<remains; i++)
-        {
-            Instantiate(_MiddleAsteroid, _SpawningRemains.position + new Vector3(i*3, 0, i*3), _SpawningRemains.rotation);
-        }
+        Instantiate(_MiddleAsteroid, _SpawningRemains.position /*+ new Vector3(0, 0, 0)*/, _SpawningRemains.rotation);
     }
 
-
-    void DropPowerUP()
+    void HitByAsteroid()
     {
-       int dropRate = Random.Range(1,100);
-
-        if (dropRate <= 20)
-        {
-            if (dropRate <= 10)
-            {
-                print("Power-up : Regen vie");
-            }
-            if (dropRate > 10)
-            {
-                print("Power-up : Shield");
-            }
-        }
-        else
-        {
-            print("Pas de Power-up");
-        }
+        Destroy(_BigAsteroid);
+        print("Vaiseau -10 de vie");
     }
+
 }
