@@ -138,11 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Asteroid: {fileID: 8244382623504400570}
-  _Size: 3
-  _SpawningRemains: {fileID: 0}
-  _VectorX: 0
-  _VectorZ: 0
+  _AsteroidTEMP: {fileID: 8244382623504400570}
+  _SpawningRemains: {fileID: 5776893781401710156}
 --- !u!54 &399602331276035094
 Rigidbody:
   m_ObjectHideFlags: 0

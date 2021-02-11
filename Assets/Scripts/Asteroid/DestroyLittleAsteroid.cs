@@ -26,6 +26,11 @@ public class DestroyLittleAsteroid : MonoBehaviour
         {
             DestructionLittleAsteroid();
         }
+
+        if(intruder.tag == "Player")
+        {
+            HitByAsteroid();
+        }
     }
 
 
@@ -34,6 +39,14 @@ public class DestroyLittleAsteroid : MonoBehaviour
         Destroy(_LittleAsteroid);
         DropPowerUP();
     }
+
+    void HitByAsteroid()
+    {
+        Destroy(_LittleAsteroid);
+        //associer avec le système de point de vie
+        print("Vaiseau -10 de vie");
+    }
+
 
     void DropPowerUP()
     {
