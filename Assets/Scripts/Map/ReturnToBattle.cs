@@ -82,23 +82,41 @@ public class ReturnToBattle : MonoBehaviour
         indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
         
         Vector2 screenPos = Vector2.zero;
-
-        float a = Screen.width;
-        float b = Screen.height;
+        float a = Screen.width - Screen.width/10f;
+        float b = Screen.height - Screen.height/8f;
         
         rot += (rot > 0f) ? 0f :  360f;
-        rotRadian += (rot > 0f) ? 0f : 2 * Mathf.PI; 
+        rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI; 
 
-        if(rot > 45f && rot <= 135f) {
-            screenPos = new Vector2(b * Mathf.Cos(rotRadian)/2 * Mathf.Sin(rotRadian), b/2);
-        } else if(rot > 135f && rot <= 225f) {
-            screenPos = new Vector2(-a/2, a * Mathf.Sin(rotRadian)/2 * Mathf.Cos(rotRadian));
-        } else if(rot > 225f && rot <= 315f) {
-            screenPos = new Vector2(-b * -Mathf.Cos(rotRadian)/2 * Mathf.Sin(rotRadian), b/2);
-        } else {
-            screenPos = new Vector2(a/2, a * Mathf.Sin(rotRadian)/2 * Mathf.Cos(rotRadian));
-        }
+        float rectAtan = Mathf.Atan2(b,a);
+        float tanTheta = Mathf.Tan(rotRadian);
+        int region;
                 
+        if ((rotRadian > -rectAtan) && (rotRadian <= rectAtan))
+            region = 1;
+        else if ((rotRadian > rectAtan) && (rotRadian <= (Mathf.PI - rectAtan)))
+            region = 2;
+        else if ((rotRadian > (Mathf.PI - rectAtan)) || (rotRadian <= -(Mathf.PI - rectAtan)))
+            region = 3;
+        else
+            region = 4;
+
+        int xFactor = 1;
+        int yFactor = 1;
+
+        if(region == 1 || region == 2) {
+            xFactor = -1;
+            yFactor = -1;  
+        }
+
+        if ((region == 1) || (region == 3)) {
+            screenPos.x += xFactor * (a / 2);
+            screenPos.y += yFactor * (a / 2) * tanTheta;
+        } else {
+            screenPos.x += xFactor * (b / (2 * tanTheta));
+            screenPos.y += yFactor * (b/  2);
+        }
+
         indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
     }
 }
