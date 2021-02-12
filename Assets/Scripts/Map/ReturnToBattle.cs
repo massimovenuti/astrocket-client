@@ -82,9 +82,11 @@ public class ReturnToBattle : MonoBehaviour
         indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
         
         Vector2 screenPos = Vector2.zero;
-        float a = Screen.width - Screen.width/10f;
-        float b = Screen.height - Screen.height/8f;
-        
+        float a = UI.GetComponent<RectTransform>().rect.width;
+        float b = UI.GetComponent<RectTransform>().rect.height;
+        a = a - a/8;
+        b = b - b/8;
+
         rot += (rot > 0f) ? 0f :  360f;
         rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI; 
 
