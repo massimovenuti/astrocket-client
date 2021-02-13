@@ -11,6 +11,8 @@ public class DestroyMiddleAsteroid : MonoBehaviour
     
     public Transform _SpawningLittleRemains;
 
+    public GameObject _SpawningZone;
+
     
     // Start is called before the first frame update
     void Start()
@@ -43,12 +45,29 @@ public class DestroyMiddleAsteroid : MonoBehaviour
     void DestructionMiddleAsteroid()
     {
         Destroy(_MiddleAsteroid);
-        DropRemains();
+        EvaluatePosition();
     }
 
-    void DropRemains()
+
+    void EvaluatePosition()
     {
-        Instantiate(_LittleAsteroid, _SpawningLittleRemains.position /*+ new Vector3(0, 0, 0)*/, _SpawningLittleRemains.rotation);
+        float xmin = _SpawningZone.GetComponent<SphereCollider>().bounds.min.x;
+        float xmax = _SpawningZone.GetComponent<SphereCollider>().bounds.max.x;
+
+        float zmin = _SpawningZone.GetComponent<SphereCollider>().bounds.min.z;
+        float zmax = _SpawningZone.GetComponent<SphereCollider>().bounds.max.z;
+
+        float x = Random.Range(xmin, xmax);
+        float z = Random.Range(zmin, zmax);
+
+        DropRemains(new Vector3(x, 2.9f, z));
+
+    }
+
+    void DropRemains(Vector3 SpawnPoint) // + ,Vector3 vec
+    {
+        Instantiate(_LittleAsteroid, SpawnPoint, _SpawningLittleRemains.rotation);
+        Instantiate(_LittleAsteroid, SpawnPoint, _SpawningLittleRemains.rotation);
     }
 
     void HitByAsteroid()
