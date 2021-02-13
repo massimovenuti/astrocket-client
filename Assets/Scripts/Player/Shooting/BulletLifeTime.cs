@@ -16,6 +16,7 @@ public class BulletLifeTime : MonoBehaviour
         if(intruder.tag == "Asteroid")
         {
             DestroyBullet();
+            intruder.SendMessage("ShootingVector", gameObject.transform.forward);
         }
     }
 
@@ -23,4 +24,5 @@ public class BulletLifeTime : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 }
