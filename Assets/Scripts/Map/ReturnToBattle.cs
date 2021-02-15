@@ -1,99 +1,107 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ReturnToBattle : MonoBehaviour
 {
-    public GameObject player;
+    public string RTBManagerName = "ReturnToBattleManager";
 
-    public static ReturnToBattle instance;
-    public GameObject UI;
-    
-    private Image background;
-    private Image indicator;
-    private TextMeshProUGUI timerText;
 
-    private Color initialAlpha;
-    private Color tmpAlpha;
-    private float AlphaFactor = 15f;
+    private GameObject _UI;
+    private GameObject _player;
 
-    private float initialTimer = 10f;
-    private float timer;
-    private bool trigger = false;
+    private Image _indicator;
+    private Image _background;
+    private TextMeshProUGUI _timerText;
 
-    private void Awake()
+    private Color _tmpAlpha;
+    private Color _initialAlpha;
+
+    private float _timer;
+    private readonly float _alphaFactor = 15f;
+    private readonly float _initialTimer = 10f;
+
+    private bool _trigger = false;
+
+    private void Awake( )
     {
-        instance = this;
-        timerText = GameObject.Find("TimerText").GetComponent<TextMeshProUGUI>();
-        background = GameObject.Find("Background").GetComponent<Image>();
-        indicator = GameObject.Find("CenterIndicator").GetComponent<Image>();
+        _player = GameObject.FindGameObjectsWithTag("Player").First();
+
+        _UI = GameObject.Find(RTBManagerName);
+        Debug.Assert(_UI != null);
+        // We can use public strings here if necessary (I find it overkill though)
+        _background = _UI.FindObjectByName("Background").GetComponent<Image>();
+        _indicator = _UI.FindObjectByName("CenterIndicator").GetComponent<Image>();
+        _timerText = _UI.FindObjectByName("TimerText").GetComponent<TextMeshProUGUI>();
     }
 
-    private void Start()
+    private void Start( )
     {
-        timer = initialTimer;
-        initialAlpha = background.color;
-        tmpAlpha = initialAlpha;
+        _timer = _initialTimer;
+        _initialAlpha = _background.color;
+        _tmpAlpha = _initialAlpha;
     }
 
-    private void Update()
+    private void Update( )
     {
-        if(trigger) {
-            timerText.text = timer.ToString("F1");
+        if (_trigger)
+        {
+            _timerText.text = _timer.ToString("F1");
 
-            if(timer <= 0) {
+            if (_timer <= 0)
+            {
                 Debug.Log("Dead");
-                trigger = false;
-
-            } else {
-                timer -= Time.deltaTime;
-                tmpAlpha.a = initialAlpha.a + (initialTimer - timer)/AlphaFactor;
-                background.color = tmpAlpha;
+                _trigger = false;
+            }
+            else
+            {
+                _timer -= Time.deltaTime;
+                _tmpAlpha.a = _initialAlpha.a + (_initialTimer - _timer) / _alphaFactor;
+                _background.color = _tmpAlpha;
             }
 
-        } else {
-
-            if(timer <= 10f)
-                timer += Time.deltaTime;
+            CalcIndicator();
         }
-
-        CalcIndicator();
+        else
+        {
+            if (_timer <= 10f)
+                _timer += Time.deltaTime;
+        }
     }
 
-    public void EnterArea()
+    public void EnterArea( )
     {
-        trigger = false;
-        UI.SetActive(trigger);
-        background.color = initialAlpha;
+        _trigger = false;
+        _UI.SetActive(_trigger);
+        _background.color = _initialAlpha;
     }
 
-    public void ExitArea()
+    public void ExitArea( )
     {
-        trigger = true;
-        UI.SetActive(trigger);
+        _trigger = true;
+        _UI.SetActive(_trigger);
     }
 
-    private void CalcIndicator()
+    private void CalcIndicator( )
     {
-        float rotRadian = Mathf.Atan2(player.transform.position.z, player.transform.position.x);
+        float rotRadian = Mathf.Atan2(_player.transform.position.z, _player.transform.position.x);
         float rot = Mathf.Rad2Deg * rotRadian;
-        indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
-        
+        _indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
+
         Vector2 screenPos = Vector2.zero;
-        float a = UI.GetComponent<RectTransform>().rect.width;
-        float b = UI.GetComponent<RectTransform>().rect.height;
-        a = a - a/8;
-        b = b - b/8;
+        float a = _UI.GetComponent<RectTransform>().rect.width;
+        float b = _UI.GetComponent<RectTransform>().rect.height;
+        a -= a / 8;
+        b -= b / 8;
 
-        rot += (rot > 0f) ? 0f :  360f;
-        rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI; 
+        rot += (rot > 0f) ? 0f : 360f;
+        rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI;
 
-        float rectAtan = Mathf.Atan2(b,a);
+        float rectAtan = Mathf.Atan2(b, a);
         float tanTheta = Mathf.Tan(rotRadian);
         int region;
-                
+
         if ((rotRadian > -rectAtan) && (rotRadian <= rectAtan))
             region = 1;
         else if ((rotRadian > rectAtan) && (rotRadian <= (Mathf.PI - rectAtan)))
@@ -106,19 +114,23 @@ public class ReturnToBattle : MonoBehaviour
         int xFactor = 1;
         int yFactor = 1;
 
-        if(region == 1 || region == 2) {
+        if (region == 1 || region == 2)
+        {
             xFactor = -1;
-            yFactor = -1;  
+            yFactor = -1;
         }
 
-        if ((region == 1) || (region == 3)) {
+        if ((region == 1) || (region == 3))
+        {
             screenPos.x += xFactor * (a / 2);
             screenPos.y += yFactor * (a / 2) * tanTheta;
-        } else {
+        }
+        else
+        {
             screenPos.x += xFactor * (b / (2 * tanTheta));
-            screenPos.y += yFactor * (b/  2);
+            screenPos.y += yFactor * (b / 2);
         }
 
-        indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
+        _indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
     }
 }

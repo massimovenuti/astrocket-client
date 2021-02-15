@@ -1,35 +1,60 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
     public GameObject bullet;
-    public GameObject barrel;
-    public GameObject bulletSpawn;
+    public float shootRate = 0.2f;
+    public float shootForce = 3000f;
+    public string ShootingFrom = "Barrel";
+    public string BulletStorageTagName = "BulletStorage";
 
-    public float shootForce = 2000;
-    public float shootRate = 0.1f;
+    private InputManager _inp;
 
-    private float lastShootingTimeRef;
+    private GameObject _barrel;
+    private GameObject _bulletSpawn;
 
-    // Update is called once per frame
-    private void Update()
+    private float _lastShootingTimeRef;
+
+    private void Start( )
     {
-        if(Input.GetMouseButtonDown(0)) 
+        _barrel = transform.gameObject.FindObjectByName(ShootingFrom);
+        if (_barrel == null)
+            Debug.LogError($"GunController : Impossible to find player's barrel");
+
+        _inp = FindObjectOfType<InputManager>();
+        if (_inp == null)
+            Debug.LogError($"No InputManager object was found");
+
+        GameObject[] l = GameObject.FindGameObjectsWithTag(BulletStorageTagName);
+        if (l.Length == 0)
         {
-            Shoot();
+            Debug.LogError($"There were no GameObjets with tag {BulletStorageTagName} assigned self");
+            _bulletSpawn = gameObject;
+        }
+        else if (l.Length >= 1)
+        {
+            _bulletSpawn = l.First();
+            if (l.Length > 1)
+                Debug.LogWarning($"{BulletStorageTagName} had more than one element assigned ({l.Length})");
         }
     }
 
-    private void Shoot()
+    private void Update( )
     {
-        if(Time.time > lastShootingTimeRef) 
+        if (_inp.IsShooting())
+            Shoot();
+    }
+
+    private void Shoot( )
+    {
+        if (Time.time > _lastShootingTimeRef)
         {
-            GameObject go = (GameObject)Instantiate(bullet, barrel.transform.position, barrel.transform.rotation);
-            go.transform.parent = bulletSpawn.transform;
-            go.GetComponent<Rigidbody>().AddForce(barrel.transform.forward * shootForce);
-            lastShootingTimeRef = Time.time + shootRate;
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
+            go.transform.parent = _bulletSpawn.transform;
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
+
+            _lastShootingTimeRef = Time.time + shootRate;
         }
     }
 }

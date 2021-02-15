@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Linq;
 
 public class OnMapExit : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider intruder) 
+    private ReturnToBattle _rtb;
+
+    private void Awake( )
     {
-        if(intruder.tag == "Player")
-            ReturnToBattle.instance.EnterArea();
+        _rtb = GameObject.FindGameObjectsWithTag("MainCamera")
+            .First().transform.parent.GetComponent<ReturnToBattle>();
+    }
+    private void OnTriggerEnter(Collider intruder)
+    {
+        if (intruder.CompareTag("Player"))
+            _rtb.EnterArea();
     }
 
-    private void OnTriggerExit(Collider intruder) 
-    {   
-        if(intruder.tag == "Player")
-            ReturnToBattle.instance.ExitArea();
+    private void OnTriggerExit(Collider intruder)
+    {
+        if (intruder.CompareTag("Player"))
+            _rtb.ExitArea();
     }
 }
