@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 8367419062941588840}
   - component: {fileID: 970618773}
   - component: {fileID: 7853057173738892666}
+  - component: {fileID: 7803545210159620016}
   m_Layer: 0
   m_Name: RealPlayer
   m_TagString: Player
@@ -155,7 +156,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a15d71e67b63d4a9c2cd1aecaedc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fowardSpeed: 5
+  _forwardSpeed: 5
+  _rotationSpeed: 10
+--- !u!114 &7803545210159620016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8367419062941588843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d6ee1ce8983b7419c93483f5762abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
+  shootRate: 0.2
+  shootForce: 3000
+  ShootingFrom: Barrel
+  BulletStorageTagName: BulletStorage
 --- !u!1 &8367419063151064722
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +184,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8367419063151064723}
-  - component: {fileID: 8367419063151064720}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -187,23 +205,6 @@ Transform:
   m_Father: {fileID: 8367419063355267885}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8367419063151064720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8367419063151064722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2d6ee1ce8983b7419c93483f5762abe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
-  barrel: {fileID: 8367419063151064722}
-  bulletSpawn: {fileID: 0}
-  shootForce: 3000
-  shootRate: 0.2
 --- !u!1 &8367419063355267884
 GameObject:
   m_ObjectHideFlags: 0

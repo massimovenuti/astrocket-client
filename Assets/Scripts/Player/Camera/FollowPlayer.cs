@@ -1,23 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    public GameObject _spaceShip;
-    public float _smoothTime = 0.1f;
 
+    private GameObject spaceShip;
+    [SerializeField]
+    private float _smoothTime = 0.1f;
     private Vector3 _velocity = Vector3.zero;
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Start( )
     {
-        
+        // TODO : Add error checking here
+        spaceShip = GameObject.FindGameObjectsWithTag("Player").First(); 
     }
 
-    // Update is called once per frame
     private void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, _spaceShip.transform.position, ref _velocity, _smoothTime);
+        // TODO : if nothing is added make the function a lambda (=>)
+        transform.position = Vector3.SmoothDamp(transform.position, spaceShip.transform.position, ref _velocity, _smoothTime);
     }
 }
