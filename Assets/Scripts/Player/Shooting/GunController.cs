@@ -50,7 +50,9 @@ public class GunController : MonoBehaviour
     {
         if (Time.time > _lastShootingTimeRef)
         {
-            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
+            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, rot);
+
             go.transform.parent = _bulletSpawn.transform;
             go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
 
