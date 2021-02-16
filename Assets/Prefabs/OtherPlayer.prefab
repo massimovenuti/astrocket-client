@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5938130314890117251}
   - component: {fileID: 1677270158669619719}
   - component: {fileID: 1077499342034048948}
-  m_Layer: 0
-  m_Name: SpawnPoint
-  m_TagString: Untagged
+  m_Layer: 8
+  m_Name: OtherPlayer
+  m_TagString: OtherPlayers
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
