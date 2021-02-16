@@ -1,0 +1,20 @@
+stages: 
+  - build
+  - deploy
+
+unity-build-windows: 
+  script: "echo 'Building for Windows...'"
+  stage: build
+  tags: 
+    - unity
+unity-build-linux: 
+  script: "echo 'Building for Linux...'"
+  stage: build
+  tags: 
+    - unity
+
+unity-build-android: 
+  script: "echo 'Building for Android...'"
+  stage: build
+  tags: 
+    - unity
