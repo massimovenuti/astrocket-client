@@ -1,9 +1,12 @@
+variables:
+  PSPath: "$(System.DefaultWorkingDirectory)/Test.ps1"
 stages: 
   - build
   - deploy
 
 unity-build-windows: 
-  script: "echo 'Building for Windows...'"
+  script: "echo 'Building for Windows...' 
+  | ${PSPath} ${UNITY_PASS} ${UNITY_USER} ${UNITY_LICENCE}"
   stage: build
   tags: 
     - unity
