@@ -299,6 +299,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367419062941588843, guid: 66156b4aaab429444bc7d384c61a6781,
         type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367419062941588843, guid: 66156b4aaab429444bc7d384c61a6781,
+        type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -614,6 +619,9 @@ MonoBehaviour:
   RespawnPointName: SpawnPoint
   respawnPrefab: {fileID: 9159548931375944267, guid: 11badff6d6927b44784116c63a590503,
     type: 3}
+  checkLayers:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1125441961
 GameObject:
   m_ObjectHideFlags: 0
