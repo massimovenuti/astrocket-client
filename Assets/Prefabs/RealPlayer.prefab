@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 970618773}
   - component: {fileID: 7853057173738892666}
   - component: {fileID: 7803545210159620016}
+  - component: {fileID: 4771608026820527732}
   m_Layer: 0
   m_Name: RealPlayer
   m_TagString: Player
@@ -175,6 +176,18 @@ MonoBehaviour:
   shootForce: 3000
   ShootingFrom: Barrel
   BulletStorageTagName: BulletStorage
+--- !u!114 &4771608026820527732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8367419062941588843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aa5718ca784f464f8ce04d2f4c0a874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8367419063151064722
 GameObject:
   m_ObjectHideFlags: 0
