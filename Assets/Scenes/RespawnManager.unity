@@ -615,13 +615,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e721bd6c949d75a4ba06de738e87a095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnStorageTagName: SpawnStorage
+  RespawnPointStorageTagName: RespawnPointStorage
   RespawnPointName: SpawnPoint
-  respawnPrefab: {fileID: 9159548931375944267, guid: 11badff6d6927b44784116c63a590503,
-    type: 3}
   checkLayers:
     serializedVersion: 2
     m_Bits: 256
+  checkRadius: 0
+  yAxis: 1
+  _enemyMockPrefab: {fileID: 9159548931375944267, guid: 11badff6d6927b44784116c63a590503,
+    type: 3}
 --- !u!1 &1125441961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,8 +1227,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2098385485}
   m_Layer: 0
-  m_Name: SpawnStorage
-  m_TagString: SpawnStorage
+  m_Name: RespawnPointStorage
+  m_TagString: RespawnPointStorage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
