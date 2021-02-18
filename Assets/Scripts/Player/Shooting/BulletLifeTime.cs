@@ -11,7 +11,8 @@ public class BulletLifeTime : MonoBehaviour
     }
 
 
-
+    //A delete
+    /*
     void OnTriggerEnter(Collider intruder)
     {
         //A changer le nom avec le nom de l'astéroide instanciée
@@ -21,6 +22,7 @@ public class BulletLifeTime : MonoBehaviour
             intruder.SendMessage("ShootingVector", gameObject.transform.forward);
         }
     }
+    */
 
     public void DestroyBullet()
     {

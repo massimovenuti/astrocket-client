@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 8244382623504400569}
   - component: {fileID: 8244382623504400568}
   - component: {fileID: 8244382623504400571}
-  - component: {fileID: 8244382623504400567}
   - component: {fileID: 8244382623504400564}
   - component: {fileID: 399602331276035094}
   m_Layer: 0
@@ -61,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 8244382623504400570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.95, y: 2.9, z: 15.89}
-  m_LocalScale: {x: 9.263047, y: 9.263047, z: 9.263047}
+  m_LocalScale: {x: 9, y: 9, z: 9}
   m_Children:
   - {fileID: 5776893781401710156}
   m_Father: {fileID: 0}
@@ -127,19 +126,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &8244382623504400567
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8244382623504400570}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8244382623504400564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,8 +138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _AsteroidTEMP: {fileID: 8244382623504400570}
+  _Asteroid: {fileID: 8244382623504400570}
+  _Size: 3
   _SpawningRemains: {fileID: 5776893781401710156}
+  _SpawningZone: {fileID: 0}
+  _VectorX: 0
+  _VectorZ: 0
 --- !u!54 &399602331276035094
 Rigidbody:
   m_ObjectHideFlags: 0
