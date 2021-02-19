@@ -85,7 +85,6 @@ public class DestroyAsteroid : MonoBehaviour
         float Angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
         float Angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-
         GameObject remain1 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
         GameObject remain2 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
 
