@@ -141,9 +141,10 @@ MonoBehaviour:
   _Asteroid: {fileID: 8244382623504400570}
   _Size: 3
   _SpawningRemains: {fileID: 5776893781401710156}
-  _SpawningZone: {fileID: 0}
+  _SpawningRemains2: {fileID: 0}
   _VectorX: 0
   _VectorZ: 0
+  index: 0
 --- !u!54 &399602331276035094
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8244382623504400570}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
