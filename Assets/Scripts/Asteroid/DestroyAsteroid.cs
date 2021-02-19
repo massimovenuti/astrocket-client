@@ -7,70 +7,56 @@ public class DestroyAsteroid : MonoBehaviour
     
     public GameObject _Asteroid;
 
-    //La taille sera attribué au spawn de l'astéroide
-    public int _Size;
-
     private Rigidbody _rb;
 
     public Transform _SpawningRemains;
 
-    //faire une var pour la vitesse
+    //La taille sera attribué au spawn de l'astéroide (entre 3 et 1)
+    public int _Size;
 
     //TEMP
-    public float _VectorX;
-    public float _VectorZ;
-
+    float _VectorX;
+    float _VectorZ;
     Vector3 _direction;
+    int _AsteroidVelocity = 3;
 
-    public int index;
 
-    // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        
-        //get le _SpawningRemains
+        _rb.mass = 15;
+        _SpawningRemains = _Asteroid.transform.Find("Remains");
 
         //J'initialise une direction arbitraire à l'asteroide
         _VectorX = Random.Range(-1f, 1f);
         _VectorZ = Random.Range(-1f, 1f);
+        _direction = new Vector3(_VectorX, 0, _VectorZ);
+        _rb.velocity = _direction.normalized * _AsteroidVelocity;
     }
 
-    void FixedUpdate()
-    {
-        //_direction = new Vector3(_VectorX, 0, _VectorZ);
-        _direction = new Vector3(-1, 0, 1);
-        _rb.AddForce(_direction*50);
-    }
-
-
+    /// <summary>
+    /// Se déclenche lorsque l'astéroide entre en collision avec un élément
+    /// </summary>
     private void OnCollisionEnter(Collision collision)
-    {
-
-        
+    {     
         if (collision.gameObject.tag == "Bullet")
         {
-
             Destroy(collision.gameObject);
-
-            DestructionAsteroid(_direction);
-
-        }
-        
+            DestructionAsteroid();
+        }       
 
         if (collision.gameObject.tag == "Player")
         {
-            //désoriente les axes du vaisseaux légèrement
             HitByAsteroid();
         }
-
     }
 
-
-    void DestructionAsteroid(Vector3 impactPoint)
+    /// <summary>
+    /// Fractionne l'astéroïde ou le détruit
+    /// </summary>
+    void DestructionAsteroid()
     {
         Vector3 vector = _Asteroid.GetComponent<Rigidbody>().velocity;
-
         Vector3 origin = _Asteroid.transform.localPosition;
 
         Destroy(_Asteroid);
@@ -85,49 +71,59 @@ public class DestroyAsteroid : MonoBehaviour
         {
             DropPowerUP();
         }
-
-        
     }
 
+    /// <summary>
+    /// Créé deux débris d'astéroïdes et leur ajoute un comportement
+    /// </summary>
     void DropRemains(Vector3 vec, Vector3 origin)
     {
-        /*
-        float angle1 = Random.Range(0f, 1f) * Mathf.PI;
-        float angle2 = Random.Range(0f, 1f) * Mathf.PI;
-        */
+        //Faut-il le placer comme attribut de classe ?
+        float RemainSpeed = 1.5f;
 
-        float Angle = Vector3.Angle(vec, new Vector3(1, 0, 0));
+        float Angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
+        float Angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-        
-      
-                                                                                            
+
         GameObject remain1 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
-        remain1.name = "Remain1";
-                                                                                                               
-        Vector3 PointSpawn1 = origin + (new Vector3(- Mathf.Sin(-Angle) * (-remain1.transform.localScale.z / 2), 0, Mathf.Cos(-Angle) * (-remain1.transform.localScale.z / 2)));
-        
-        remain1.transform.position = PointSpawn1;
-        remain1.transform.localScale = new Vector3(remain1.transform.localScale.x / 2, remain1.transform.localScale.y / 2, remain1.transform.localScale.z / 2);
-        remain1.GetComponent<Rigidbody>().mass /= 2;
-
-        remain1.GetComponent<Rigidbody>().AddForce(new Vector3(Mathf.Cos(Mathf.PI/6) * vec.x - Mathf.Sin(Mathf.PI/6) * vec.z, 0, Mathf.Sin(Mathf.PI/6)* vec.x + Mathf.Cos(Mathf.PI/6) * vec.z)*0);
-
-       
-        
         GameObject remain2 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
+
+        remain1.name = "Remain1";
         remain2.name = "Remain2";
-                                                        
-        Vector3 PointSpawn2 = origin + (new Vector3(-Mathf.Sin(-Angle) * (remain2.transform.localScale.z) / 2, 0, Mathf.Cos(-Angle) * (remain2.transform.localScale.z / 2)));
+
+        float PointSpawn1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
+        float PointSpawn1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
+        float PointSpawn2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
+        float PointSpawn2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
+
+
+        Vector3 PointSpawn1 = new Vector3 (PointSpawn1_X, 0, PointSpawn1_Z).normalized * (remain1.transform.localScale.x / 4) + origin;
+        Vector3 PointSpawn2 = new Vector3(PointSpawn2_X, 0, PointSpawn2_Z).normalized * (remain1.transform.localScale.x / 4) + origin;
+
+        remain1.transform.position = PointSpawn1;
         remain2.transform.position = PointSpawn2;
-        remain2.transform.localScale = new Vector3(remain2.transform.localScale.x/2, remain2.transform.localScale.y /2, remain2.transform.localScale.z/ 2);
+
+        remain1.transform.localScale = new Vector3(remain1.transform.localScale.x / 2, remain1.transform.localScale.y / 2, remain1.transform.localScale.z / 2);
+        remain2.transform.localScale = new Vector3(remain2.transform.localScale.x / 2, remain2.transform.localScale.y / 2, remain2.transform.localScale.z / 2);
+
+        remain1.GetComponent<Rigidbody>().mass /= 2;
         remain2.GetComponent<Rigidbody>().mass /= 2;
 
-        remain2.GetComponent<Rigidbody>().AddForce(new Vector3(Mathf.Cos(-Mathf.PI / 6) * vec.x - Mathf.Sin(-Mathf.PI / 6) * vec.z, 0, Mathf.Sin(-Mathf.PI / 6) * vec.x + Mathf.Cos(-Mathf.PI / 6) * vec.z)*0);
+        float Velocity1_X = Mathf.Cos(Angle1) * vec.x - Mathf.Sin(Angle1) * vec.z;
+        float Velocity1_Z = Mathf.Sin(Angle1) * vec.x + Mathf.Cos(Angle1) * vec.z;
+        float Velocity2_X = Mathf.Cos(-Angle2) * vec.x - Mathf.Sin(-Angle2) * vec.z;
+        float Velocity2_Z = Mathf.Sin(-Angle2) * vec.x + Mathf.Cos(-Angle2) * vec.z;
 
+
+        remain1.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity1_X, 0, Velocity1_Z) * RemainSpeed);
+        remain2.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity2_X, 0, Velocity2_Z) * RemainSpeed);
     }
 
 
-    //amené a etre modifier selon les choix sur les power up
+    //Amené à être modifié selon les choix sur les power up
+    /// <summary>
+    /// Laisse tomber les power-up
+    /// </summary>
     void DropPowerUP()
     {
        int dropRate = Random.Range(1,100);
@@ -149,6 +145,9 @@ public class DestroyAsteroid : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Inflige des dégats au vaisseau
+    /// </summary>
     void HitByAsteroid( )
     {
         Destroy(_Asteroid);
