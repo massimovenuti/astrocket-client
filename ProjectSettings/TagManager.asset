@@ -8,6 +8,7 @@ TagManager:
   - BulletStorage
   - OtherPlayers
   - RespawnPointStorage
+  - Asteroid
   layers:
   - Default
   - TransparentFX

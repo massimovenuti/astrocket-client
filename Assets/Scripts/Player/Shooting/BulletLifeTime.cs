@@ -7,4 +7,5 @@ public class BulletLifeTime : MonoBehaviour
     {
         Destroy(gameObject, 1);
     }
+
 }

@@ -63,4 +63,6 @@ public class GunController : MonoBehaviour
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }
+
+
 }
