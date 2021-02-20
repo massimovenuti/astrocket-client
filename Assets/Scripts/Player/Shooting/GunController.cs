@@ -5,6 +5,7 @@ public class GunController : MonoBehaviour
 {
     public GameObject bullet;
     public float shootRate = 0.2f;
+    public Material bulletMaterial; 
     public float shootForce = 3000f;
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
@@ -50,7 +51,12 @@ public class GunController : MonoBehaviour
     {
         if (Time.time > _lastShootingTimeRef)
         {
-            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
+            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, rot);
+
+            go.GetComponent<MeshRenderer>().material = bulletMaterial;
+            go.GetComponent<TrailRenderer>().material = bulletMaterial;
+
             go.transform.parent = _bulletSpawn.transform;
             go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
 
