@@ -5,7 +5,6 @@ using UnityEngine;
 public class DestroyAsteroid : MonoBehaviour
 {
     
-
     public GameObject _Asteroid;
 
     private Rigidbody _rb;
