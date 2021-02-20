@@ -5,37 +5,58 @@ using System;
 
 public class Health
 {
-    public event EventHandler GetDamage;
 
     private int health;
     private int healthMax;
+    private bool isDead;
 
-    // Fonction initialisant la vie d'une instance
+    // Fonction initialisant la vie d'un objet
     public Health(int healthMax) {
         this.healthMax = healthMax;
         health = healthMax;
+        isDead = false;
     }
 
-    // Fonction retournant la vie d'une instance
+    // Fonction retournant la vie d'un objet
     public int GetHealth() {
         return health;
     }
 
-    // Fonction diminuant la vie d'une instance
+    // Fonction changeant la valeur de la vie
+    // d'un objet
+    public void SetHealth(int health)
+    {
+        this.health = health;
+    }
+
+    // Fonction retournant true si l'objet
+    // est "mort" et false sinon
+    public bool GetDead()
+    {
+        return isDead;
+    }
+
+    // Fonction changeant l'état de mort de
+    // l'objet
+    public void SetDead(bool isDead)
+    {
+        this.isDead = isDead;
+    }
+
+    // Fonction diminuant la vie d'un objet
     public void Damage(int damageValue) {
         health -= damageValue;
-        if (health < 0)
+        if (health <= 0)
+        {
             health = 0;
-        if (GetDamage != null)
-            GetDamage(this, EventArgs.Empty);
+            isDead = true;
+        }
 
         // DEBUG
         Debug.Log("Health : " + GetHealth());
-        if (health == 0)
-            Debug.Log("It's dead :(");
     }
 
-    // Fonction augmentant la vie d'une instance
+    // Fonction augmentant la vie d'un objet
     public void Heal(int healValue) {
         health += healValue;
         if (health > healthMax)
