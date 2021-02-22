@@ -38,7 +38,7 @@ public class RespawnManager : MonoBehaviour
     private void Start()
     {
         InstantiateRespawnPoints();
-        GenerateEnemiesToSpot();
+        //GenerateEnemiesToSpot();
     }
 
     private void Update()

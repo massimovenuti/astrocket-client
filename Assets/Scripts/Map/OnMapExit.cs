@@ -7,9 +7,9 @@ public class OnMapExit : MonoBehaviour
 
     private void Awake( )
     {
-        _rtb = GameObject.FindGameObjectsWithTag("MainCamera")
-            .First().transform.parent.GetComponent<ReturnToBattle>();
+        _rtb = GameObject.FindGameObjectsWithTag("MainCamera").First().transform.parent.GetComponent<ReturnToBattle>();
     }
+
     private void OnTriggerEnter(Collider intruder)
     {
         if (intruder.CompareTag("Player"))

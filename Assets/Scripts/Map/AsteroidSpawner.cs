@@ -6,14 +6,22 @@ using System.Linq;
 public class AsteroidSpawner : MonoBehaviour
 {
     public string AsteroidSpawnerStorageTagName = "AsteroidSpawnerStorage";
+    public string AsteroidStorageTagName = "AsteroidStorage";
     public string AsteroidSpawnerName = "AsteroidSpawner";
 
+    public GameObject asteroidPrefab;
+
+    private GameObject _asteroidStorage;
     private GameObject _asteroidSpawner;
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 8;
     private int _mapRadiusLen = 160;
     private float _yAxis = 2.9f;
+
+    private float _asteroidVelocity = 10f;
+
+    private int randomIndex = 0;
 
     private void Awake()
     {
@@ -23,24 +31,27 @@ public class AsteroidSpawner : MonoBehaviour
         else
             _asteroidSpawner = go;
 
+        go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
+        if (go == null)
+            Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
+        else
+            _asteroidStorage = go;
+
         _asteroidSpawnerList = new List<GameObject>();
     }
 
     private void Start()
     {
         InstantiateAsteroidSpawners();
-    }
 
-    private void Update()
-    {
-        
+        // invoke every 2 seconds starting from time.deltaTime = 0f
+        InvokeRepeating("SpawnAsteroid", 0f, 2f);
     }
 
     private void InstantiateAsteroidSpawners()
     {
         float angleStep = 360f / _asteroidSpawnerAmount;
         Vector3 pos = new Vector3(0, _yAxis, 0);
-        Debug.Log("angle : " + angleStep);
         
         for (int i = 0; i < _asteroidSpawnerAmount; i++)
         {
@@ -53,5 +64,24 @@ public class AsteroidSpawner : MonoBehaviour
             go.transform.position = pos;
             _asteroidSpawnerList.Add(go);
         }
+    }
+
+    private void SpawnAsteroid()
+    {
+        int tmp = Random.Range(0, _asteroidSpawnerAmount);
+
+        // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
+        randomIndex = (tmp == randomIndex)? (randomIndex + 3) % _asteroidSpawnerAmount : tmp;
+
+        Transform tf = _asteroidSpawnerList[randomIndex].transform;
+        Vector3 dir = -tf.position.normalized;
+
+        //random angle towards center of the map
+        dir += new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
+
+        GameObject go = Instantiate(asteroidPrefab, tf.position, tf.rotation);
+        go.transform.parent = _asteroidStorage.transform;
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        rb.velocity = dir * _asteroidVelocity;
     }
 }

@@ -10,6 +10,7 @@ TagManager:
   - RespawnPointStorage
   - Asteroid
   - AsteroidSpawnerStorage
+  - AsteroidStorage
   layers:
   - Default
   - TransparentFX
