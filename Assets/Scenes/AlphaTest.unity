@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &110243010 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8244382623504400570, guid: d59bd3ff7120c8345a2360a6660d2c61,
+    type: 3}
+  m_PrefabInstance: {fileID: 1299385454}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &311093567
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,49 +236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddced7a50cbb5e6498ded442be108eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &321980563
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 321980565}
-  - component: {fileID: 321980564}
-  m_Layer: 0
-  m_Name: RespawnHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &321980564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321980563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b51fc1320d4e0c546902b34ce571d55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &321980565
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321980563}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.8066683, y: 2.099244, z: 0.5587454}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &398291697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -947,6 +910,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8244382623504400564, guid: d59bd3ff7120c8345a2360a6660d2c61,
+        type: 3}
+      propertyPath: asteroid
+      value: 
+      objectReference: {fileID: 110243010}
     - target: {fileID: 8244382623504400566, guid: d59bd3ff7120c8345a2360a6660d2c61,
         type: 3}
       propertyPath: m_RootOrder
