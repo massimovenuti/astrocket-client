@@ -16,12 +16,13 @@ public class AsteroidSpawner : MonoBehaviour
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 8;
-    private int _mapRadiusLen = 160;
+    private int _mapRadiusLen = 175;
     private float _yAxis = 2.9f;
 
     private float _asteroidVelocity = 10f;
 
-    private int randomIndex = 0;
+    private int _maxAsteroidCount = 50;
+    private int _randomIndex = 0;
 
     private void Awake()
     {
@@ -68,20 +69,31 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void SpawnAsteroid()
     {
-        int tmp = Random.Range(0, _asteroidSpawnerAmount);
+        int asteroidCount = GameObject.FindGameObjectsWithTag("Asteroid").Length;
 
-        // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
-        randomIndex = (tmp == randomIndex)? (randomIndex + 3) % _asteroidSpawnerAmount : tmp;
+        if (asteroidCount < _maxAsteroidCount)
+        {
+            Debug.Log(asteroidCount + " asteroids out of " + _maxAsteroidCount);
 
-        Transform tf = _asteroidSpawnerList[randomIndex].transform;
-        Vector3 dir = -tf.position.normalized;
+            int tmp = Random.Range(0, _asteroidSpawnerAmount);
 
-        //random angle towards center of the map
-        dir += new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
+            // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
+            _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
-        GameObject go = Instantiate(asteroidPrefab, tf.position, tf.rotation);
-        go.transform.parent = _asteroidStorage.transform;
-        Rigidbody rb = go.GetComponent<Rigidbody>();
-        rb.velocity = dir * _asteroidVelocity;
+            Transform tf = _asteroidSpawnerList[_randomIndex].transform;
+            Vector3 dir = -tf.position.normalized;
+
+            //random angle towards center of the map
+            dir += new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
+
+            GameObject go = Instantiate(asteroidPrefab, tf.position, tf.rotation);
+            go.transform.parent = _asteroidStorage.transform;
+            Rigidbody rb = go.GetComponent<Rigidbody>();
+            rb.velocity = dir * _asteroidVelocity;
+        }
+        else
+        {
+            Debug.Log("Max number of asteroids reached : " + _maxAsteroidCount);
+        }
     }
 }
