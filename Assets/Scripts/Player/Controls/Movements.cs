@@ -22,7 +22,6 @@ public class Movements : MonoBehaviour
         _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
-
     }
 
     private void Update()
