@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class Movements : MonoBehaviour
 {
-    [SerializeField]
-    private float _forwardSpeed = 5.0f;
-    [SerializeField]
+    private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
 
     private Camera _mainCamera;
@@ -18,7 +16,7 @@ public class Movements : MonoBehaviour
     /// <summary>
     /// Trouver le rigidbody du vaisseau
     /// </summary>
-    void Awake()
+    private void Awake()
     {
         _inp = FindObjectOfType<InputManager>();
         _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
@@ -27,12 +25,11 @@ public class Movements : MonoBehaviour
 
     }
 
-    void Update()
+    private void Update()
     {
         LookAt();
         if (_inp.IsBoosting())
             _rgbody.AddForce(transform.forward * _forwardSpeed);
-        
     }
 
     private void LookAt( )

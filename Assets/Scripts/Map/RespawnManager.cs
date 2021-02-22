@@ -9,12 +9,12 @@ public class RespawnManager : MonoBehaviour
     public string RespawnPointName = "RespawnPoint";
 
     public float checkRadius = 25f;
-    public float yAxis = 1f;
 
     public LayerMask checkLayers;
 
     public GameObject enemyMockPrefab;
 
+    private float yAxis = 2.9f;
 
     private GameObject _respawnManager;
     private List<GameObject> _respawnPointsList;
@@ -140,6 +140,27 @@ public class RespawnManager : MonoBehaviour
             Vector3 pos = new Vector3((Random.value - 0.5f) * _radius * 2, 1f, (Random.value - 0.5f) * _radius * 2);
             Instantiate(enemyMockPrefab, pos, Quaternion.identity);
         }
+    }
+
+    // Fonction désactivant le joueur et lançant
+    // le compte à rebours avant la réactivation
+    void SwitchPlayerActivation(GameObject Player)
+    {
+        Player.SetActive(false);
+        StartCoroutine(WaitForReactivation(Player));
+    }
+
+    // Fonction attendant 2 secondes avant de
+    // réactiver le joueur
+    IEnumerator WaitForReactivation(GameObject Player)
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(2);
+
+        // le joueur est téléporté à son point
+        // de réapparition
+        Player.transform.position = GetSafeRespawnPoint();
+        Player.SetActive(true);
     }
 
     private void OnDrawGizmos( )

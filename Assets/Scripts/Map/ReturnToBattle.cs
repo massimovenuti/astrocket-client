@@ -7,7 +7,6 @@ public class ReturnToBattle : MonoBehaviour
 {
     public string RTBManagerName = "ReturnToBattleManager";
 
-
     private GameObject _UI;
     private GameObject _player;
 

@@ -11,14 +11,16 @@ public class Health
     private bool isDead;
 
     // Fonction initialisant la vie d'un objet
-    public Health(int healthMax) {
+    public Health(int healthMax) 
+    {
         this.healthMax = healthMax;
         health = healthMax;
         isDead = false;
     }
 
     // Fonction retournant la vie d'un objet
-    public int GetHealth() {
+    public int GetHealth() 
+    {
         return health;
     }
 
@@ -44,7 +46,8 @@ public class Health
     }
 
     // Fonction diminuant la vie d'un objet
-    public void Damage(int damageValue) {
+    public void Damage(int damageValue) 
+    {
         health -= damageValue;
         if (health <= 0)
         {
@@ -57,7 +60,8 @@ public class Health
     }
 
     // Fonction augmentant la vie d'un objet
-    public void Heal(int healValue) {
+    public void Heal(int healValue) 
+    {
         health += healValue;
         if (health > healthMax)
             health = healthMax;

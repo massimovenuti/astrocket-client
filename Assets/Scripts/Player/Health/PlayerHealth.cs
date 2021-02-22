@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
     public Health playerHealth;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         playerHealth = new Health(100);
 
@@ -17,9 +17,8 @@ public class PlayerHealth : MonoBehaviour
     }
 
     // Fonction Update, appelée à chaque frame
-    void Update()
+    private void Update()
     {
-
         // si le joueur est mort
         if (playerHealth.GetDead())
         {
@@ -28,13 +27,8 @@ public class PlayerHealth : MonoBehaviour
 
             // le joueur est mort, un script va le
             // désactiver pendant X secondes
-            GameObject handler = GameObject.Find("RespawnHandler");
+            GameObject handler = GameObject.Find("Map");
             handler.SendMessage("SwitchPlayerActivation", gameObject);
-
-            // le joueur est téléporté à son point
-            // de réapparition
-            // TODO: change with Rayan's spawn system
-            this.gameObject.transform.position = new Vector3(0, 2.9f, 0);
 
             // Réinitialise la vie, et indique que
             // le joueur est à nouveau vivant

@@ -4,34 +4,18 @@ using UnityEngine;
 
 public class DestroyAsteroid : MonoBehaviour
 {
-    
-    public GameObject _Asteroid;
-
-    private Rigidbody _rb;
-
-    public Transform _SpawningRemains;
+    public Transform spawningRemains;
 
     //La taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size;
 
-    //TEMP
-    float _VectorX;
-    float _VectorZ;
-    Vector3 _direction;
-    int _AsteroidVelocity = 3;
+    private Rigidbody _rb;
 
-
-    void Start()
+    private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _rb.mass = 15;
-        _SpawningRemains = _Asteroid.transform.Find("Remains");
-
-        //J'initialise une direction arbitraire à l'asteroide
-        _VectorX = Random.Range(-1f, 1f);
-        _VectorZ = Random.Range(-1f, 1f);
-        _direction = new Vector3(_VectorX, 0, _VectorZ);
-        _rb.velocity = _direction.normalized * _AsteroidVelocity;
+        spawningRemains = this.transform.Find("Remains");
     }
 
     /// <summary>
@@ -54,12 +38,12 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Fractionne l'astéroïde ou le détruit
     /// </summary>
-    void DestructionAsteroid()
+    private void DestructionAsteroid()
     {
-        Vector3 vector = _Asteroid.GetComponent<Rigidbody>().velocity;
-        Vector3 origin = _Asteroid.transform.localPosition;
+        Vector3 vector = this.GetComponent<Rigidbody>().velocity;
+        Vector3 origin = this.transform.localPosition;
 
-        Destroy(_Asteroid);
+        Destroy(this.gameObject);
 
         _Size--;
 
@@ -76,7 +60,7 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Créé deux débris d'astéroïdes et leur ajoute un comportement
     /// </summary>
-    void DropRemains(Vector3 vec, Vector3 origin)
+    private void DropRemains(Vector3 vec, Vector3 origin)
     {
         //Faut-il le placer comme attribut de classe ?
         float RemainSpeed = 1.5f;
@@ -84,8 +68,8 @@ public class DestroyAsteroid : MonoBehaviour
         float Angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
         float Angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-        GameObject remain1 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
-        GameObject remain2 = (GameObject)Instantiate(_Asteroid, _SpawningRemains.position, _SpawningRemains.rotation);
+        GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
+        GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
 
         remain1.name = "Remain1";
         remain2.name = "Remain2";
@@ -126,7 +110,7 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Laisse tomber les power-up
     /// </summary>
-    void DropPowerUP()
+    private void DropPowerUP()
     {
        int dropRate = Random.Range(1,100);
 
@@ -150,9 +134,9 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Inflige des dégats au vaisseau
     /// </summary>
-    void HitByAsteroid( )
+    private void HitByAsteroid( )
     {
-        Destroy(_Asteroid);
+        Destroy(this.gameObject);
         print("Vaiseau -10 de vie");
     }
 
