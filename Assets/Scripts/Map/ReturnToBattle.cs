@@ -48,10 +48,14 @@ public class ReturnToBattle : MonoBehaviour
         {
             _timerText.text = _timer.ToString("F1");
 
-            if (_timer <= 0)
+            if (_timer <= 0 && _trigger)
             {
-                Debug.Log("Dead");
+                PlayerHealth ph = _player.GetComponent<PlayerHealth>();
+                ph.playerHealth.Damage(ph.playerHealth.GetHealth());
                 _trigger = false;
+                _timer = 10f;
+
+                Debug.Log("Dead");
             }
             else
             {

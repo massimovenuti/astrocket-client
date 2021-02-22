@@ -34,6 +34,9 @@ public class PlayerHealth : MonoBehaviour
             // le joueur est à nouveau vivant
             playerHealth.SetDead(false);
             playerHealth.SetHealth(100);
+
+            // reset l'inertie
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 

@@ -1,15 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class DestroyAsteroid : MonoBehaviour
 {
+    public string AsteroidStorageTagName = "AsteroidStorage";
+
     public Transform spawningRemains;
+    public int _Size; //La taille sera attribué au spawn de l'astéroide (entre 3 et 1)
 
-    //La taille sera attribué au spawn de l'astéroide (entre 3 et 1)
-    public int _Size;
-
+    private GameObject _asteroidStorage;
     private Rigidbody _rb;
+
+    private void Awake()
+    {
+        GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
+        if (go == null)
+            Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
+        else
+            _asteroidStorage = go;
+    }
 
     private void Start()
     {
@@ -70,6 +81,8 @@ public class DestroyAsteroid : MonoBehaviour
 
         GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
         GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
+        remain1.transform.parent = _asteroidStorage.transform;
+        remain2.transform.parent = _asteroidStorage.transform;
 
         remain1.name = "Remain1";
         remain2.name = "Remain2";

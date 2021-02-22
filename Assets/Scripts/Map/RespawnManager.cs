@@ -35,19 +35,19 @@ public class RespawnManager : MonoBehaviour
         checkRadius = _radius / 2f;
     }
 
-    private void Start( )
+    private void Start()
     {
         InstantiateRespawnPoints();
-        GenerateEnemiesToSpot();
+        //GenerateEnemiesToSpot();
     }
 
-    private void Update( )
+    private void Update()
     {
         if (Input.GetKeyDown("k"))
             Debug.Log("Safe : "+ GetSafeRespawnPoint());
     }
 
-    private IEnumerable<Vector2> GetGridPointsInCircle( )
+    private IEnumerable<Vector2> GetGridPointsInCircle()
     {
         int i1 = (int)Mathf.Ceil(-_radius / _gridStep);
         int i2 = (int)Mathf.Floor(_radius / _gridStep);
@@ -70,7 +70,7 @@ public class RespawnManager : MonoBehaviour
         }
     }
 
-    private void InstantiateRespawnPoints( )
+    private void InstantiateRespawnPoints()
     {
         int i = 0;
 
@@ -144,7 +144,7 @@ public class RespawnManager : MonoBehaviour
 
     // Fonction désactivant le joueur et lançant
     // le compte à rebours avant la réactivation
-    void SwitchPlayerActivation(GameObject Player)
+    private void SwitchPlayerActivation(GameObject Player)
     {
         Player.SetActive(false);
         StartCoroutine(WaitForReactivation(Player));
@@ -152,7 +152,7 @@ public class RespawnManager : MonoBehaviour
 
     // Fonction attendant 2 secondes avant de
     // réactiver le joueur
-    IEnumerator WaitForReactivation(GameObject Player)
+    private IEnumerator WaitForReactivation(GameObject Player)
     {
         // TODO: change value
         yield return new WaitForSeconds(2);
@@ -163,7 +163,7 @@ public class RespawnManager : MonoBehaviour
         Player.SetActive(true);
     }
 
-    private void OnDrawGizmos( )
+    private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
 
