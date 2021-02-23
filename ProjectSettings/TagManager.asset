@@ -11,6 +11,9 @@ TagManager:
   - Asteroid
   - AsteroidSpawnerStorage
   - AsteroidStorage
+  - WarningBorder
+  - AbsoluteBorder
+  - SmoothBorder
   layers:
   - Default
   - TransparentFX
