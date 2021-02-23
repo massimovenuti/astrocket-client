@@ -20,6 +20,7 @@ public class AsteroidSpawner : MonoBehaviour
     private float _yAxis = 2.9f;
 
     private float _asteroidVelocity = 10f;
+    private int _barrierVelocitySensitivity = 6;
 
     private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
@@ -69,12 +70,11 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void SpawnAsteroid()
     {
-        int asteroidCount = GameObject.FindGameObjectsWithTag("Asteroid").Length;
+        GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+        int asteroidCount = asteroids.Length;
 
         if (asteroidCount < _maxAsteroidCount)
         {
-            Debug.Log(asteroidCount + " asteroids out of " + _maxAsteroidCount);
-
             int tmp = Random.Range(0, _asteroidSpawnerAmount);
 
             // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
@@ -83,7 +83,7 @@ public class AsteroidSpawner : MonoBehaviour
             Transform tf = _asteroidSpawnerList[_randomIndex].transform;
             Vector3 dir = -tf.position.normalized;
 
-            //random angle towards center of the map
+            // random angle towards center of the map
             dir += new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
 
             GameObject go = Instantiate(asteroidPrefab, tf.position, tf.rotation);
@@ -93,7 +93,21 @@ public class AsteroidSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("Max number of asteroids reached : " + _maxAsteroidCount);
+            Debug.Log("Max number of asteroids reached : " + asteroidCount);
+        }
+
+        CheckAsteroidPosition(asteroids);
+    }
+
+    private void CheckAsteroidPosition(GameObject[] asteroids)
+    {
+        foreach (GameObject asteroid in asteroids)
+        {
+            bool inMapBounds = asteroid.GetComponent<DestroyAsteroid>().inMapBounds;
+            float speed = asteroid.GetComponent<Rigidbody>().velocity.magnitude;
+
+            if (!inMapBounds && speed < _barrierVelocitySensitivity)
+                Destroy(asteroid);
         }
     }
 }

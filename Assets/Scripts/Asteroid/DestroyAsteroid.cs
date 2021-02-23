@@ -8,7 +8,10 @@ public class DestroyAsteroid : MonoBehaviour
     public string AsteroidStorageTagName = "AsteroidStorage";
 
     public Transform spawningRemains;
-    public int _Size; //La taille sera attribué au spawn de l'astéroide (entre 3 et 1)
+
+    // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
+    public int _Size; 
+    public bool inMapBounds = false;
 
     private GameObject _asteroidStorage;
     private Rigidbody _rb;
@@ -81,9 +84,10 @@ public class DestroyAsteroid : MonoBehaviour
 
         GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
         GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
+        remain1.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
+        remain2.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
         remain1.transform.parent = _asteroidStorage.transform;
         remain2.transform.parent = _asteroidStorage.transform;
-
         remain1.name = "Remain1";
         remain2.name = "Remain2";
 
@@ -152,5 +156,4 @@ public class DestroyAsteroid : MonoBehaviour
         Destroy(this.gameObject);
         print("Vaiseau -10 de vie");
     }
-
 }
