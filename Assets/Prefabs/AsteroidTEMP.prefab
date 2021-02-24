@@ -138,8 +138,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AsteroidStorageTagName: AsteroidStorage
   spawningRemains: {fileID: 0}
+  medikit: {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
+  mitraillette: {fileID: 6928950440809333532, guid: 78be2daceccfe47419341b41da6de63a,
+    type: 3}
+  akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   _Size: 3
+  inMapBounds: 0
 --- !u!54 &399602331276035094
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.Linq;
 
 public class DestroyAsteroid : MonoBehaviour
@@ -8,6 +9,10 @@ public class DestroyAsteroid : MonoBehaviour
     public string AsteroidStorageTagName = "AsteroidStorage";
 
     public Transform spawningRemains;
+
+    public GameObject medikit;
+    public GameObject mitraillette;
+    public GameObject akimbo;
 
     // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size; 
@@ -129,23 +134,38 @@ public class DestroyAsteroid : MonoBehaviour
     /// </summary>
     private void DropPowerUP()
     {
-       int dropRate = Random.Range(1,100);
+        int dropRate = Random.Range(1,100);
 
-        if (dropRate <= 20)
+        // TODO: change values
+        if (dropRate <= 25)
         {
-            if (dropRate <= 10)
-            {
-                print("Power-up : Regen vie");
-            }
-            if (dropRate > 10)
-            {
-                print("Power-up : Shield");
-            }
+            // drop un power-up de santé
+            DropPowerUpBis(medikit);
+        }
+        if (dropRate >= 26 && dropRate <= 50)
+        {
+            // drop un power-up mitraillette
+            DropPowerUpBis(mitraillette);
+        }
+        if (dropRate >= 51 && dropRate <= 75)
+        {
+            // drop un power-up akimbo
+            DropPowerUpBis(akimbo);
         }
         else
         {
             print("Pas de Power-up");
         }
+    }
+
+    // Fonction instanciant un power-up
+    private void DropPowerUpBis(GameObject powerUp)
+    {
+        // DEBUG
+        Debug.Log("Drop Power-Up : " + powerUp.name);
+
+        GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, spawningRemains.rotation);
+
     }
 
     /// <summary>

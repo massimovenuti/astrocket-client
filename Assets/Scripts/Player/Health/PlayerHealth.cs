@@ -19,6 +19,10 @@ public class PlayerHealth : MonoBehaviour
     // Fonction Update, appelée à chaque frame
     private void Update()
     {
+        // DEBUG
+        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            playerHealth.Damage(20);
+
         // si le joueur est mort
         if (playerHealth.GetDead())
         {
@@ -56,5 +60,11 @@ public class PlayerHealth : MonoBehaviour
         }
 
         // TODO: collision with players and asteroids
+    }
+
+    // Fonction augmantant la vie du joueur
+    private void PowerUpMedikit(int value)
+    {
+        playerHealth.Heal(value);
     }
 }

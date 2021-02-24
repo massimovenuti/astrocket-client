@@ -1,18 +1,23 @@
 ﻿using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 public class GunController : MonoBehaviour
 {
     public GameObject bullet;
     public float shootRate = 0.2f;
-    public Material bulletMaterial; 
+    public Material bulletMaterial;
     public float shootForce = 3000f;
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
+    public bool akimbo;
+    public bool mitraillette;
 
     private InputManager _inp;
 
     private GameObject _barrel;
+    private GameObject _barrelAkimbo1;
+    private GameObject _barrelAkimbo2;
     private GameObject _bulletSpawn;
 
     private float _lastShootingTimeRef;
@@ -22,6 +27,14 @@ public class GunController : MonoBehaviour
         _barrel = transform.gameObject.FindObjectByName(ShootingFrom);
         if (_barrel == null)
             Debug.LogError($"GunController : Impossible to find player's barrel");
+
+        _barrelAkimbo1 = transform.gameObject.FindObjectByName("BarrelAkimbo1");
+        if (_barrelAkimbo1 == null)
+            Debug.LogError($"GunController : Impossible to find player's barrelAkimbo1");
+
+        _barrelAkimbo2 = transform.gameObject.FindObjectByName("BarrelAkimbo2");
+        if (_barrelAkimbo2 == null)
+            Debug.LogError($"GunController : Impossible to find player's barrelAkimbo2");
 
         _inp = FindObjectOfType<InputManager>();
         if (_inp == null)
@@ -39,12 +52,17 @@ public class GunController : MonoBehaviour
             if (l.Length > 1)
                 Debug.LogWarning($"{BulletStorageTagName} had more than one element assigned ({l.Length})");
         }
+
+        akimbo = false;
+        mitraillette = false;
     }
 
     private void Update( )
     {
-        if (_inp.IsShooting())
+        if (_inp.IsShooting() && !akimbo)
             Shoot();
+        if (_inp.IsShooting() && akimbo)
+            ShootAkimbo();
     }
 
     private void Shoot( )
@@ -64,5 +82,60 @@ public class GunController : MonoBehaviour
         }
     }
 
+    private void ShootAkimbo( )
+    {
+        if (Time.time > _lastShootingTimeRef)
+        {
+            Quaternion rot1 = _barrelAkimbo1.transform.rotation * Quaternion.Euler(90, 0, 0);
+            Quaternion rot2 = _barrelAkimbo2.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go1 = (GameObject)Instantiate(bullet, _barrelAkimbo1.transform.position, rot1);
+            GameObject go2 = (GameObject)Instantiate(bullet, _barrelAkimbo2.transform.position, rot2);
 
+            go1.GetComponent<MeshRenderer>().material = bulletMaterial;
+            go1.GetComponent<TrailRenderer>().material = bulletMaterial;
+            go2.GetComponent<MeshRenderer>().material = bulletMaterial;
+            go2.GetComponent<TrailRenderer>().material = bulletMaterial;
+
+            go1.transform.parent = _bulletSpawn.transform;
+            go1.GetComponent<Rigidbody>().AddForce(_barrelAkimbo1.transform.forward * shootForce);
+            go2.transform.parent = _bulletSpawn.transform;
+            go2.GetComponent<Rigidbody>().AddForce(_barrelAkimbo2.transform.forward * shootForce);
+
+            _lastShootingTimeRef = Time.time + shootRate;
+        }
+    }
+
+    private void PowerUpNewShootRate( )
+    {
+        // TODO: change value
+        shootRate = 0.15f;
+
+        mitraillette = true;
+        StartCoroutine(TimerMitraillette());
+    }
+
+    private void PowerUpAkimbo( )
+    {
+        akimbo = true;
+        StartCoroutine(TimerAkimbo());
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up akimbo
+    private IEnumerator TimerAkimbo( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(5);
+        akimbo = false;
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up mitraillette
+    private IEnumerator TimerMitraillette( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(5);
+        mitraillette = false;
+        shootRate = 0.2f;
+    }
 }
