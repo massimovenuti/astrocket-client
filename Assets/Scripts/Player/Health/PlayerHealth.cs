@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour
     public Health playerHealth;
     public int shieldDurability;
 
+    public GameObject shield;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -17,6 +19,8 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Health : " + playerHealth.GetHealth());
 
         shieldDurability = 0;
+        shield = GameObject.Find("Shield");
+        shield.SetActive(false);
     }
 
     // Fonction Update, appelée à chaque frame
@@ -80,6 +84,8 @@ public class PlayerHealth : MonoBehaviour
             {
                 playerHealth.Damage(5);
                 shieldDurability--;
+                if (shieldDurability == 0)
+                    shield.SetActive(false);
             }
             Destroy(collision.gameObject);
         }
@@ -95,6 +101,7 @@ public class PlayerHealth : MonoBehaviour
     private void PowerUpShield()
     {
         // TODO: change value
-        shieldDurability = 10;
+        shieldDurability = 5;
+        shield.SetActive(true);
     }
 }
