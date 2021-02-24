@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class PlayerHealth : MonoBehaviour
 {
     public Health playerHealth;
+    public int shieldDurability;
 
     // Start is called before the first frame update
     private void Start()
@@ -14,6 +15,8 @@ public class PlayerHealth : MonoBehaviour
 
         // DEBUG
         Debug.Log("Health : " + playerHealth.GetHealth());
+
+        shieldDurability = 0;
     }
 
     // Fonction Update, appelée à chaque frame
@@ -54,17 +57,44 @@ public class PlayerHealth : MonoBehaviour
             // DEBUG
             Debug.Log("Touched by a bullet");
 
-            // TODO: change value
-            playerHealth.Damage(20);
+            // TODO: change values
+            if (shieldDurability <= 0)
+                playerHealth.Damage(20);
+            else
+            {
+                playerHealth.Damage(5);
+                shieldDurability--;
+            }
             Destroy(collision.gameObject);
         }
 
         // TODO: collision with players and asteroids
+        // DEBUG
+        if (collision.gameObject.tag == "Asteroid")
+        {
+
+            // TODO: change values
+            if (shieldDurability <= 0)
+                playerHealth.Damage(20);
+            else
+            {
+                playerHealth.Damage(5);
+                shieldDurability--;
+            }
+            Destroy(collision.gameObject);
+        }
     }
 
     // Fonction augmantant la vie du joueur
     private void PowerUpMedikit(int value)
     {
         playerHealth.Heal(value);
+    }
+
+    // Fonction donnant un bouclier au joueur
+    private void PowerUpShield()
+    {
+        // TODO: change value
+        shieldDurability = 10;
     }
 }

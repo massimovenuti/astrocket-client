@@ -13,6 +13,7 @@ public class DestroyAsteroid : MonoBehaviour
     public GameObject medikit;
     public GameObject mitraillette;
     public GameObject akimbo;
+    public GameObject shield;
 
     // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size; 
@@ -154,7 +155,8 @@ public class DestroyAsteroid : MonoBehaviour
         }
         else
         {
-            print("Pas de Power-up");
+            // drop un power-up shield
+            DropPowerUpBis(shield);
         }
     }
 
