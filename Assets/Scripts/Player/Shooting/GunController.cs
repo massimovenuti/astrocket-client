@@ -131,7 +131,7 @@ public class GunController : MonoBehaviour
     {
         mitraillette = true;
 
-        // TODO: change values
+        // TODO: change value
         shootRate -= 0.1f;
 
         StartCoroutine(TimerMitraillette());
@@ -142,6 +142,7 @@ public class GunController : MonoBehaviour
         if (bazooka)
         {
             bazooka = false;
+            // TODO: change value
             shootRate -= 0.2f;
         }
         akimbo = true;
@@ -176,8 +177,11 @@ public class GunController : MonoBehaviour
     {
         // TODO: change value
         yield return new WaitForSeconds(5);
-        mitraillette = false;
+
+        // TODO: change values
         shootRate += 0.1f;
+
+        mitraillette = false;
     }
 
     // Fonction attendant 5 secondes avant de
@@ -186,6 +190,8 @@ public class GunController : MonoBehaviour
     {
         // TODO: change value
         yield return new WaitForSeconds(15);
+
+        // TODO: change values
         shootRate -= 0.2f;
 
         bazooka = false;

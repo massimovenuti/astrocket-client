@@ -95,21 +95,13 @@ public class PlayerHealth : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        // TODO: collision with players and asteroids
-        // DEBUG
+        // touché par un astéroide
         if (collision.gameObject.tag == "Asteroid")
         {
 
             // TODO: change values
             if (shieldDurability <= 0)
-                playerHealth.Damage(20);
-            else
-            {
-                playerHealth.Damage(5);
-                shieldDurability--;
-                if (shieldDurability <= 0)
-                    shield.SetActive(false);
-            }
+                playerHealth.Damage(10);
             Destroy(collision.gameObject);
         }
     }
