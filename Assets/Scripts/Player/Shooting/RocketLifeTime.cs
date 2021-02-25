@@ -25,7 +25,10 @@ public class RocketLifeTime : MonoBehaviour
         explosionPosition = gameObject.transform.position;
 
         GameObject explosion = Instantiate(ExplosionVFX, explosionPosition, Quaternion.identity);
-        explosion.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+        ParticleSystem explosionParticles = explosion.transform.GetChild(0).GetComponent<ParticleSystem>();
+        explosionParticles.Play();
+        float explositionDuration = explosionParticles.main.duration + explosionParticles.main.startLifetimeMultiplier;
+        Destroy(explosion, explositionDuration);
 
         Collider[] colliders = Physics.OverlapSphere(explosionPosition, radius);
 
