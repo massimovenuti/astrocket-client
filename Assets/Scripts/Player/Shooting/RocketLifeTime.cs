@@ -8,6 +8,8 @@ public class RocketLifeTime : MonoBehaviour
     public float power;
     public Vector3 explosionPosition;
 
+    public GameObject ExplosionVFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +22,11 @@ public class RocketLifeTime : MonoBehaviour
 
     public void OnCollisionEnter(Collision collider)
     {
-
         explosionPosition = gameObject.transform.position;
+
+        GameObject explosion = Instantiate(ExplosionVFX, explosionPosition, Quaternion.identity);
+        explosion.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+
         Collider[] colliders = Physics.OverlapSphere(explosionPosition, radius);
 
         foreach (Collider hit in colliders)

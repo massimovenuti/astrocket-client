@@ -126,6 +126,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 5
   power: 10
+  explosionPosition: {x: 0, y: 0, z: 0}
+  ExplosionVFX: {fileID: 2993552907803997183, guid: c213675d5856141418f286581d75a50b,
+    type: 3}
 --- !u!96 &2240155041876578850
 TrailRenderer:
   serializedVersion: 2
