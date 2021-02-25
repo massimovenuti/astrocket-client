@@ -8,16 +8,21 @@ public class GunController : MonoBehaviour
     public float shootRate = 0.2f;
     public Material bulletMaterial;
     public float shootForce = 3000f;
+    public float shootForceRocket = 2000f;
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
+
     public bool akimbo;
     public bool mitraillette;
+    public bool bazooka;
 
     private InputManager _inp;
 
     private GameObject _barrel;
     private GameObject _barrelAkimbo1;
     private GameObject _barrelAkimbo2;
+    public GameObject rocket;
+
     private GameObject _bulletSpawn;
 
     private float _lastShootingTimeRef;
@@ -55,14 +60,17 @@ public class GunController : MonoBehaviour
 
         akimbo = false;
         mitraillette = false;
+        bazooka = false;
     }
 
     private void Update( )
     {
-        if (_inp.IsShooting() && !akimbo)
-            Shoot();
         if (_inp.IsShooting() && akimbo)
             ShootAkimbo();
+        else if (_inp.IsShooting() && bazooka)
+            ShootBazooka();
+        else if (_inp.IsShooting())
+            Shoot();
     }
 
     private void Shoot( )
@@ -105,19 +113,49 @@ public class GunController : MonoBehaviour
         }
     }
 
+    private void ShootBazooka( )
+    {
+        if (Time.time > _lastShootingTimeRef)
+        {
+            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(rocket, _barrel.transform.position, rot);
+
+            go.transform.parent = _bulletSpawn.transform;
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForceRocket);
+
+            _lastShootingTimeRef = Time.time + shootRate;
+        }
+    }
+
     private void PowerUpNewShootRate( )
     {
-        // TODO: change value
-        shootRate = 0.15f;
-
         mitraillette = true;
+
+        // TODO: change values
+        shootRate -= 0.1f;
+
         StartCoroutine(TimerMitraillette());
     }
 
     private void PowerUpAkimbo( )
     {
+        if (bazooka)
+            bazooka = false;
         akimbo = true;
+
         StartCoroutine(TimerAkimbo());
+    }
+
+    private void PowerUpBazooka( )
+    {
+        if (akimbo)
+            akimbo =  false;
+        bazooka = true;
+
+        // TODO: change values
+        shootRate += 0.2f;
+
+        StartCoroutine(TimerBazooka());
     }
 
     // Fonction attendant 5 secondes avant de
@@ -136,6 +174,17 @@ public class GunController : MonoBehaviour
         // TODO: change value
         yield return new WaitForSeconds(5);
         mitraillette = false;
-        shootRate = 0.2f;
+        shootRate += 0.1f;
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up bazooka
+    private IEnumerator TimerBazooka( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(15);
+        shootRate -= 0.2f;
+
+        bazooka = false;
     }
 }

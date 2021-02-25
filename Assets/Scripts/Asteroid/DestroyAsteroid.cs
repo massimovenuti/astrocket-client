@@ -15,6 +15,7 @@ public class DestroyAsteroid : MonoBehaviour
     public GameObject akimbo;
     public GameObject shield;
     public GameObject flash;
+    public GameObject bazooka;
 
     // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size; 
@@ -44,7 +45,7 @@ public class DestroyAsteroid : MonoBehaviour
     /// </summary>
     private void OnCollisionEnter(Collision collision)
     {     
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket")
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();
@@ -144,26 +145,34 @@ public class DestroyAsteroid : MonoBehaviour
             // drop un power-up de santé
             DropPowerUpBis(medikit);
         }
-        if (dropRate >= 21 && dropRate <= 40)
+        else if (dropRate >= 21 && dropRate <= 40)
         {
             // drop un power-up mitraillette
             DropPowerUpBis(mitraillette);
         }
-        if (dropRate >= 41 && dropRate <= 60)
+        else if (dropRate >= 41 && dropRate <= 60)
         {
             // drop un power-up akimbo
             DropPowerUpBis(akimbo);
         }
-        if (dropRate >= 61 && dropRate <= 80)
+        else if (dropRate >= 61 && dropRate <= 80)
         {
             // drop un power-up de vitesse
             DropPowerUpBis(flash);
         }
-        else
+        else if (dropRate >= 81 && dropRate <= 90)
         {
             // drop un power-up shield
             DropPowerUpBis(shield);
         }
+        else if (dropRate >= 91 && dropRate <= 100)
+        {
+            // drop un power-up bazooka
+            DropPowerUpBis(bazooka);
+        }
+        // DEBUG
+        else
+            Debug.Log("There is a problem somewhere...");
     }
 
     // Fonction instanciant un power-up

@@ -68,7 +68,30 @@ public class PlayerHealth : MonoBehaviour
             {
                 playerHealth.Damage(5);
                 shieldDurability--;
+                if (shieldDurability <= 0)
+                    shield.SetActive(false);
             }
+            Destroy(collision.gameObject);
+        }
+
+        // touché par une rocket
+        if (collision.gameObject.tag == "Rocket")
+        {
+            // DEBUG
+            Debug.Log("Touched by a rocket");
+
+            // TODO: change values
+            if (shieldDurability <= 0)
+                playerHealth.Damage(40);
+            /*
+            else
+            {
+                playerHealth.Damage(10);
+                shieldDurability -= 2;
+                if (shieldDurability <= 0)
+                    shield.SetActive(false);
+            }
+            */
             Destroy(collision.gameObject);
         }
 
@@ -84,10 +107,24 @@ public class PlayerHealth : MonoBehaviour
             {
                 playerHealth.Damage(5);
                 shieldDurability--;
-                if (shieldDurability == 0)
+                if (shieldDurability <= 0)
                     shield.SetActive(false);
             }
             Destroy(collision.gameObject);
+        }
+    }
+
+    // Fonction augmantant la vie du joueur
+    private void ExplosionDamage()
+    {
+        if (shieldDurability <= 0)
+            playerHealth.Damage(30);
+        else
+        {
+            playerHealth.Damage(10);
+            shieldDurability--;
+            if (shieldDurability <= 0)
+                shield.SetActive(false);
         }
     }
 
