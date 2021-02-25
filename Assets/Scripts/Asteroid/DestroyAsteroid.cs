@@ -14,6 +14,7 @@ public class DestroyAsteroid : MonoBehaviour
     public GameObject mitraillette;
     public GameObject akimbo;
     public GameObject shield;
+    public GameObject flash;
 
     // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size; 
@@ -138,20 +139,25 @@ public class DestroyAsteroid : MonoBehaviour
         int dropRate = Random.Range(1,100);
 
         // TODO: change values
-        if (dropRate <= 25)
+        if (dropRate <= 20)
         {
             // drop un power-up de santé
             DropPowerUpBis(medikit);
         }
-        if (dropRate >= 26 && dropRate <= 50)
+        if (dropRate >= 21 && dropRate <= 40)
         {
             // drop un power-up mitraillette
             DropPowerUpBis(mitraillette);
         }
-        if (dropRate >= 51 && dropRate <= 75)
+        if (dropRate >= 41 && dropRate <= 60)
         {
             // drop un power-up akimbo
             DropPowerUpBis(akimbo);
+        }
+        if (dropRate >= 61 && dropRate <= 80)
+        {
+            // drop un power-up de vitesse
+            DropPowerUpBis(flash);
         }
         else
         {

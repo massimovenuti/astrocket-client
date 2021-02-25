@@ -44,4 +44,19 @@ public class Movements : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lockOnLook, _rotationSpeed * Time.deltaTime);
         }
     }
+
+    private void PowerUpFlash( )
+    {
+        _forwardSpeed = 10f;
+        StartCoroutine(TimerFlash());
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up de vitesse
+    private IEnumerator TimerFlash( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(5);
+        _forwardSpeed = 5f;
+    }
 }
