@@ -140,7 +140,10 @@ public class GunController : MonoBehaviour
     private void PowerUpAkimbo( )
     {
         if (bazooka)
+        {
             bazooka = false;
+            shootRate -= 0.2f;
+        }
         akimbo = true;
 
         StartCoroutine(TimerAkimbo());

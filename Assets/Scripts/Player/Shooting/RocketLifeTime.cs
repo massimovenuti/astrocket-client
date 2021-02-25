@@ -8,6 +8,10 @@ public class RocketLifeTime : MonoBehaviour
     public float power;
     public Vector3 explosionPosition;
 
+
+    public GameObject BulletStorage;
+    public GameObject PlayerParent;
+    public GameObject RealPlayer;
     public GameObject ExplosionVFX;
 
     // Start is called before the first frame update
@@ -16,6 +20,10 @@ public class RocketLifeTime : MonoBehaviour
         // TODO: change values
         radius = 25.0f;
         power = 100.0f;
+
+        BulletStorage = this.transform.parent.gameObject;
+        PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
+        RealPlayer = PlayerParent.gameObject.transform.GetChild(0).gameObject;
 
         Destroy(gameObject, 1);
     }
@@ -36,14 +44,18 @@ public class RocketLifeTime : MonoBehaviour
         {
             if (hit.tag == "Player" || hit.tag == "Asteroid")
             {
-                Rigidbody rb = hit.GetComponent<Rigidbody>();
-                if (rb != null)
-                    rb.AddExplosionForce(power, explosionPosition, radius, 3.0f);
+                if (hit.gameObject != RealPlayer)
+                {
+                    Rigidbody rb = hit.GetComponent<Rigidbody>();
+                    if (rb != null)
+                        rb.AddExplosionForce(power, explosionPosition, radius, 3.0f);
 
-                if (hit.tag == "Player")
-                    hit.SendMessage("ExplosionDamage");
+                    if (hit.tag == "Asteroid")
+                        hit.SendMessage("DestructionAsteroid");
 
-                // TODO: shooter doesn't take damages !!!!
+                    if (hit.tag == "Player")
+                        hit.SendMessage("ExplosionDamage");
+                }
             }
         }
     }

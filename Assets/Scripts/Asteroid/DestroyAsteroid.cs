@@ -183,6 +183,11 @@ public class DestroyAsteroid : MonoBehaviour
 
         GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, spawningRemains.rotation);
 
+        // TODO: change values
+        // détruit le power-up s'il n'est pas ramassé
+        // au bout de 15 secondes
+        Destroy(PowerUp, 15);
+
     }
 
     /// <summary>
