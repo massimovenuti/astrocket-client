@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace API.Auth
 {
     [Serializable]
-    public class UserToken
+    public class Token
     {
-        public string Token { get; set; }
+        public string Tok { get; set; }
     }
 }
