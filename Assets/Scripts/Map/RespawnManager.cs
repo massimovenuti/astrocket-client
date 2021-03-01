@@ -14,7 +14,7 @@ public class RespawnManager : MonoBehaviour
 
     public GameObject enemyMockPrefab;
 
-    private float yAxis = 2.9f;
+    private float yAxis = 0f;
 
     private GameObject _respawnManager;
     private List<GameObject> _respawnPointsList;

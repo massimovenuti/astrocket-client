@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 839d34f55a0df3c4984e9d98c5bd835c
+guid: c77cad5a0b87ca648ac1f9f7f94a4594
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,28 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: accent
-    second: {fileID: 2100000, guid: 0b2f8f91c512b0144aab48ae546fd87e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: black
-    second: {fileID: 2100000, guid: 9329db5e8e17db04788601020acf75e2, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: glass
-    second: {fileID: 2100000, guid: 19f0ba200af60fa43a7af681c6b98c74, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: metal
-    second: {fileID: 2100000, guid: 5b6d32425e219f747af2b0599cf99923, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: white
-    second: {fileID: 2100000, guid: 40ce76f0ab7c6e749870db34ec500233, type: 2}
+      name: asteroid_mat
+    second: {fileID: 2100000, guid: 587ac94a5a8d3be48a04d8f7bd1c0873, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
