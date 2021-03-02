@@ -26,10 +26,6 @@ public class PlayerHealth : MonoBehaviour
     // Fonction Update, appelée à chaque frame
     private void Update()
     {
-        // DEBUG
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-            playerHealth.Damage(20);
-
         // si le joueur est mort
         if (playerHealth.GetDead())
         {
