@@ -45,9 +45,7 @@ public class AsteroidSpawner : MonoBehaviour
     private void Start()
     {
         InstantiateAsteroidSpawners();
-
-        // invoke every second starting from time.deltaTime = 0f
-        InvokeRepeating("SpawnAsteroid", 0f, 1f);
+        StartCoroutine(SpawnAsteroid());
     }
 
     private void InstantiateAsteroidSpawners()
@@ -68,7 +66,7 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnAsteroid()
+    private IEnumerator SpawnAsteroid()
     {
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
         int asteroidCount = asteroids.Length;
@@ -98,6 +96,10 @@ public class AsteroidSpawner : MonoBehaviour
         }
 
         CheckAsteroidPosition(asteroids);
+
+        yield return new WaitForSeconds(1f);
+
+        StartCoroutine(SpawnAsteroid());
     }
 
     private void CheckAsteroidPosition(GameObject[] asteroids)

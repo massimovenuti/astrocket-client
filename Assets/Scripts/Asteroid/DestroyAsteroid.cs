@@ -13,13 +13,13 @@ public class DestroyAsteroid : MonoBehaviour
     public bool inMapBounds = false;
 
     private GameObject _asteroidStorage;
-    private GameObject _player;
+    private GameObject[] _player;
     private Rigidbody _rb;
 
-    private void Awake()
+    private void Awake( )
     {
-        //_player = GameObject.FindGameObjectsWithTag("Player").First();
-        Debug.Log("awoo");
+        // may be null (provokes error) if asteroid spawns while player is dead (disabled) see HitByAsteroid() behaviour
+        _player = GameObject.FindGameObjectsWithTag("Player");
 
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
         if (go == null)
@@ -150,8 +150,12 @@ public class DestroyAsteroid : MonoBehaviour
     {
         Destroy(this.gameObject);
 
-        //PlayerHealth ph = _player.GetComponent<PlayerHealth>();
-        //ph.playerHealth.Damage(25);
+        if (_player != null)
+        {
+            GameObject go = _player.First();
+            PlayerHealth ph = go.GetComponent<PlayerHealth>();
+            ph.playerHealth.Damage(25);
+        }
         Debug.Log("Meow've been hit :'(");
     }
 }
