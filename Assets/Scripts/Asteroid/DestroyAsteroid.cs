@@ -6,11 +6,10 @@ using System.Linq;
 public class DestroyAsteroid : MonoBehaviour
 {
     public string AsteroidStorageTagName = "AsteroidStorage";
-
     public Transform spawningRemains;
 
-    // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
-    public int _Size; 
+    // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
+    public int size; 
     public bool inMapBounds = false;
 
     private GameObject _asteroidStorage;
@@ -59,16 +58,10 @@ public class DestroyAsteroid : MonoBehaviour
 
         Destroy(this.gameObject);
 
-        _Size--;
-
-        if(_Size >= 1)
-        {
+        if (--size >= 1)
             DropRemains(vector, origin);
-        }
         else
-        {
             DropPowerUP();
-        }
     }
 
     /// <summary>
@@ -76,52 +69,53 @@ public class DestroyAsteroid : MonoBehaviour
     /// </summary>
     private void DropRemains(Vector3 vec, Vector3 origin)
     {
-        //Faut-il le placer comme attribut de classe ?
-        float RemainSpeed = 1.5f;
+        float remainSpeed = 1.5f;
 
-        float Angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
-        float Angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
+        float angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
+        float angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
         GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
         GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
+
+        Rigidbody rb1 = remain1.GetComponent<Rigidbody>();
+        Rigidbody rb2 = remain2.GetComponent<Rigidbody>();
+
         remain1.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
         remain2.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
+
         remain1.transform.parent = _asteroidStorage.transform;
         remain2.transform.parent = _asteroidStorage.transform;
-        remain1.name = "Remain1";
-        remain2.name = "Remain2";
 
-        float PointSpawn1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
-        float PointSpawn1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
-        float PointSpawn2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
-        float PointSpawn2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
+        float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
+        float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
+        float spawnPoint2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
+        float spawnPoint2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
 
+        Vector3 spawnPoint1 = new Vector3 (spawnPoint1_X, 0, spawnPoint1_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
 
-        Vector3 PointSpawn1 = new Vector3 (PointSpawn1_X, 0, PointSpawn1_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
-        Vector3 PointSpawn2 = new Vector3(PointSpawn2_X, 0, PointSpawn2_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
-
-        remain1.transform.position = PointSpawn1;
-        remain2.transform.position = PointSpawn2;
+        remain1.transform.position = spawnPoint1;
+        remain2.transform.position = spawnPoint2;
 
         remain1.transform.localScale = new Vector3(remain1.transform.localScale.x / 2, remain1.transform.localScale.y / 2, remain1.transform.localScale.z / 2);
         remain2.transform.localScale = new Vector3(remain2.transform.localScale.x / 2, remain2.transform.localScale.y / 2, remain2.transform.localScale.z / 2);
 
-        remain1.GetComponent<Rigidbody>().mass /= 2;
-        remain2.GetComponent<Rigidbody>().mass /= 2;
+        rb1.mass /= 2;
+        rb2.mass /= 2;
 
-        float Velocity1_X = Mathf.Cos(Angle1) * vec.x - Mathf.Sin(Angle1) * vec.z;
-        float Velocity1_Z = Mathf.Sin(Angle1) * vec.x + Mathf.Cos(Angle1) * vec.z;
-        float Velocity2_X = Mathf.Cos(-Angle2) * vec.x - Mathf.Sin(-Angle2) * vec.z;
-        float Velocity2_Z = Mathf.Sin(-Angle2) * vec.x + Mathf.Cos(-Angle2) * vec.z;
+        float velocity1_X = Mathf.Cos(angle1) * vec.x - Mathf.Sin(angle1) * vec.z;
+        float velocity1_Z = Mathf.Sin(angle1) * vec.x + Mathf.Cos(angle1) * vec.z;
+        float velocity2_X = Mathf.Cos(-angle2) * vec.x - Mathf.Sin(-angle2) * vec.z;
+        float velocity2_Z = Mathf.Sin(-angle2) * vec.x + Mathf.Cos(-angle2) * vec.z;
 
+        rb1.velocity = (new Vector3(velocity1_X, 0, velocity1_Z) * remainSpeed);
+        rb2.velocity = (new Vector3(velocity2_X, 0, velocity2_Z) * remainSpeed);
 
-        remain1.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity1_X, 0, Velocity1_Z) * RemainSpeed);
-        remain2.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity2_X, 0, Velocity2_Z) * RemainSpeed);
+        float rotForce_tmp = (remain1.GetComponent<DestroyAsteroid>().size == 2) ? 5000 : 1000;
 
-        remain1.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity1_X, 0, Velocity1_Z) * RemainSpeed);
-        remain2.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity2_X, 0, Velocity2_Z) * RemainSpeed);
+        rb1.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
+        rb2.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
     }
-
 
     //Amené à être modifié selon les choix sur les power up
     /// <summary>
@@ -134,17 +128,14 @@ public class DestroyAsteroid : MonoBehaviour
         if (dropRate <= 20)
         {
             if (dropRate <= 10)
-            {
-                print("Power-up : Regen vie");
-            }
+                Debug.Log("Power-up : Regen vie");
+
             if (dropRate > 10)
-            {
-                print("Power-up : Shield");
-            }
+                Debug.Log("Power-up : Shield");
         }
         else
         {
-            print("Pas de Power-up");
+            Debug.Log("Pas de Power-up");
         }
     }
 
@@ -154,6 +145,5 @@ public class DestroyAsteroid : MonoBehaviour
     private void HitByAsteroid( )
     {
         Destroy(this.gameObject);
-        print("Vaiseau -10 de vie");
     }
 }

@@ -90,6 +90,7 @@ public class AsteroidSpawner : MonoBehaviour
             go.transform.parent = _asteroidStorage.transform;
             Rigidbody rb = go.GetComponent<Rigidbody>();
             rb.velocity = dir * _asteroidVelocity;
+            rb.AddTorque(transform.up * 10000 * ((Random.value < 0.5f) ? 1 : -1));
         }
         else
         {
