@@ -17,7 +17,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     private int _asteroidSpawnerAmount = 8;
     private int _mapRadiusLen = 175;
-    private float _yAxis = 2.9f;
+    private float _yAxis = 0f;
 
     private float _asteroidVelocity = 10f;
     private int _barrierVelocitySensitivity = 6;

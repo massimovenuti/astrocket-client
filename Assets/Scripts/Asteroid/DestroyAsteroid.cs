@@ -37,7 +37,7 @@ public class DestroyAsteroid : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _rb.mass = 15;
-        spawningRemains = this.transform.Find("Remains");
+        spawningRemains = this.transform;
     }
 
     /// <summary>
@@ -90,8 +90,8 @@ public class DestroyAsteroid : MonoBehaviour
         float Angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
         float Angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-        GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
-        GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, spawningRemains.rotation);
+        GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
+        GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
         remain1.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
         remain2.GetComponent<DestroyAsteroid>().inMapBounds = inMapBounds;
         remain1.transform.parent = _asteroidStorage.transform;
@@ -105,8 +105,8 @@ public class DestroyAsteroid : MonoBehaviour
         float PointSpawn2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
 
 
-        Vector3 PointSpawn1 = new Vector3 (PointSpawn1_X, 0, PointSpawn1_Z).normalized * (remain1.transform.localScale.x / 4) + origin;
-        Vector3 PointSpawn2 = new Vector3(PointSpawn2_X, 0, PointSpawn2_Z).normalized * (remain1.transform.localScale.x / 4) + origin;
+        Vector3 PointSpawn1 = new Vector3 (PointSpawn1_X, 0, PointSpawn1_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
+        Vector3 PointSpawn2 = new Vector3(PointSpawn2_X, 0, PointSpawn2_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
 
         remain1.transform.position = PointSpawn1;
         remain2.transform.position = PointSpawn2;
