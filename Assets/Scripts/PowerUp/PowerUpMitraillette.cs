@@ -9,10 +9,7 @@ public class PowerUpMitraillette : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Mitraillette");
-
-            collider.SendMessage("PowerUpNewShootRate");
+            collider.GetComponent<GunController>().PowerUpNewShootRate();
             Destroy(this.gameObject);
         }
     }

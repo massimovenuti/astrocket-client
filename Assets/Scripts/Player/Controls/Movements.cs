@@ -13,6 +13,18 @@ public class Movements : MonoBehaviour
     private InputManager _inp;
     private Plane _groundPlane;
 
+    public bool flash;
+    private float _refSpeed;
+    private float _powerUpSpeed;
+
+    // Start is called before the first frame update
+    private void Start( )
+    {
+        flash = false;
+        _refSpeed = _forwardSpeed;
+        _powerUpSpeed = 2 * _forwardSpeed;
+    }
+
     /// <summary>
     /// Trouver le rigidbody du vaisseau
     /// </summary>
@@ -45,9 +57,14 @@ public class Movements : MonoBehaviour
         }
     }
 
-    private void PowerUpFlash( )
+    public void PowerUpFlash( )
     {
-        _forwardSpeed = 10f;
+        // DEBUG
+        Debug.Log("Flash");
+
+        flash = true;
+        _forwardSpeed = _powerUpSpeed;
+
         StartCoroutine(TimerFlash());
     }
 
@@ -56,7 +73,18 @@ public class Movements : MonoBehaviour
     private IEnumerator TimerFlash( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(5);
-        _forwardSpeed = 5f;
+        yield return new WaitForSeconds(10);
+
+        flash = false;
+        _forwardSpeed = _refSpeed;
+    }
+
+    public void ResetPowerUps( )
+    {
+        // DEBUG
+        Debug.Log("Death: Reset power-ups (movements)");
+
+        flash = false;
+        _forwardSpeed = _refSpeed;
     }
 }

@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PowerUpBazooka : MonoBehaviour
 {
+
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Bazooka");
-
-            collider.SendMessage("PowerUpBazooka");
+            collider.GetComponent<GunController>().PowerUpBazooka();
             Destroy(this.gameObject);
         }
     }

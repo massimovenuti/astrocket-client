@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PowerUpFlash : MonoBehaviour
 {
+
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Flash");
-
-            collider.SendMessage("PowerUpFlash");
+            collider.GetComponent<Movements>().PowerUpFlash();
             Destroy(this.gameObject);
         }
     }

@@ -1052,7 +1052,7 @@ MonoBehaviour:
   akimbo: 0
   mitraillette: 0
   bazooka: 0
-  rocket: {fileID: 0}
+  rocket: {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
 --- !u!114 &8014777496973570340
 MonoBehaviour:
   m_ObjectHideFlags: 0

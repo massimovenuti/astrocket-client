@@ -60,7 +60,7 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Fractionne l'astéroïde ou le détruit
     /// </summary>
-    private void DestructionAsteroid()
+    public void DestructionAsteroid()
     {
         Vector3 vector = this.GetComponent<Rigidbody>().velocity;
         Vector3 origin = this.transform.localPosition;
@@ -75,7 +75,7 @@ public class DestroyAsteroid : MonoBehaviour
         }
         else
         {
-            DropPowerUP();
+            DropChancePowerUp();
         }
     }
 
@@ -131,48 +131,65 @@ public class DestroyAsteroid : MonoBehaviour
     }
 
 
+    private void DropChancePowerUp()
+    {
+        // TODO: change values
+        int dropChance = Random.Range(1, 100);
+
+        Debug.Log(dropChance);
+
+        if (dropChance >= 50)
+        {
+            DropPowerUP(dropChance);
+            // DEBUG
+            Debug.Log("Power-up");
+        }
+        else
+            // DEBUG
+            Debug.Log("Pas de power-up");
+    }
+
     //Amené à être modifié selon les choix sur les power up
     /// <summary>
     /// Laisse tomber les power-up
     /// </summary>
-    private void DropPowerUP()
+    private void DropPowerUP(int dropChance)
     {
-        int dropRate = Random.Range(1,100);
 
         // TODO: change values
-        if (dropRate <= 20)
+        if (dropChance <= 55)
         {
             // drop un power-up de santé
             DropPowerUpBis(medikit);
         }
-        else if (dropRate >= 21 && dropRate <= 40)
+        else if (dropChance >= 56 && dropChance <= 60)
         {
             // drop un power-up mitraillette
             DropPowerUpBis(mitraillette);
         }
-        else if (dropRate >= 41 && dropRate <= 60)
+        else if (dropChance >= 61 && dropChance <= 65)
         {
             // drop un power-up akimbo
             DropPowerUpBis(akimbo);
         }
-        else if (dropRate >= 61 && dropRate <= 80)
+        else if (dropChance >= 66 && dropChance <= 70)
         {
             // drop un power-up de vitesse
             DropPowerUpBis(flash);
         }
-        else if (dropRate >= 81 && dropRate <= 90)
+        else if (dropChance >= 71 && dropChance <= 75)
         {
             // drop un power-up shield
             DropPowerUpBis(shield);
         }
-        else if (dropRate >= 91 && dropRate <= 100)
+        else if (dropChance >= 76 && dropChance <= 80)
         {
             // drop un power-up bazooka
             DropPowerUpBis(bazooka);
         }
         // DEBUG
         else
-            Debug.Log("There is a problem somewhere...");
+            Debug.Log("Not implemented yet...");
     }
 
     // Fonction instanciant un power-up

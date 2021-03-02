@@ -8,13 +8,16 @@ public class GunController : MonoBehaviour
     public float shootRate = 0.2f;
     public Material bulletMaterial;
     public float shootForce = 3000f;
-    public float shootForceRocket = 2000f;
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
 
     public bool akimbo;
     public bool mitraillette;
     public bool bazooka;
+    private float _refShootRate;
+    private float _mitrailletteShootRate;
+    private float _bazookaShootRate;
+    private float _shootForceRocket;
 
     private InputManager _inp;
 
@@ -61,6 +64,10 @@ public class GunController : MonoBehaviour
         akimbo = false;
         mitraillette = false;
         bazooka = false;
+        _refShootRate = shootRate;
+        _mitrailletteShootRate = shootRate / 2;
+        _bazookaShootRate = shootRate * 2;
+        _shootForceRocket = (shootForce * 3) / 2;
     }
 
     private void Update( )
@@ -121,43 +128,58 @@ public class GunController : MonoBehaviour
             GameObject go = (GameObject)Instantiate(rocket, _barrel.transform.position, rot);
 
             go.transform.parent = _bulletSpawn.transform;
-            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForceRocket);
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * _shootForceRocket);
 
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }
 
-    private void PowerUpNewShootRate( )
+    public void PowerUpNewShootRate( )
     {
-        mitraillette = true;
+        // DEBUG
+        Debug.Log("Mitraillette");
 
-        // TODO: change value
-        shootRate -= 0.1f;
+        // on ne peut avoir qu'un power-up de
+        // tir à la fois
+        if (akimbo)
+            akimbo = false;
+        else if (bazooka)
+            bazooka = false;
+        
+        mitraillette = true;
+        shootRate = _mitrailletteShootRate;
 
         StartCoroutine(TimerMitraillette());
     }
 
-    private void PowerUpAkimbo( )
+    public void PowerUpAkimbo( )
     {
+        // DEBUG
+        Debug.Log("Akimbo");
+
         if (bazooka)
-        {
             bazooka = false;
-            // TODO: change value
-            shootRate -= 0.2f;
-        }
+        else if (mitraillette)
+            mitraillette = false;
+
         akimbo = true;
+        shootRate = _refShootRate;
 
         StartCoroutine(TimerAkimbo());
     }
 
-    private void PowerUpBazooka( )
+    public void PowerUpBazooka( )
     {
-        if (akimbo)
-            akimbo =  false;
-        bazooka = true;
+        // DEBUG
+        Debug.Log("Bazooka");
 
-        // TODO: change values
-        shootRate += 0.2f;
+        if (akimbo)
+            akimbo = false;
+        else if (mitraillette)
+            mitraillette = false;
+
+        bazooka = true;
+        shootRate = _bazookaShootRate;
 
         StartCoroutine(TimerBazooka());
     }
@@ -167,8 +189,10 @@ public class GunController : MonoBehaviour
     private IEnumerator TimerAkimbo( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
+
         akimbo = false;
+        shootRate = _refShootRate;
     }
 
     // Fonction attendant 5 secondes avant de
@@ -176,12 +200,10 @@ public class GunController : MonoBehaviour
     private IEnumerator TimerMitraillette( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(5);
-
-        // TODO: change values
-        shootRate += 0.1f;
+        yield return new WaitForSeconds(10);
 
         mitraillette = false;
+        shootRate = _refShootRate;
     }
 
     // Fonction attendant 5 secondes avant de
@@ -189,11 +211,31 @@ public class GunController : MonoBehaviour
     private IEnumerator TimerBazooka( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(15);
-
-        // TODO: change values
-        shootRate -= 0.2f;
+        yield return new WaitForSeconds(10);
 
         bazooka = false;
+        shootRate = _refShootRate;
+    }
+
+    public void ResetPowerUps( )
+    {
+        // DEBUG
+        Debug.Log("Death: Reset power-ups (guns)");
+
+        if (akimbo)
+        {
+            akimbo = false;
+            shootRate = _refShootRate;
+        }
+        if (bazooka)
+        {
+            bazooka = false;
+            shootRate = _refShootRate;
+        }
+        if (mitraillette)
+        {
+            mitraillette = false;
+            shootRate = _refShootRate;
+        }
     }
 }

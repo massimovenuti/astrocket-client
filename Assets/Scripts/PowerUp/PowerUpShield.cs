@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PowerUpShield : MonoBehaviour
 {
+
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Shield");
-
-            collider.SendMessage("PowerUpShield");
+            collider.GetComponent<PlayerHealth>().PowerUpShield();
             Destroy(this.gameObject);
         }
     }
