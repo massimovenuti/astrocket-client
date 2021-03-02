@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AsteroidStorageTagName: AsteroidStorage
   spawningRemains: {fileID: 0}
-  _Size: 3
+  size: 3
   inMapBounds: 0
 --- !u!54 &7975735016790354321
 Rigidbody:
