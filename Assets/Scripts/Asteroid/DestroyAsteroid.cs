@@ -196,6 +196,5 @@ public class DestroyAsteroid : MonoBehaviour
     private void HitByAsteroid( )
     {
         Destroy(this.gameObject);
-        print("Vaiseau -10 de vie");
     }
 }
