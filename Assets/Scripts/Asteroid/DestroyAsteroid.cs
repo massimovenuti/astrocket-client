@@ -13,15 +13,12 @@ public class DestroyAsteroid : MonoBehaviour
     public bool inMapBounds = false;
 
     private GameObject _asteroidStorage;
-    private GameObject[] _player;
     private Rigidbody _rb;
 
     private void Awake( )
     {
-        // may be null (provokes error) if asteroid spawns while player is dead (disabled) see HitByAsteroid() behaviour
-        _player = GameObject.FindGameObjectsWithTag("Player");
-
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
+
         if (go == null)
             Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
         else
@@ -48,7 +45,7 @@ public class DestroyAsteroid : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            HitByAsteroid();
+            HitByAsteroid(collision.gameObject);
         }
     }
 
@@ -146,16 +143,11 @@ public class DestroyAsteroid : MonoBehaviour
     /// <summary>
     /// Inflige des dégats au vaisseau
     /// </summary>
-    private void HitByAsteroid( )
+    private void HitByAsteroid(GameObject player)
     {
         Destroy(this.gameObject);
-
-        if (_player != null)
-        {
-            GameObject go = _player.First();
-            PlayerHealth ph = go.GetComponent<PlayerHealth>();
-            ph.playerHealth.Damage(25);
-        }
+        PlayerHealth ph = player.GetComponent<PlayerHealth>();
+        ph.playerHealth.Damage(25);
         Debug.Log("Meow've been hit :'(");
     }
 }
