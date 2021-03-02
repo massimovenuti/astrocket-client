@@ -13,10 +13,14 @@ public class DestroyAsteroid : MonoBehaviour
     public bool inMapBounds = false;
 
     private GameObject _asteroidStorage;
+    private GameObject _player;
     private Rigidbody _rb;
 
     private void Awake()
     {
+        //_player = GameObject.FindGameObjectsWithTag("Player").First();
+        Debug.Log("awoo");
+
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
         if (go == null)
             Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
@@ -145,5 +149,9 @@ public class DestroyAsteroid : MonoBehaviour
     private void HitByAsteroid( )
     {
         Destroy(this.gameObject);
+
+        //PlayerHealth ph = _player.GetComponent<PlayerHealth>();
+        //ph.playerHealth.Damage(25);
+        Debug.Log("Meow've been hit :'(");
     }
 }

@@ -15,14 +15,14 @@ public class AsteroidSpawner : MonoBehaviour
     private GameObject _asteroidSpawner;
     private List<GameObject> _asteroidSpawnerList;
 
-    private int _asteroidSpawnerAmount = 8;
-    private int _mapRadiusLen = 175;
+    private int _asteroidSpawnerAmount = 16;
+    private int _mapRadiusLen = 355;
     private float _yAxis = 0f;
 
     private float _asteroidVelocity = 10f;
     private int _barrierVelocitySensitivity = 6;
 
-    private int _maxAsteroidCount = 50;
+    private int _maxAsteroidCount = 80;
     private int _randomIndex = 0;
 
     private void Awake()
@@ -46,8 +46,8 @@ public class AsteroidSpawner : MonoBehaviour
     {
         InstantiateAsteroidSpawners();
 
-        // invoke every 2 seconds starting from time.deltaTime = 0f
-        InvokeRepeating("SpawnAsteroid", 0f, 2f);
+        // invoke every second starting from time.deltaTime = 0f
+        InvokeRepeating("SpawnAsteroid", 0f, 1f);
     }
 
     private void InstantiateAsteroidSpawners()
@@ -84,7 +84,7 @@ public class AsteroidSpawner : MonoBehaviour
             Vector3 dir = -tf.position.normalized;
 
             // random angle towards center of the map
-            dir += new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f));
+            dir += new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f));
 
             GameObject go = Instantiate(asteroidPrefab, tf.position, tf.rotation);
             go.transform.parent = _asteroidStorage.transform;

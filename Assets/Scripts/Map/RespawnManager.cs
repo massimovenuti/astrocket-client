@@ -8,7 +8,7 @@ public class RespawnManager : MonoBehaviour
     public string RespawnPointStorageTagName = "RespawnPointStorage";
     public string RespawnPointName = "RespawnPoint";
 
-    public float checkRadius = 25f;
+    public float checkRadius;
 
     public LayerMask checkLayers;
 
@@ -19,8 +19,8 @@ public class RespawnManager : MonoBehaviour
     private GameObject _respawnManager;
     private List<GameObject> _respawnPointsList;
 
-    private readonly float _radius = 50f;
-    private readonly float _gridStep = 50f;
+    private readonly float _radius = 200f;
+    private readonly float _gridStep = 100f;
 
 
     private void Awake( )
@@ -32,7 +32,7 @@ public class RespawnManager : MonoBehaviour
             _respawnManager = go;
 
         _respawnPointsList = new List<GameObject>();
-        checkRadius = _radius / 2f;
+        checkRadius = 25f;
     }
 
     private void Start()
