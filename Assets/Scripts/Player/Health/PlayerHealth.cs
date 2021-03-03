@@ -23,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
     private int _damageCollisionAsteroid = 25;
     private int _damageCollisionPlayer = 25;
     private int _damageExplosion = 30;
+    private int _damageValue;
 
     // Start is called before the first frame update
     private void Start()
@@ -80,16 +81,8 @@ public class PlayerHealth : MonoBehaviour
             // DEBUG
             Debug.Log("Touched by a bullet");
 
-            if (shieldDurability <= 0)
-                playerHealth.Damage(_damageBullet);
-
-            else
-            {
-                playerHealth.Damage(_damageBullet / 2);
-                shieldDurability--;
-                if (shieldDurability <= 0)
-                    shield.SetActive(false);
-            }
+            _damageValue = _damageBullet;
+            dealDamage(_damageValue);
 
             Destroy(collision.gameObject);
         }
@@ -100,17 +93,8 @@ public class PlayerHealth : MonoBehaviour
             // DEBUG
             Debug.Log("Touched by a rocket");
 
-            if (shieldDurability <= 0)
-                playerHealth.Damage(_damageRocket);
-
-            // TODO: voir comportement des rockets sur le bouclier
-            else
-            {
-                playerHealth.Damage(_damageRocket / 2);
-                shieldDurability -= 2;
-                if (shieldDurability <= 0)
-                    shield.SetActive(false);
-            }
+            _damageValue = _damageRocket;
+            dealDamage(_damageValue);
 
             Destroy(collision.gameObject);
         }
@@ -121,16 +105,8 @@ public class PlayerHealth : MonoBehaviour
             // DEBUG
             Debug.Log("Collision with an asteroid");
 
-            if (shieldDurability <= 0)
-                playerHealth.Damage(_damageCollisionAsteroid);
-
-            else
-            {
-                playerHealth.Damage(_damageCollisionAsteroid / 2);
-                shieldDurability--;
-                if (shieldDurability <= 0)
-                    shield.SetActive(false);
-            }
+            _damageValue = _damageCollisionAsteroid;
+            dealDamage(_damageValue);
 
             collision.gameObject.GetComponent<DestroyAsteroid>().DestructionAsteroid();
         }
@@ -141,31 +117,31 @@ public class PlayerHealth : MonoBehaviour
             // DEBUG
             Debug.Log("Collision with a player");
 
-            if (shieldDurability <= 0)
-                playerHealth.Damage(_damageCollisionPlayer);
-
-            else
-            {
-                playerHealth.Damage(_damageCollisionPlayer / 2);
-                shieldDurability--;
-                if (shieldDurability <= 0)
-                    shield.SetActive(false);
-            }
+            _damageValue = _damageCollisionPlayer;
+            dealDamage(_damageValue);
         }
     }
 
     // Fonction diminuant la vie du joueur
     // quand il est affecté par une explosion
-    private void ExplosionDamage()
+    public void ExplosionDamage()
     {
         // DEBUG
         Debug.Log("Affected by an explosion");
 
+        _damageValue = _damageExplosion;
+        dealDamage(_damageValue);
+    }
+
+    // Fonction générale diminuant la vie du joueur
+    // en gérant le bouclier
+    private void dealDamage(int damageValue)
+    {
         if (shieldDurability <= 0)
-            playerHealth.Damage(_damageExplosion);
+            playerHealth.Damage(damageValue);
         else
         {
-            playerHealth.Damage(_damageExplosion / 2);
+            playerHealth.Damage(damageValue / 2);
             shieldDurability--;
             if (shieldDurability <= 0)
                 shield.SetActive(false);

@@ -75,7 +75,7 @@ public class DestroyAsteroid : MonoBehaviour
         }
         else
         {
-            DropChancePowerUp();
+            DropPowerUp();
         }
     }
 
@@ -130,62 +130,49 @@ public class DestroyAsteroid : MonoBehaviour
         remain2.GetComponent<Rigidbody>().velocity = (new Vector3(Velocity2_X, 0, Velocity2_Z) * RemainSpeed);
     }
 
-
-    private void DropChancePowerUp()
-    {
-        // TODO: change values
-        int dropChance = Random.Range(1, 100);
-
-        Debug.Log(dropChance);
-
-        if (dropChance >= 50)
-        {
-            DropPowerUP(dropChance);
-            // DEBUG
-            Debug.Log("Power-up");
-        }
-        else
-            // DEBUG
-            Debug.Log("Pas de power-up");
-    }
-
     //Amené à être modifié selon les choix sur les power up
     /// <summary>
     /// Laisse tomber les power-up
     /// </summary>
-    private void DropPowerUP(int dropChance)
+    private void DropPowerUp()
     {
+        int dropChance = Random.Range(1, 100);
 
         // TODO: change values
-        if (dropChance <= 55)
+        if (dropChance <= 50)
         {
-            // drop un power-up de santé
-            DropPowerUpBis(medikit);
+            // pas de power-up
+            Debug.Log("Pas de power-up");
+        }
+        else if (dropChance >= 51 && dropChance <= 55)
+        {
+            // drop un power-up medikit
+            InstantiatePowerUp(medikit);
         }
         else if (dropChance >= 56 && dropChance <= 60)
         {
             // drop un power-up mitraillette
-            DropPowerUpBis(mitraillette);
+            InstantiatePowerUp(mitraillette);
         }
         else if (dropChance >= 61 && dropChance <= 65)
         {
             // drop un power-up akimbo
-            DropPowerUpBis(akimbo);
+            InstantiatePowerUp(akimbo);
         }
         else if (dropChance >= 66 && dropChance <= 70)
         {
             // drop un power-up de vitesse
-            DropPowerUpBis(flash);
+            InstantiatePowerUp(flash);
         }
         else if (dropChance >= 71 && dropChance <= 75)
         {
             // drop un power-up shield
-            DropPowerUpBis(shield);
+            InstantiatePowerUp(shield);
         }
         else if (dropChance >= 76 && dropChance <= 80)
         {
             // drop un power-up bazooka
-            DropPowerUpBis(bazooka);
+            InstantiatePowerUp(bazooka);
         }
         // DEBUG
         else
@@ -193,7 +180,7 @@ public class DestroyAsteroid : MonoBehaviour
     }
 
     // Fonction instanciant un power-up
-    private void DropPowerUpBis(GameObject powerUp)
+    private void InstantiatePowerUp(GameObject powerUp)
     {
         // DEBUG
         Debug.Log("Drop Power-Up : " + powerUp.name);
