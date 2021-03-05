@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Mirror;
 
-public class Movements : MonoBehaviour
+public class Movements : NetworkBehaviour
 {
     private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
 
-    private Camera _mainCamera;
+    public Camera _mainCamera;
     private Rigidbody _rgbody;
     private InputManager _inp;
     private Plane _groundPlane;
@@ -19,19 +20,22 @@ public class Movements : MonoBehaviour
     private void Awake()
     {
         _inp = FindObjectOfType<InputManager>();
-        _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
+        //_mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
     }
 
     private void Update()
     {
-        LookAt();
-        if (_inp.IsBoosting())
-            _rgbody.AddForce(transform.forward * _forwardSpeed);
+        if (isLocalPlayer)
+        {
+            LookAt();
+            if (_inp.IsBoosting())
+                _rgbody.AddForce(transform.forward * _forwardSpeed);
+        }
     }
 
-    private void LookAt( )
+    private void LookAt()
     {
         Vector3 mousePosition = _inp.PointingAt();
         Ray cameraRay = _mainCamera.ScreenPointToRay(mousePosition);

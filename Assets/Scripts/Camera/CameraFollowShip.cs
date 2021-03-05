@@ -10,13 +10,13 @@ public class CameraFollowShip : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
 
     // Start is called before the first frame update
-    void Awake( )
+    void Awake()
     {
         _spaceShip = GameObject.FindGameObjectsWithTag("Player").First();
     }
 
     // Update is called once per frame
-    void Update( )
+    void Update()
     {
         transform.position = Vector3.SmoothDamp(transform.position, _spaceShip.transform.position, ref velocity, SmoothTime);
     }
