@@ -161,7 +161,6 @@ GameObject:
   m_Component:
   - component: {fileID: 217060920}
   - component: {fileID: 217060919}
-  - component: {fileID: 217060918}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -169,23 +168,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &217060918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 217060917}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f361e0c714c9b4469910ec48dbd5ba0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AsteroidSpawnerStorageTagName: AsteroidSpawnerStorage
-  AsteroidStorageTagName: AsteroidStorage
-  AsteroidSpawnerName: AsteroidSpawner
-  asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
 --- !u!114 &217060919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1146,7 +1128,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 250
+      value: 100
       mode: 0
       spread: 0
       speed:
@@ -5900,7 +5882,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 400
+      value: 200
       mode: 0
       spread: 0
       speed:
@@ -9984,7 +9966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DebugEnabled: 0
   ServerBindAll: 1
-  ServerBindAddress: 127.0.0.1
+  ServerBindAddress: 192.168.1.30
   CommunicationPort: 7777
   MaximumPeerCCU: 100
   EnetServerPollTimeout: 1
@@ -10144,7 +10126,7 @@ Transform:
   m_GameObject: {fileID: 1000608712}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 700, y: 700, z: 700}
+  m_LocalScale: {x: 300, y: 300, z: 300}
   m_Children: []
   m_Father: {fileID: 217060920}
   m_RootOrder: 4
@@ -10333,7 +10315,7 @@ Transform:
   m_GameObject: {fileID: 1477074001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 600, y: 600, z: 600}
+  m_LocalScale: {x: 250, y: 250, z: 250}
   m_Children: []
   m_Father: {fileID: 217060920}
   m_RootOrder: 3
@@ -10571,7 +10553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1786291509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10726,7 +10708,7 @@ Transform:
   m_GameObject: {fileID: 1831813872}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 500, y: 500, z: 500}
+  m_LocalScale: {x: 200, y: 200, z: 200}
   m_Children: []
   m_Father: {fileID: 217060920}
   m_RootOrder: 2

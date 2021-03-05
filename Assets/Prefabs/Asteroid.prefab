@@ -3,8 +3,7 @@
 --- !u!1 &7975735016790354320
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647764, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
@@ -27,8 +26,7 @@ GameObject:
 --- !u!4 &7975735016790354326
 Transform:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647762, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
@@ -42,8 +40,7 @@ Transform:
 --- !u!33 &7975735016790354325
 MeshFilter:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647761, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
@@ -51,8 +48,7 @@ MeshFilter:
 --- !u!23 &7975735016790354324
 MeshRenderer:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647760, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
@@ -91,8 +87,7 @@ MeshRenderer:
 --- !u!135 &7975735016790354323
 SphereCollider:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647767, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
@@ -105,25 +100,26 @@ SphereCollider:
 --- !u!114 &7975735016790354322
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647766, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   AsteroidStorageTagName: AsteroidStorage
   spawningRemains: {fileID: 0}
+  asteroidPrefab: {fileID: 7975735016790354320}
   size: 3
   inMapBounds: 0
 --- !u!54 &7975735016790354321
 Rigidbody:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 7971338758692647765, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}

@@ -19,9 +19,8 @@ public class RespawnManager : MonoBehaviour
     private GameObject _respawnManager;
     private List<GameObject> _respawnPointsList;
 
-    private readonly float _radius = 200f;
-    private readonly float _gridStep = 100f;
-
+    private readonly float _radius = 80f;
+    private readonly float _gridStep = 50f;
 
     private void Awake( )
     {

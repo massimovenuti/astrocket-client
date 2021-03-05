@@ -14,13 +14,13 @@ public class AsteroidNetworkManager : NetworkManager
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 16;
-    private int _mapRadiusLen = 355;
+    private int _mapRadiusLen = 210;
     private float _yAxis = 0f;
 
     private float _asteroidVelocity = 10f;
     private int _barrierVelocitySensitivity = 6;
 
-    private int _maxAsteroidCount = 80;
+    private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
 
     public override void OnStartServer( )
