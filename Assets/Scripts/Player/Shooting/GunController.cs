@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using UnityEngine;
+using Mirror;
 
-public class GunController : MonoBehaviour
+public class GunController : NetworkBehaviour
 {
     public GameObject bullet;
     public float shootRate = 0.2f;
@@ -47,19 +48,18 @@ public class GunController : MonoBehaviour
             Shoot();
     }
 
-    private void Shoot( )
+    [Command]
+    private void Shoot()
     {
         if (Time.time > _lastShootingTimeRef)
         {
-            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
-            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, rot);
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
 
             go.GetComponent<MeshRenderer>().material = bulletMaterial;
             go.GetComponent<TrailRenderer>().material = bulletMaterial;
 
-            go.transform.parent = _bulletSpawn.transform;
-            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
-
+            //go.transform.parent = _bulletSpawn.transform;
+            NetworkServer.Spawn(go);
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }

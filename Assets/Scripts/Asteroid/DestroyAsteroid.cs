@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Mirror;
 
-public class DestroyAsteroid : MonoBehaviour
+public class DestroyAsteroid : NetworkBehaviour
 {
     public string AsteroidStorageTagName = "AsteroidStorage";
     public Transform spawningRemains;
@@ -39,7 +40,7 @@ public class DestroyAsteroid : MonoBehaviour
     {     
         if (collision.gameObject.tag == "Bullet")
         {
-            Destroy(collision.gameObject);
+            NetworkServer.Destroy(collision.gameObject);
             DestructionAsteroid();
         }       
 
@@ -57,7 +58,7 @@ public class DestroyAsteroid : MonoBehaviour
         Vector3 vector = this.GetComponent<Rigidbody>().velocity;
         Vector3 origin = this.transform.localPosition;
 
-        Destroy(this.gameObject);
+        NetworkServer.Destroy(this.gameObject);
 
         if (--size >= 1)
             DropRemains(vector, origin);
@@ -116,6 +117,8 @@ public class DestroyAsteroid : MonoBehaviour
 
         rb1.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
         rb2.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
+
+        NetworkServer.Spawn(remain1, remain2);
     }
 
     //Amené à être modifié selon les choix sur les power up
