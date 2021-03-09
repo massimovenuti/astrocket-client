@@ -33,11 +33,14 @@ class InputManager : MonoBehaviour
         Debug.Log($"OnEnable ran {_instance == null}");
     }
 
-    public void SetKeyForAxis(string axis, KeyCode key)
+    public bool SetKeyForAxis(string axis, KeyCode key)
     {
         Debug.Assert(_keys.ContainsKey(axis));
         if (key != KeyCode.Escape)
             _keys[axis] = key;
+        else
+            return false;
+        return true;
     }
 
     public Vector3 PointingAt( )
@@ -63,5 +66,14 @@ class InputManager : MonoBehaviour
             return true;
         else
             return Input.GetKey(_keys["Shoot"]);
+    }
+
+    public string SaveInputs()
+    {
+        string json = $"\"controls\" : {{";
+        foreach (var kp in _keys)
+            json += $"\"{kp.Key}\" : \"{kp.Value}\",";
+        json += $"\" }}";
+        return json;
     }
 }
