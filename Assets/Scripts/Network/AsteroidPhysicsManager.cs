@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class AsteroidPhysicsManager : NetworkBehaviour
+public class AsteroidPhysicsManager : MonoBehaviour
 {
     public string AsteroidStorageTagName = "AsteroidStorage";
     public float _asteroidForce = 10000f;
@@ -21,6 +20,6 @@ public class AsteroidPhysicsManager : NetworkBehaviour
         this.transform.parent = _asteroidStorage.transform;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * _asteroidForce);
-        //rb.AddTorque(transform.up * 10000);
+        //rb.AddTorque(transform.up * 10000); // DO NOT TOUCH
     }
 }

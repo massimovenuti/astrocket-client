@@ -104,7 +104,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975735016790354320}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
   m_Name: 
@@ -113,6 +113,7 @@ MonoBehaviour:
   syncInterval: 0.1
   AsteroidStorageTagName: AsteroidStorage
   spawningRemains: {fileID: 0}
+  asteroidPrefab: {fileID: 7975735016790354320}
   size: 3
   inMapBounds: 0
 --- !u!54 &7975735016790354321
@@ -162,4 +163,4 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   AsteroidStorageTagName: AsteroidStorage
-  _asteroidVelocity: 3000
+  _asteroidForce: 10000

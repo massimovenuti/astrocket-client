@@ -9,6 +9,8 @@ public class DestroyAsteroid : NetworkBehaviour
     public string AsteroidStorageTagName = "AsteroidStorage";
     public Transform spawningRemains;
 
+    public GameObject asteroidPrefab;
+
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
     public int size; 
     public bool inMapBounds = false;
@@ -36,6 +38,8 @@ public class DestroyAsteroid : NetworkBehaviour
     /// <summary>
     /// Se déclenche lorsque l'astéroide entre en collision avec un élément
     /// </summary>
+    
+    [Server]
     private void OnCollisionEnter(Collision collision)
     {     
         if (collision.gameObject.tag == "Bullet")
@@ -58,12 +62,13 @@ public class DestroyAsteroid : NetworkBehaviour
         Vector3 vector = this.GetComponent<Rigidbody>().velocity;
         Vector3 origin = this.transform.localPosition;
 
-        NetworkServer.Destroy(this.gameObject);
-
         if (--size >= 1)
-            DropRemains(vector, origin);
+            //DropRemains(vector, origin);
+            DropRemainsByMe();
         else
             DropPowerUP();
+
+        NetworkServer.Destroy(this.gameObject);
     }
 
     /// <summary>
@@ -76,8 +81,8 @@ public class DestroyAsteroid : NetworkBehaviour
         float angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
         float angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-        GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
-        GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawningRemains.position, Random.rotation);
+        GameObject remain1 = (GameObject)Instantiate(asteroidPrefab, spawningRemains.position, Random.rotation);
+        GameObject remain2 = (GameObject)Instantiate(asteroidPrefab, spawningRemains.position, Random.rotation);
 
         Rigidbody rb1 = remain1.GetComponent<Rigidbody>();
         Rigidbody rb2 = remain2.GetComponent<Rigidbody>();
@@ -143,10 +148,35 @@ public class DestroyAsteroid : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// Inflige des dégats au vaisseau
-    /// </summary>
-    private void HitByAsteroid(GameObject player)
+    private void DropRemainsByMe()
+    {
+        /*
+        Vector3 vec = this.GetComponent<Rigidbody>().velocity;
+        Vector3 origin = this.transform.localPosition;
+
+        float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
+        float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
+        float spawnPoint2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
+        float spawnPoint2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
+
+        Vector3 spawnPoint1 = new Vector3(spawnPoint1_X, 0, spawnPoint1_Z).normalized * (this.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (this.transform.localScale.x / 20) + origin;
+
+        Quaternion parLa = new Quaternion(this.transform.rotation.x, this.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), this.transform.rotation.z, this.transform.rotation.w);
+        Quaternion nonMaisParLa = new Quaternion(this.transform.rotation.x, this.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), this.transform.rotation.z, this.transform.rotation.w);
+
+        GameObject remain1 = (GameObject)Instantiate(this.gameObject, spawnPoint1, parLa);
+        GameObject remain2 = (GameObject)Instantiate(this.gameObject, spawnPoint2, nonMaisParLa);
+        */
+
+        GameObject remain1 = Instantiate(asteroidPrefab, this.transform.position, this.transform.rotation);
+        NetworkServer.Spawn(remain1);
+    }
+
+        /// <summary>
+        /// Inflige des dégats au vaisseau
+        /// </summary>
+        private void HitByAsteroid(GameObject player)
     {
         Destroy(this.gameObject);
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
