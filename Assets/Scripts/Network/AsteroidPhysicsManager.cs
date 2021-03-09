@@ -21,6 +21,6 @@ public class AsteroidPhysicsManager : NetworkBehaviour
         this.transform.parent = _asteroidStorage.transform;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * _asteroidForce);
-        rb.AddTorque(transform.up * 10000 * ((Random.value < 0.5f) ? 1 : -1));
+        //rb.AddTorque(transform.up * 10000);
     }
 }
