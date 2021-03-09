@@ -23,7 +23,7 @@ public class RocketLifeTime : MonoBehaviour
 
         BulletStorage = this.transform.parent.gameObject;
         PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
-        RealPlayer = PlayerParent.gameObject.transform.GetChild(0).gameObject;
+        RealPlayer = PlayerParent.gameObject.transform.Find("Player").gameObject;
 
         Destroy(gameObject, 1);
     }

@@ -211,7 +211,7 @@ public class GunController : MonoBehaviour
     private IEnumerator TimerBazooka( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(30);
 
         bazooka = false;
         shootRate = _refShootRate;
