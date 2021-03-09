@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-namespace API.Auth
+﻿namespace API.Auth
 {
     public class AuthAPICall
     {
