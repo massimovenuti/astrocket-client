@@ -6,15 +6,13 @@ using Mirror;
 public class AsteroidNetworkManager : NetworkManager
 {
     public string AsteroidSpawnerStorageTagName = "AsteroidSpawnerStorage";
-    public string AsteroidStorageTagName = "AsteroidStorage";
     public string AsteroidSpawnerName = "AsteroidSpawner";
 
-    private GameObject _asteroidStorage;
     private GameObject _asteroidSpawner;
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 16;
-    private int _mapRadiusLen = 210;
+    private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
     private float _asteroidVelocity = 10f;
@@ -23,6 +21,8 @@ public class AsteroidNetworkManager : NetworkManager
     private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
 
+    private float precision = 0.3f; // 0 => very precise
+
     public override void OnStartServer( )
     {
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidSpawnerStorageTagName)[0];
@@ -30,12 +30,6 @@ public class AsteroidNetworkManager : NetworkManager
             Debug.LogError($"There were no GameObjects with tag {AsteroidSpawnerStorageTagName} assigned self");
         else
             _asteroidSpawner = go;
-
-        go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName)[0];
-        if (go == null)
-            Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
-        else
-            _asteroidStorage = go;
 
         _asteroidSpawnerList = new List<GameObject>();
 
@@ -69,6 +63,7 @@ public class AsteroidNetworkManager : NetworkManager
             GameObject go = new GameObject(AsteroidSpawnerName + (i + 1));
             go.transform.parent = _asteroidSpawner.transform;
             go.transform.position = pos;
+            go.transform.rotation = Quaternion.LookRotation((Vector3.zero - go.transform.position).normalized);
             _asteroidSpawnerList.Add(go);
         }
     }
@@ -86,16 +81,9 @@ public class AsteroidNetworkManager : NetworkManager
             _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
             Transform tf = _asteroidSpawnerList[_randomIndex].transform;
-            Vector3 dir = -tf.position.normalized;
-
-            // random angle towards center of the map
-            dir += new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f));
-
+            tf.rotation = new Quaternion(tf.rotation.x, tf.rotation.y + Random.Range(-precision, precision), tf.rotation.z, tf.rotation.w);
+            
             GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, tf.rotation);
-            go.transform.parent = _asteroidStorage.transform;
-            Rigidbody rb = go.GetComponent<Rigidbody>();
-            rb.velocity = dir * _asteroidVelocity;
-            rb.AddTorque(transform.up * 10000 * ((Random.value < 0.5f) ? 1 : -1));
             NetworkServer.Spawn(go);
         }
         else

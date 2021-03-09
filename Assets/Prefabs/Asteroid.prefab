@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7975735016790354322}
   - component: {fileID: 7975735016790354321}
   - component: {fileID: 3989882683078854682}
-  - component: {fileID: 2527696305922337063}
+  - component: {fileID: -5714367963193414414}
   m_Layer: 8
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -113,7 +113,6 @@ MonoBehaviour:
   syncInterval: 0.1
   AsteroidStorageTagName: AsteroidStorage
   spawningRemains: {fileID: 0}
-  asteroidPrefab: {fileID: 7975735016790354320}
   size: 3
   inMapBounds: 0
 --- !u!54 &7975735016790354321
@@ -148,7 +147,7 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &2527696305922337063
+--- !u!114 &-5714367963193414414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,12 +156,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7975735016790354320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Script: {fileID: 11500000, guid: bb39f1625a86bb94f9fc85ada1903614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 0
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
+  AsteroidStorageTagName: AsteroidStorage
+  _asteroidVelocity: 3000
