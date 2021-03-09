@@ -9,9 +9,9 @@ namespace API.Auth
 {
     public class AuthAPICall
     {
-        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr");
+        private readonly Uri AUTH_API_URL = new(@"https://auth.aw.alexandre-vogel.fr/");
         private readonly Dictionary<string, string> _endpoints;
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new();
 
         public AuthAPICall( )
         {
@@ -26,17 +26,17 @@ namespace API.Auth
             // API endpoints
             _endpoints = new Dictionary<string, string>()
             {
-                ["loginUser"] = "/user/login",
-                ["addUser"] = "/user/add",
-                ["checkUserToken"] = "/user/check",
-                ["checkServerToken"] = "/server/check",
-                ["banUser"] = "/user/ban",
-                ["removeUser"] = "/user/remove",
-                ["addServer"] = "/server/add",
-                ["removeServer"] = "/server/remove",
-                ["addAdmin"] = "/user/admin",
-                ["removeAdmin"] = "/user/unadmin",
-                ["unbanUser"] = "/user/unban",
+                ["loginUser"] = "user/login",
+                ["addUser"] = "user/add",
+                ["checkUserToken"] = "user/check",
+                ["checkServerToken"] = "server/check",
+                ["banUser"] = "user/ban",
+                ["removeUser"] = "user/remove",
+                ["addServer"] = "server/add",
+                ["removeServer"] = "server/remove",
+                ["addAdmin"] = "user/admin",
+                ["removeAdmin"] = "user/unadmin",
+                ["unbanUser"] = "user/unban",
             };
         }
 

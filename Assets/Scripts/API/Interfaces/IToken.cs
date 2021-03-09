@@ -1,6 +1,6 @@
-﻿namespace API.Auth
+﻿namespace API
 {
-    interface IToken
+    public interface IToken
     {
         string Token { get; set; }
     }

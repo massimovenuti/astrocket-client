@@ -1,6 +1,6 @@
 ﻿namespace API
 {
-    interface IName
+    public interface IName
     {
         string Name { get; set; }
     }
