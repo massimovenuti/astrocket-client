@@ -1,11 +1,13 @@
-﻿using System;
-
-namespace API.Auth
+﻿namespace API.Auth
 {
-    [Serializable]
-    public class UserLogin
+    [System.Serializable]
+    public class UserLogin : IName, IPassword
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Name { get => username; set { username = value; } }
+        [UnityEngine.SerializeField]
+        private string username;
+        public string Password { get => password; set { password = value; } }
+        [UnityEngine.SerializeField]
+        private string password;
     }
 }

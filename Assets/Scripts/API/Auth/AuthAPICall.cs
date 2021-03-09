@@ -3,102 +3,187 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using System;
 
 namespace API.Auth
 {
     public class AuthAPICall
     {
-        private const string AUTH_API_URL = @"https://auth.aw.alexandre-vogel.fr";
-        private readonly Dictionary<string, string> _urls;
+        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr");
+        private readonly Dictionary<string, string> _endpoints;
         private readonly HttpClient _httpClient = new HttpClient();
 
         public AuthAPICall( )
         {
-            _urls = new Dictionary<string, string>()
+            // Default URL for Auth API call
+            _httpClient.BaseAddress = AUTH_API_URL;
+
+            // Allow for HTTPS communication
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                | SecurityProtocolType.Tls11
+                | SecurityProtocolType.Tls;
+
+            // API endpoints
+            _endpoints = new Dictionary<string, string>()
             {
-                ["logUser"] = "/user/login",
-                ["regUser"] = "/user/add",
+                ["loginUser"] = "/user/login",
+                ["addUser"] = "/user/add",
+                ["checkUserToken"] = "/user/check",
+                ["checkServerToken"] = "/server/check",
+                ["banUser"] = "/user/ban",
+                ["removeUser"] = "/user/remove",
                 ["addServer"] = "/server/add",
-                ["userTokCheck"] = "/user/check",
-                ["srvTokCheck"] = "/server/check",
-                ["banUser"] = "/user/remove",
-                ["rmvServer"] = "/server/remove",
+                ["removeServer"] = "/server/remove",
+                ["addAdmin"] = "/user/admin",
+                ["removeAdmin"] = "/user/unadmin",
+                ["unbanUser"] = "/user/unban",
             };
         }
 
-        public Token PostUserLoginInfo(string username, string password)
-            => PostUserLoginInfo(new UserLogin() { Username = username, Password = password });
-        public Token PostUserLoginInfo(UserLogin ur)
+        /// <summary>
+        /// Post user login information and asks a new token
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <returns>null if the user doesn't exist or credentials are invalid</returns>
+        public UserToken PostLoginUser(string username, string password)
+            => PostLoginUser(new UserLogin() { Name = username, Password = password });
+        public UserToken PostLoginUser(UserLogin ur)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ur), _urls["logUser"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["logUser"], RequestType.Post);
             if (res == null)
-                return new Token() { Tok = null };
+                return new UserToken() { Token = null };
             else
             {
-                Token token = (Token)JsonUtility.FromJson(res, typeof(Token));
-                if (token.Tok == default)
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
                     return null;
                 else
                     return token;
             }
         }
 
-        public Token PostUserRegisterInfo(string username, string password, string email)
-            => PostUserRegisterInfo(new UserRegister() { Username = username, Password = password, Email = email });
-        public Token PostUserRegisterInfo(UserRegister ur)
+
+        public UserToken PostAddUser(string username, string password, string email)
+            => PostAddUser(new UserRegister() { Name = username, Password = password, Email = email });
+        public UserToken PostAddUser(UserRegister ur)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ur), _urls["regUser"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["regUser"], RequestType.Post);
             if (res == null)
-                return new Token() { Tok = null };
+                return new UserToken() { Token = null };
             else
             {
-                Token token = (Token)JsonUtility.FromJson(res, typeof(Token));
-                if (token.Tok == default)
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
                     return null;
                 else
                     return token;
             }
         }
 
-        public Token PostUserTokenVerification(string token)
-            => PostUserTokenVerification(new Token() { Tok = token });
-        public Token PostUserTokenVerification(Token ut)
+        public UserToken PostCheckUserToken(string token)
+            => PostCheckUserToken(new UserToken() { Token = token });
+        public UserToken PostCheckUserToken(UserToken ut)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ut), _urls["userTokCheck"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(ut), _endpoints["checkUserToken"], RequestType.Post);
             if (res == null)
-                return new Token() { Tok = null };
+                return new UserToken() { Token = null };
             else
             {
-                Token token = (Token)JsonUtility.FromJson(res, typeof(Token));
-                if (token.Tok == default)
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
                     return null;
                 else
                     return token;
+            }
+        }
+
+        public UserToken PostCheckServerToken(string token)
+            => PostCheckServerToken(new UserToken() { Token = token });
+        public UserToken PostCheckServerToken(UserToken ut)
+        {
+            string res = DoApiCall(JsonUtility.ToJson(ut), _endpoints["checkServerToken"], RequestType.Post);
+            if (res == null)
+                return new UserToken() { Token = null };
+            else
+            {
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
+                    return null;
+                else
+                    return token;
+            }
+        }
+
+        public bool PostAddAdmin(string username, string password, string email)
+            => PostAddAdmin(new UserRegister() { Name = username, Password = password, Email = email });
+        public bool PostAddAdmin(UserRegister ur)
+        {
+            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["regUser"], RequestType.Post);
+            if (res == null)
+                return false;
+            else
+            {
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
+                    return false;
+                else
+                    return true;
             }
         }
 
         public void PostBanUser(string username, string adminToken)
-            => PostBanUser(new BanItem() { Username = username, AdminToken = adminToken });
+            => PostBanUser(new BanItem() { Name = username, Token = adminToken });
         public void PostBanUser(BanItem bi)
         {
-            string res = DoApiCall(JsonUtility.ToJson(bi), _urls["userTokCheck"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(bi), _endpoints["userTokCheck"], RequestType.Post);
             if (res == null)
-                Debug.LogWarning($"Invalid username {bi.Username} or admin token {bi.AdminToken}");
+                Debug.LogWarning($"Invalid username {bi.Name} or admin token {bi.Token}");
             else
-                Debug.Log($"The user {bi.Username} was banned successfully");
+                Debug.Log($"The user {bi.Name} was banned successfully");
         }
 
-        public Token PostServerTokenVerification(string token)
-            => PostServerTokenVerification(new Token() { Tok = token });
-        public Token PostServerTokenVerification(Token ut)
+        public void PostRemoveUser(string username, string adminToken)
+            => PostRemoveUser(new BanItem() { Name = username, Token = adminToken });
+        public void PostRemoveUser(BanItem bi)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ut), _urls["srvTokCheck"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(bi), _endpoints["userTokCheck"], RequestType.Post);
             if (res == null)
-                return new Token() { Tok = null };
+                Debug.LogWarning($"Invalid username {bi.Name} or admin token {bi.Token}");
+            else
+                Debug.Log($"The user {bi.Name} was removed successfully");
+        }
+
+
+
+        public ServerToken PostAddServerToList(string name, string user_token)
+            => PostAddServerToList(new ServerInfo() { Token = user_token, Name = name});
+        public ServerToken PostAddServerToList(ServerInfo ut)
+        {
+            string res = DoApiCall(JsonUtility.ToJson(ut), _endpoints["srvTokCheck"], RequestType.Post);
+            if (res == null)
+                return new ServerToken() { Token = null };
             else
             {
-                Token token = (Token)JsonUtility.FromJson(res, typeof(Token));
-                if (token.Tok == default)
+                ServerToken token = (ServerToken)JsonUtility.FromJson(res, typeof(ServerToken));
+                if (token.Token == default)
+                    return null;
+                else
+                    return token;
+            }
+        }
+
+        public UserToken PostRemoveServerFromList(string token)
+            => PostRemoveServerFromList(new UserToken() { Token = token });
+        public UserToken PostRemoveServerFromList(UserToken ut)
+        {
+            string res = DoApiCall(JsonUtility.ToJson(ut), _endpoints["srvTokCheck"], RequestType.Post);
+            if (res == null)
+                return new UserToken() { Token = null };
+            else
+            {
+                UserToken token = (UserToken)JsonUtility.FromJson(res, typeof(UserToken));
+                if (token.Token == default)
                     return null;
                 else
                     return token;
@@ -109,23 +194,14 @@ namespace API.Auth
         {
             HttpResponseMessage responseMessage;
             if (type == RequestType.Get)
-                responseMessage = _httpClient.GetAsync(AUTH_API_URL + called).Result;
+                responseMessage = _httpClient.GetAsync(called).Result;
             else
-                responseMessage = _httpClient.PostAsync(AUTH_API_URL + called, new StringContent(json, Encoding.UTF8, "application/json")).Result;
+                responseMessage = _httpClient.PostAsync(called, new StringContent(json, Encoding.UTF8, "application/json")).Result;
 
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
                 return responseMessage.Content.ReadAsStringAsync().Result;
-        }
-
-        public Token TestAddUser()
-        {
-            string username = "testusername";
-            string password = "testpassword";
-            string email = @"test.email@example.com";
-
-            return PostUserRegisterInfo(username, password, email);
         }
     }
 }

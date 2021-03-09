@@ -1,11 +1,14 @@
-﻿using System;
-
-namespace API.Auth
+﻿namespace API.Auth
 {
-    [Serializable]
-    public class BanItem
+    [System.Serializable]
+    public class BanItem : IToken, IName
     {
-        public string AdminToken { get; set; }
-        public string Username { get; set; }
+        public string Name { get => username; set { username = value; } }
+        [UnityEngine.SerializeField]
+        private string username;
+
+        public string Token { get => token; set { token = value; } }
+        [UnityEngine.SerializeField]
+        private string token;
     }
 }
