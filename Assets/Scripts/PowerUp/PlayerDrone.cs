@@ -5,11 +5,18 @@ using UnityEngine;
 public class PlayerDrone : MonoBehaviour
 {
     public GameObject drone;
+    public GameObject bullet;
+    public Material bulletMaterial;
     public PlayerHealth accessShield;
 
     private GameObject _player;
+    private GameObject _droneBarrel;
 
     public bool hasDrone;
+
+    private float _droneShootRate = 0.5f;
+    private float _droneShootForce = 3000f;
+    private float _lastShootingTimeRef;
 
     // Start is called before the first frame update
     private void Start( )
@@ -17,6 +24,8 @@ public class PlayerDrone : MonoBehaviour
         drone = GameObject.Find("Drone");
         drone.SetActive(false);
         hasDrone = false;
+
+        _droneBarrel = transform.gameObject.FindObjectByName("DroneBarrel");
 
         _player = this.gameObject.transform.GetChild(2).gameObject;
 
@@ -26,6 +35,34 @@ public class PlayerDrone : MonoBehaviour
     private void Update( )
     {
         drone.transform.RotateAround(_player.transform.position, Vector3.up, 80 * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.tag == "Asteroid" || collider.tag == "Player")
+        {
+            // DEBUG
+            Debug.Log("Something enters the trigger");
+
+            DroneShoot();
+        }
+    }
+
+    private void DroneShoot( )
+    {
+        if (Time.time > _lastShootingTimeRef)
+        {
+            Quaternion rot = _droneBarrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(bullet, _droneBarrel.transform.position, rot);
+            
+            go.GetComponent<MeshRenderer>().material = bulletMaterial;
+            go.GetComponent<TrailRenderer>().material = bulletMaterial;
+
+            go.transform.parent = this.transform.parent.gameObject.transform.Find("BulletStorage").transform;
+            go.GetComponent<Rigidbody>().AddForce(_droneBarrel.transform.forward * _droneShootForce);
+
+            _lastShootingTimeRef = Time.time + _droneShootRate;
+        }
     }
 
     // Update is called once per frame
@@ -42,12 +79,12 @@ public class PlayerDrone : MonoBehaviour
         StartCoroutine(TimerDrone());
     }
 
-    // Fonction attendant 15 secondes avant de
+    // Fonction attendant 30 secondes avant de
     // désactiver le drone
     private IEnumerator TimerDrone( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(15);
+        yield return new WaitForSeconds(30);
 
         drone.SetActive(false);
         hasDrone = false;
