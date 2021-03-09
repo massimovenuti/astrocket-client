@@ -144,7 +144,7 @@ public class RespawnManager : MonoBehaviour
 
     // Fonction désactivant le joueur et lançant
     // le compte à rebours avant la réactivation
-    private void SwitchPlayerActivation(GameObject Player)
+    public void SwitchPlayerActivation(GameObject Player)
     {
         Player.SetActive(false);
         StartCoroutine(WaitForReactivation(Player));

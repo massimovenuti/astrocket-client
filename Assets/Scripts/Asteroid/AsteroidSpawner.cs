@@ -68,7 +68,7 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnAsteroid()
+    public void SpawnAsteroid()
     {
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
         int asteroidCount = asteroids.Length;
