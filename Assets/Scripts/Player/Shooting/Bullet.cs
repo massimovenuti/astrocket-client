@@ -19,15 +19,14 @@ public class Bullet : NetworkBehaviour
         rigidBody.AddForce(transform.forward * force);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        DestroySelf();
+    }
+
     [Server]
     void DestroySelf( )
     {
         NetworkServer.Destroy(gameObject);
     }
-/*
-    [ServerCallback]
-    void OnTriggerEnter(Collider co)
-    {
-        NetworkServer.Destroy(gameObject);
-    }*/
 }

@@ -38,20 +38,19 @@ public class DestroyAsteroid : NetworkBehaviour
     /// <summary>
     /// Se déclenche lorsque l'astéroide entre en collision avec un élément
     /// </summary>
-    
-    [Server]
     private void OnCollisionEnter(Collision collision)
     {     
         if (collision.gameObject.tag == "Bullet")
         {
-            NetworkServer.Destroy(collision.gameObject);
             DestructionAsteroid();
         }       
 
         if (collision.gameObject.tag == "Player")
         {
-            HitByAsteroid(collision.gameObject);
+            NetworkServer.Destroy(this.gameObject);
         }
+
+        NetworkServer.Destroy(this.gameObject);
     }
 
     /// <summary>
@@ -171,16 +170,5 @@ public class DestroyAsteroid : NetworkBehaviour
 
         GameObject remain1 = Instantiate(asteroidPrefab, this.transform.position, this.transform.rotation);
         NetworkServer.Spawn(remain1);
-    }
-
-        /// <summary>
-        /// Inflige des dégats au vaisseau
-        /// </summary>
-        private void HitByAsteroid(GameObject player)
-    {
-        Destroy(this.gameObject);
-        PlayerHealth ph = player.GetComponent<PlayerHealth>();
-        ph.playerHealth.Damage(25);
-        Debug.Log("Meow've been hit :'(");
     }
 }

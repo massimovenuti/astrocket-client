@@ -6,7 +6,7 @@ public class GunController : NetworkBehaviour
 {
     public GameObject bullet;
     public float shootRate = 0.2f;
-    public Material bulletMaterial; 
+    public Material bulletMaterial;
     public float shootForce = 3000f;
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
@@ -44,12 +44,13 @@ public class GunController : NetworkBehaviour
 
     private void Update( )
     {
-        if (_inp.IsShooting())
-            Shoot();
+        if (isLocalPlayer)
+            if (_inp.IsShooting())
+                CmdShoot();
     }
 
     [Command]
-    private void Shoot()
+    private void CmdShoot( )
     {
         if (Time.time > _lastShootingTimeRef)
         {
@@ -63,6 +64,4 @@ public class GunController : NetworkBehaviour
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }
-
-
 }
