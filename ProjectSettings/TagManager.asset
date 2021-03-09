@@ -15,6 +15,7 @@ TagManager:
   - AbsoluteBorder
   - SmoothBorder
   - Rocket
+  - Enemy
   layers:
   - Default
   - TransparentFX

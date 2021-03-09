@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public int shieldDurability;
 
     public GameObject shield;
+    //public PlayerDrone accessDrone;
 
     // TODO: changes values
     private int _playerHealth = 100;
@@ -25,6 +26,8 @@ public class PlayerHealth : MonoBehaviour
     private int _damageExplosion = 30;
     private int _damageValue;
 
+    public bool hasShield;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -33,9 +36,12 @@ public class PlayerHealth : MonoBehaviour
         // DEBUG
         Debug.Log("Health : " + playerHealth.GetHealth());
 
-        shieldDurability = 0;
         shield = GameObject.Find("Shield");
         shield.SetActive(false);
+        hasShield = false;
+        shieldDurability = 0;
+
+        //accessDrone = this.GetComponent<PlayerDrone>();
     }
 
     // Fonction Update, appelée à chaque frame
@@ -50,11 +56,8 @@ public class PlayerHealth : MonoBehaviour
             // Réinitialise les power-ups
             this.GetComponent<Movements>().ResetPowerUps();
             this.GetComponent<GunController>().ResetPowerUps();
-            if (shieldDurability > 0)
-            {
-                shield.SetActive(false);
-                shieldDurability = 0;
-            }
+            //this.GetComponent<PlayerDrone>().DesactivateDrone();
+            DesactivateShield();
 
             // le joueur est mort, un script va le
             // désactiver pendant 2 secondes
@@ -162,8 +165,22 @@ public class PlayerHealth : MonoBehaviour
     {
         // DEBUG
         Debug.Log("Shield");
-
+        /*
+        if (accessDrone.hasDrone)
+            accessDrone.DesactivateDrone();
+        */
+        hasShield = true;
         shieldDurability = _shieldDurabilityMax;
         shield.SetActive(true);
+    }
+
+    public void DesactivateShield( )
+    {
+        if (shieldDurability > 0)
+        {
+            hasShield = false;
+            shield.SetActive(false);
+            shieldDurability = 0;
+        }
     }
 }

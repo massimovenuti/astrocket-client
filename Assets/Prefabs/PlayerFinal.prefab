@@ -1030,6 +1030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a15d71e67b63d4a9c2cd1aecaedc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flash: 0
 --- !u!114 &8014777496973570339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,13 +1047,16 @@ MonoBehaviour:
   shootRate: 0.2
   bulletMaterial: {fileID: 2100000, guid: e870c99f70b7fda408c47d52e45db830, type: 2}
   shootForce: 3000
-  shootForceRocket: 2000
   ShootingFrom: Barrel
   BulletStorageTagName: BulletStorage
   akimbo: 0
   mitraillette: 0
   bazooka: 0
+  homing: 0
   rocket: {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
+  homingMissile: {fileID: 6397604834857263136, guid: bc476ddccbf7e31498a0853c90d72bba,
+    type: 3}
+  targetHomingMissile: {fileID: 0}
 --- !u!114 &8014777496973570340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1067,6 +1071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shieldDurability: 0
   shield: {fileID: 0}
+  hasShield: 0
 --- !u!65 &8014777496973570341
 BoxCollider:
   m_ObjectHideFlags: 0

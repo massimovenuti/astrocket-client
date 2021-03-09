@@ -14,10 +14,16 @@ public class GunController : MonoBehaviour
     public bool akimbo;
     public bool mitraillette;
     public bool bazooka;
+    //NEW
+    public bool homing;
+    //
     private float _refShootRate;
     private float _mitrailletteShootRate;
     private float _bazookaShootRate;
     private float _shootForceRocket;
+    //NEW
+    private float _homingShootRate;
+    //
 
     private InputManager _inp;
 
@@ -25,6 +31,11 @@ public class GunController : MonoBehaviour
     private GameObject _barrelAkimbo1;
     private GameObject _barrelAkimbo2;
     public GameObject rocket;
+    //private ?
+    public GameObject homingMissile;
+    public Transform targetHomingMissile;
+    private float _rotateMissileSpeed = 200f;
+    //
 
     private GameObject _bulletSpawn;
 
@@ -64,10 +75,13 @@ public class GunController : MonoBehaviour
         akimbo = false;
         mitraillette = false;
         bazooka = false;
+        homing = false;
         _refShootRate = shootRate;
         _mitrailletteShootRate = shootRate / 2;
         _bazookaShootRate = shootRate * 2;
         _shootForceRocket = (shootForce * 3) / 2;
+        _homingShootRate = shootRate * 3;
+        targetHomingMissile = GameObject.FindGameObjectWithTag("Enemy").transform;
     }
 
     private void Update( )
@@ -76,6 +90,8 @@ public class GunController : MonoBehaviour
             ShootAkimbo();
         else if (_inp.IsShooting() && bazooka)
             ShootBazooka();
+        else if (_inp.IsShooting() && homing)
+            ShootHomingMissile();
         else if (_inp.IsShooting())
             Shoot();
     }
@@ -134,6 +150,29 @@ public class GunController : MonoBehaviour
         }
     }
 
+    //TODO
+    private void ShootHomingMissile()
+    {
+        if (Time.time > _lastShootingTimeRef)
+        {
+            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(homingMissile, _barrel.transform.position, rot);
+
+            go.transform.parent = _bulletSpawn.transform;
+
+            Vector3 direction = targetHomingMissile.position - go.GetComponent<Rigidbody>().position;
+            direction.Normalize();
+            Vector3 rotationAmount = Vector3.Cross(_barrel.transform.forward, direction);
+
+            go.GetComponent<Rigidbody>().angularVelocity = rotationAmount * _rotateMissileSpeed;
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
+            //go.GetComponent<Rigidbody>().velocity = _barrel.transform.forward * shootForce;
+
+            _lastShootingTimeRef = Time.time + shootRate;
+        }
+    }
+
+    //A MODIF
     public void PowerUpNewShootRate( )
     {
         // DEBUG
@@ -145,6 +184,8 @@ public class GunController : MonoBehaviour
             akimbo = false;
         else if (bazooka)
             bazooka = false;
+        else if (homing)
+            homing = false;
         
         mitraillette = true;
         shootRate = _mitrailletteShootRate;
@@ -184,6 +225,24 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerBazooka());
     }
 
+    //TODO
+    public void PowerUpHomingMissile()
+    {
+        //DEBUG
+        Debug.Log("HomingMissile");
+
+        if (homing)
+            homing = false;
+        else if (mitraillette)
+            mitraillette = false;
+        else if (bazooka)
+            bazooka = false;
+
+        homing = true;
+        shootRate = _homingShootRate;
+        StartCoroutine(TimerHomingMissile());
+    }
+
     // Fonction attendant 5 secondes avant de
     // désactiver le power-up akimbo
     private IEnumerator TimerAkimbo( )
@@ -217,6 +276,20 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up homing missile
+    private IEnumerator TimerHomingMissile( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(10);
+        
+        homing = false;
+        shootRate = _refShootRate;
+        
+    }
+
+
     public void ResetPowerUps( )
     {
         // DEBUG
@@ -235,6 +308,11 @@ public class GunController : MonoBehaviour
         if (mitraillette)
         {
             mitraillette = false;
+            shootRate = _refShootRate;
+        }
+        if (homing)
+        {
+            homing = false;
             shootRate = _refShootRate;
         }
     }
