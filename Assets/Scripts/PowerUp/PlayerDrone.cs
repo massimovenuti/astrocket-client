@@ -14,7 +14,7 @@ public class PlayerDrone : MonoBehaviour
 
     public bool hasDrone;
 
-    private float _droneShootRate = 0.5f;
+    private float _droneShootRate = 1f;
     private float _droneShootForce = 3000f;
     private float _lastShootingTimeRef;
 
@@ -35,6 +35,7 @@ public class PlayerDrone : MonoBehaviour
     private void Update( )
     {
         drone.transform.RotateAround(_player.transform.position, Vector3.up, 80 * Time.deltaTime);
+        drone.transform.Rotate(Vector3.up * Time.deltaTime, Space.Self);
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -44,16 +45,18 @@ public class PlayerDrone : MonoBehaviour
             // DEBUG
             Debug.Log("Something enters the trigger");
 
-            DroneShoot();
+            DroneShoot(collider);
         }
     }
 
-    private void DroneShoot( )
+    private void DroneShoot(Collider collider)
     {
         if (Time.time > _lastShootingTimeRef)
         {
             Quaternion rot = _droneBarrel.transform.rotation * Quaternion.Euler(90, 0, 0);
             GameObject go = (GameObject)Instantiate(bullet, _droneBarrel.transform.position, rot);
+
+            go.GetComponent<DroneBullet>().target = collider;
             
             go.GetComponent<MeshRenderer>().material = bulletMaterial;
             go.GetComponent<TrailRenderer>().material = bulletMaterial;

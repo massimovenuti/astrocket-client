@@ -27,6 +27,7 @@ public class PlayerHealth : MonoBehaviour
     private int _damageValue;
 
     public bool hasShield;
+    private bool _isFantome;
 
     // Start is called before the first frame update
     private void Start()
@@ -40,6 +41,8 @@ public class PlayerHealth : MonoBehaviour
         shield.SetActive(false);
         hasShield = false;
         shieldDurability = 0;
+
+        _isFantome = false;
 
         accessDrone = this.GetComponent<PlayerDrone>();
     }
@@ -58,6 +61,8 @@ public class PlayerHealth : MonoBehaviour
             this.GetComponent<GunController>().ResetPowerUps();
             this.GetComponent<PlayerDrone>().DesactivateDrone();
             DesactivateShield();
+            if (_isFantome)
+                this.GetComponent<BoxCollider>().enabled = true;
 
             // le joueur est mort, un script va le
             // désactiver pendant 2 secondes
@@ -174,6 +179,14 @@ public class PlayerHealth : MonoBehaviour
         shield.SetActive(true);
     }
 
+    public void PowerUpFantome( )
+    {
+        _isFantome = true;
+        this.GetComponent<BoxCollider>().enabled = false;
+
+        StartCoroutine(TimerFantome());
+    }
+
     public void DesactivateShield( )
     {
         if (shieldDurability > 0)
@@ -182,5 +195,16 @@ public class PlayerHealth : MonoBehaviour
             shield.SetActive(false);
             shieldDurability = 0;
         }
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up fantome
+    private IEnumerator TimerFantome( )
+    {
+        // TODO: change value /!\ OP
+        yield return new WaitForSeconds(5);
+
+        this.GetComponent<BoxCollider>().enabled = true;
+        _isFantome = false;
     }
 }

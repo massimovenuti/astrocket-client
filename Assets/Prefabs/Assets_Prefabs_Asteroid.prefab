@@ -120,7 +120,7 @@ MonoBehaviour:
     type: 3}
   akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
-  flash: {fileID: 5699956918454467653, guid: f390558fe69972a40bbf34d72be41337, type: 3}
+  flash: {fileID: 3113505347714470143, guid: b520106ae4c221d438619ec2591c6dd0, type: 3}
   bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
   _Size: 3
   inMapBounds: 0
