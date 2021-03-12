@@ -33,9 +33,12 @@ public class GunController : MonoBehaviour
     public GameObject rocket;
     //private ?
     public GameObject homingMissile;
-    public Transform targetHomingMissile;
-    private float _rotateMissileSpeed = 200f;
-    //
+
+
+
+
+
+
 
     private GameObject _bulletSpawn;
 
@@ -81,7 +84,7 @@ public class GunController : MonoBehaviour
         _bazookaShootRate = shootRate * 2;
         _shootForceRocket = (shootForce * 3) / 2;
         _homingShootRate = shootRate * 3;
-        targetHomingMissile = GameObject.FindGameObjectWithTag("Enemy").transform;
+
     }
 
     private void Update( )
@@ -160,17 +163,10 @@ public class GunController : MonoBehaviour
 
             go.transform.parent = _bulletSpawn.transform;
 
-            Vector3 direction = targetHomingMissile.position - go.GetComponent<Rigidbody>().position;
-            direction.Normalize();
-            Vector3 rotationAmount = Vector3.Cross(_barrel.transform.forward, direction);
-
-            go.GetComponent<Rigidbody>().angularVelocity = rotationAmount * _rotateMissileSpeed;
-            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
-            //go.GetComponent<Rigidbody>().velocity = _barrel.transform.forward * shootForce;
-
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }
+
 
     //A MODIF
     public void PowerUpNewShootRate( )
@@ -282,7 +278,7 @@ public class GunController : MonoBehaviour
     private IEnumerator TimerHomingMissile( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(30);
         
         homing = false;
         shootRate = _refShootRate;
