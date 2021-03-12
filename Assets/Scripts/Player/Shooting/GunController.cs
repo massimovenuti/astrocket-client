@@ -16,6 +16,7 @@ public class GunController : MonoBehaviour
     public bool bazooka;
     //NEW
     public bool homing;
+    public bool heavy;
     //
     private float _refShootRate;
     private float _mitrailletteShootRate;
@@ -33,12 +34,6 @@ public class GunController : MonoBehaviour
     public GameObject rocket;
     //private ?
     public GameObject homingMissile;
-
-
-
-
-
-
 
     private GameObject _bulletSpawn;
 
@@ -79,6 +74,7 @@ public class GunController : MonoBehaviour
         mitraillette = false;
         bazooka = false;
         homing = false;
+        heavy = false;
         _refShootRate = shootRate;
         _mitrailletteShootRate = shootRate / 2;
         _bazookaShootRate = shootRate * 2;
@@ -95,6 +91,8 @@ public class GunController : MonoBehaviour
             ShootBazooka();
         else if (_inp.IsShooting() && homing)
             ShootHomingMissile();
+        else if (_inp.IsShooting() && heavy)
+            ShootHeavyLaser();
         else if (_inp.IsShooting())
             Shoot();
     }
@@ -168,6 +166,38 @@ public class GunController : MonoBehaviour
     }
 
 
+    private void ShootHeavyLaser( )
+    {
+        if (Time.time > _lastShootingTimeRef)
+        {
+            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, rot);
+
+            go.GetComponent<MeshRenderer>().material = bulletMaterial;
+            go.GetComponent<TrailRenderer>().material = bulletMaterial;
+
+            go.transform.parent = _bulletSpawn.transform;
+
+            int DoubleDamageChance = Random.Range(1, 100);
+
+            if(DoubleDamageChance <= 70)
+            {
+                go.tag = "HeavyLaser";
+                Debug.Log("Fait le double de degat");
+            }
+            else
+            {
+                Debug.Log("Fait degat normal");
+            }
+            
+
+
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
+
+            _lastShootingTimeRef = Time.time + shootRate;
+        }
+    }
+
     //A MODIF
     public void PowerUpNewShootRate( )
     {
@@ -182,6 +212,8 @@ public class GunController : MonoBehaviour
             bazooka = false;
         else if (homing)
             homing = false;
+        else if (heavy)
+            heavy = false;
         
         mitraillette = true;
         shootRate = _mitrailletteShootRate;
@@ -198,6 +230,10 @@ public class GunController : MonoBehaviour
             bazooka = false;
         else if (mitraillette)
             mitraillette = false;
+        else if (homing)
+            homing = false;
+        else if (heavy)
+            heavy = false;
 
         akimbo = true;
         shootRate = _refShootRate;
@@ -214,6 +250,10 @@ public class GunController : MonoBehaviour
             akimbo = false;
         else if (mitraillette)
             mitraillette = false;
+        else if (homing)
+            homing = false;
+        else if (heavy)
+            heavy = false;
 
         bazooka = true;
         shootRate = _bazookaShootRate;
@@ -227,17 +267,39 @@ public class GunController : MonoBehaviour
         //DEBUG
         Debug.Log("HomingMissile");
 
-        if (homing)
-            homing = false;
+        if (akimbo)
+            akimbo = false;
         else if (mitraillette)
             mitraillette = false;
         else if (bazooka)
             bazooka = false;
+        else if (heavy)
+            heavy = false;
 
         homing = true;
         shootRate = _homingShootRate;
         StartCoroutine(TimerHomingMissile());
     }
+
+    public void PowerUpHeavyLaser( )
+    {
+        //DEBUG
+        Debug.Log("HeavyLaser");
+
+        if (akimbo)
+            akimbo = false;
+        else if (mitraillette)
+            mitraillette = false;
+        else if (bazooka)
+            bazooka = false;
+        else if (homing)
+            homing = false;
+
+        heavy = true;
+        shootRate = _refShootRate;
+        StartCoroutine(TimerHeavyLaser());
+    }
+
 
     // Fonction attendant 5 secondes avant de
     // désactiver le power-up akimbo
@@ -273,7 +335,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // Fonction attendant 5 secondes avant de
+    // Fonction attendant 30 secondes avant de
     // désactiver le power-up homing missile
     private IEnumerator TimerHomingMissile( )
     {
@@ -283,6 +345,18 @@ public class GunController : MonoBehaviour
         homing = false;
         shootRate = _refShootRate;
         
+    }
+
+    // Fonction attendant 15 secondes avant de
+    // désactiver le power-up homing missile
+    private IEnumerator TimerHeavyLaser( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(15);
+
+        heavy = false;
+        shootRate = _refShootRate;
+
     }
 
 
@@ -309,6 +383,12 @@ public class GunController : MonoBehaviour
         if (homing)
         {
             homing = false;
+            shootRate = _refShootRate;
+        }
+
+        if (heavy)
+        {
+            heavy = false;
             shootRate = _refShootRate;
         }
     }
