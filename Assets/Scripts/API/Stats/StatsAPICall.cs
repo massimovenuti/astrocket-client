@@ -10,8 +10,8 @@ namespace API.Stats
     // use [Serializable] to turn a class into structure JSON
     public class StatsAPICall
     {
-        private readonly Uri AUTH_API_URL = new(@"https://auth.aw.alexandre-vogel.fr/");
-        private readonly HttpClient _httpClient = new();
+        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public StatsAPICall( )
         {
@@ -54,7 +54,7 @@ namespace API.Stats
             => PostModifyPlayerStats(name.Name, token.Token);
         public bool PostModifyPlayerStats(string name, string token)
         {
-            using (HttpRequestMessage message = new(HttpMethod.Post, $"stats/{name}"))
+            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"stats/{name}"))
             {
                 message.Headers.Add("serverToken", token);
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
@@ -68,9 +68,9 @@ namespace API.Stats
             => DeleteUserStats(name.Name, token.Token);
         public bool DeleteUserStats(string name, string token)
         {
-            using (HttpRequestMessage message = new(HttpMethod.Delete, $"stats/{name}"))
+            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, $"stats/{name}"))
             {
-                message.Headers.Add("serverToken", token);
+                message.Headers.Add("serverToken", token);  
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
                 if (responseMessage.IsSuccessStatusCode)
                     return true;

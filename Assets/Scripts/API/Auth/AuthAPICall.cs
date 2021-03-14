@@ -9,9 +9,9 @@ namespace API.Auth
 {
     public class AuthAPICall
     {
-        private readonly Uri AUTH_API_URL = new(@"https://auth.aw.alexandre-vogel.fr/");
+        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
         private readonly Dictionary<string, string> _endpoints;
-        private readonly HttpClient _httpClient = new();
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public AuthAPICall( )
         {

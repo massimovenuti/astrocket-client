@@ -13,5 +13,10 @@ namespace API
             Debug.Log(JsonUtility.ToJson(new UserLogin() { Name = "testuser", Password = "testpass"}));
             Debug.Log(JsonUtility.ToJson(new UserRegister() { Name = "testuser", Password = "testpass", Email = "test@example.com" }));
         }
+
+        public void AuthApiTest()
+        {
+
+        }
     }
 }
