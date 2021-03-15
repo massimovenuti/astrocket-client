@@ -8,6 +8,7 @@ public class Bullet : NetworkBehaviour
     public float destroyAfter = 1;
     public Rigidbody rigidBody;
     public float force = 3000f;
+    public NetworkIdentity ownerIdentity;
 
     public override void OnStartServer( )
     {

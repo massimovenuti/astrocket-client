@@ -58,6 +58,7 @@ public class GunController : NetworkBehaviour
 
             go.GetComponent<MeshRenderer>().material = bulletMaterial;
             go.GetComponent<TrailRenderer>().material = bulletMaterial;
+            go.GetComponent<Bullet>().ownerIdentity = netIdentity;
 
             //go.transform.parent = _bulletSpawn.transform;
             NetworkServer.Spawn(go);

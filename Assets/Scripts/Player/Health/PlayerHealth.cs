@@ -21,14 +21,16 @@ public class PlayerHealth : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
-        if (collision.gameObject.tag == "Bullet")
+        GameObject go = collision.gameObject;
+
+        if (go.tag == "Bullet" && go.GetComponent<Bullet>().ownerIdentity.netId != netId)
         {
             Debug.Log("Touched by a bullet");
             //playerHealth.Damage(20);
             CmdDamage(20);
         }
 
-        if (collision.gameObject.tag == "Asteroid")
+        if (go.tag == "Asteroid")
         {
             Debug.Log("Touched by an asteroid");
             //playerHealth.Damage(25);
