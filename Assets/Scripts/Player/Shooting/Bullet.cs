@@ -8,7 +8,9 @@ public class Bullet : NetworkBehaviour
     public float destroyAfter = 1;
     public Rigidbody rigidBody;
     public float force = 3000f;
-    public NetworkIdentity ownerIdentity;
+    
+    [SyncVar]
+    public uint ownerId;
 
     public override void OnStartServer( )
     {
@@ -20,13 +22,8 @@ public class Bullet : NetworkBehaviour
         rigidBody.AddForce(transform.forward * force);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        DestroySelf();
-    }
-
     [Server]
-    void DestroySelf( )
+    private void DestroySelf( )
     {
         NetworkServer.Destroy(gameObject);
     }

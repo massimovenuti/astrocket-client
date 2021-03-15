@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 7975735016790354325}
   - component: {fileID: 7975735016790354324}
   - component: {fileID: 7975735016790354323}
-  - component: {fileID: 7975735016790354322}
   - component: {fileID: 7975735016790354321}
   - component: {fileID: 3989882683078854682}
-  - component: {fileID: -5714367963193414414}
+  - component: {fileID: 8183083627793970973}
   m_Layer: 8
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -97,25 +96,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.09908298
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7975735016790354322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7975735016790354320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b0b255eae0e7845b90c6ddd73bb987, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  AsteroidStorageTagName: AsteroidStorage
-  spawningRemains: {fileID: 0}
-  asteroidPrefab: {fileID: 7975735016790354320}
-  size: 3
-  inMapBounds: 0
 --- !u!54 &7975735016790354321
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -148,7 +128,7 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &-5714367963193414414
+--- !u!114 &8183083627793970973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,10 +137,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7975735016790354320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb39f1625a86bb94f9fc85ada1903614, type: 3}
+  m_Script: {fileID: 11500000, guid: e09a348ad8f1cd24e92d75a1dc7cab80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
   AsteroidStorageTagName: AsteroidStorage
   _asteroidForce: 10000
+  inMapBounds: 1

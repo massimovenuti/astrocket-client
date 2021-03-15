@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: 531237884777375409}
   - component: {fileID: 5736028829998019851}
   - component: {fileID: 3337810025864409140}
-  - component: {fileID: 7223251109820790133}
+  - component: {fileID: 2959660685197905538}
+  - component: {fileID: 1923235959055590005}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -235,7 +236,7 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &7223251109820790133
+--- !u!114 &2959660685197905538
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,6 +250,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  destroyAfter: 1.07
+  destroyAfter: 1
   rigidBody: {fileID: 531237884777375409}
   force: 3000
+  ownerIdentity: {fileID: 0}
+--- !u!114 &1923235959055590005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529621894446456818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 850105e2ee4d9a64c8c6bd4291343f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
+    type: 3}

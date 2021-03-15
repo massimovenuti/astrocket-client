@@ -15,7 +15,7 @@ public class AsteroidNetworkManager : NetworkManager
     private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
-    private float _asteroidVelocity = 10f;
+    //private float _asteroidVelocity = 10f;
     private int _barrierVelocitySensitivity = 6;
 
     private int _maxAsteroidCount = 50;
@@ -102,7 +102,7 @@ public class AsteroidNetworkManager : NetworkManager
     {
         foreach (GameObject asteroid in asteroids)
         {
-            bool inMapBounds = asteroid.GetComponent<DestroyAsteroid>().inMapBounds;
+            bool inMapBounds = asteroid.GetComponent<Asteroid>().inMapBounds;
             float speed = asteroid.GetComponent<Rigidbody>().velocity.magnitude;
 
             if (!inMapBounds && speed < _barrierVelocitySensitivity)

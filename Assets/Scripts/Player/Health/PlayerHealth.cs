@@ -23,21 +23,20 @@ public class PlayerHealth : NetworkBehaviour
 
         GameObject go = collision.gameObject;
 
-        if (go.tag == "Bullet" && go.GetComponent<Bullet>().ownerIdentity.netId != netId)
+        if (go.tag == "Bullet" && go.GetComponent<Bullet>().ownerId != netId)
         {
-            Debug.Log("Touched by a bullet");
-            //playerHealth.Damage(20);
+            Debug.Log("(" + netId + ") Touched by a bullet from : " + go.GetComponent<Bullet>().ownerId);
+            CmdDestroyObject(go);
             CmdDamage(20);
         }
 
         if (go.tag == "Asteroid")
         {
             Debug.Log("Touched by an asteroid");
-            //playerHealth.Damage(25);
+            CmdDestroyObject(go);
             CmdDamage(25);
         }
 
-        // DEBUG
         Debug.Log("Health : " + playerHealth.GetHealth());
 
         if (playerHealth.GetDead())
@@ -81,5 +80,11 @@ public class PlayerHealth : NetworkBehaviour
 
         // reset l'inertie
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    [Command]
+    private void CmdDestroyObject(GameObject go)
+    {
+        NetworkServer.Destroy(go);
     }
 }

@@ -21,7 +21,7 @@ public class OnMapExit : MonoBehaviour
         }
         else if (this.CompareTag("SmoothBorder") && intruder.CompareTag("Asteroid"))
         {
-            intruder.GetComponent<DestroyAsteroid>().inMapBounds = true;
+            intruder.GetComponent<Asteroid>().inMapBounds = true;
         }
     }
 
@@ -38,7 +38,7 @@ public class OnMapExit : MonoBehaviour
         {
             if (intruder.CompareTag("Asteroid"))
             {
-                intruder.GetComponent<DestroyAsteroid>().inMapBounds = false;
+                intruder.GetComponent<Asteroid>().inMapBounds = false;
             }
         }
         else if(this.CompareTag("AbsoluteBorder"))
