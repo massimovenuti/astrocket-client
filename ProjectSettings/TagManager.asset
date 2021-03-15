@@ -14,6 +14,8 @@ TagManager:
   - WarningBorder
   - AbsoluteBorder
   - SmoothBorder
+  - Asteroid1
+  - Asteroid2
   layers:
   - Default
   - TransparentFX

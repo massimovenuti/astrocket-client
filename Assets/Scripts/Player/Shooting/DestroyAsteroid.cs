@@ -7,34 +7,42 @@ public class DestroyAsteroid : NetworkBehaviour
 {
     private GameObject asteroidToDestroy;
     public GameObject asteroidPrefab;
+    public GameObject asteroidPrefab_1;
+    public GameObject asteroidPrefab_2;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Asteroid")
+        Debug.Log(collision.gameObject.tag);
+        if (collision.gameObject.tag == "Asteroid" || collision.gameObject.tag == "Asteroid1" || collision.gameObject.tag == "Asteroid2")
         {
             asteroidToDestroy = collision.gameObject;
-            AsteroidDestruction();
+            AsteroidDestruction(collision.gameObject.tag);
         }
     }
 
     [Server]
-    private void AsteroidDestruction()
+    private void AsteroidDestruction(string tag)
     {
         NetworkServer.Destroy(this.gameObject);
 
-        if (asteroidToDestroy.GetComponent<Asteroid>().GetSize() >= 1)
+        switch (tag)
         {
-            asteroidToDestroy.GetComponent<Asteroid>().DecreaseSize();
-            DropRemains();
-        }
-        else
-        {    
-            DropPowerUP();
+            case "Asteroid":
+                DropRemains(asteroidPrefab_1);
+                break;
+            case "Asteroid1":
+                DropRemains(asteroidPrefab_2);
+                break;
+            case "Asteroid2":
+                DropPowerUP();
+                break;
+            default:
+                break;
         }
     }
 
     [Server]
-    private void DropRemains()
+    private void DropRemains(GameObject asteroidPrefab)
     {
         Vector3 vec = asteroidToDestroy.GetComponent<Rigidbody>().velocity;
         Vector3 origin = asteroidToDestroy.transform.localPosition;
