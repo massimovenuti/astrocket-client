@@ -9,7 +9,7 @@ public class HomingMissileLifeTime : MonoBehaviour
     public GameObject PlayerParent;
     public GameObject RealPlayer;
 
-    public GameObject target;
+    private GameObject target;
     public Transform targetTransform;
     private Rigidbody _rb;
     private float _rotateMissileSpeed = 5f;
@@ -19,51 +19,51 @@ public class HomingMissileLifeTime : MonoBehaviour
     GameObject[] tblTargets;
 
     //A MODIFIER POUR L'EQUILIBRAGE
-    float treshold = 6.5f;
+    float treshold = 15f;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Start( )
     {
-        
+
         BulletStorage = this.transform.parent.gameObject;
         PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
         RealPlayer = PlayerParent.gameObject.transform.Find("Player").gameObject;
 
+        _rb = GetComponent<Rigidbody>();
+
+
         target = ClosestEnenmy();
 
-        print(target.name);
+        Debug.Log(target.name);
 
         targetTransform = target.GetComponent<Transform>();
-        _rb = GetComponent<Rigidbody>(); 
         
-        //A voir pour le destroy
-        Destroy(gameObject, 15);
+        Destroy(gameObject, 10);
     }
 
-    void FixedUpdate()
+    void FixedUpdate( )
     {
 
-        //ATTENTION ON RATTRAPPE LES MISSILES
-        _rb.velocity = transform.up * _force;
+        if (IsCloseEnemy(target))
+        { 
+            
 
-        if (IsCloseEnemy())
-        {
             direction = targetTransform.position - _rb.position;
             direction.Normalize();
             Vector3 rotationAmount = Vector3.Cross(transform.up, direction);
             _rb.angularVelocity = rotationAmount * _rotateMissileSpeed;
             _rb.velocity = transform.up * _force;
         }
+        else
+        {
+            _rb.velocity = transform.up * _force;
+        }
+
+        
     }
 
-    
-    private float CalculateDistance(Vector3 a, Vector3 b)
-    {
-        return Mathf.Sqrt(Mathf.Pow(b.x - a.x,2) + Mathf.Pow(b.y - a.y,2));
-    }
-
-    private GameObject ClosestEnenmy()
+    private GameObject ClosestEnenmy( )
     {
         //TODO CHANGE TAG
         tblTargets = GameObject.FindGameObjectsWithTag("Enemy");
@@ -76,7 +76,7 @@ public class HomingMissileLifeTime : MonoBehaviour
         {
             Vector3 tmp = targets.transform.position;
 
-            if (CalculateDistance(tmp, RealPlayer.transform.position) <= CalculateDistance(targetDistance, RealPlayer.transform.position))
+            if (Vector3.Distance(tmp, RealPlayer.transform.position) <= Vector3.Distance(targetDistance, RealPlayer.transform.position))
             {
                 targetDistance = tmp;
                 Truetarget = targets;
@@ -86,21 +86,12 @@ public class HomingMissileLifeTime : MonoBehaviour
         return Truetarget;
     }
 
-    private bool IsCloseEnemy()
+    private bool IsCloseEnemy(GameObject Closest)
     {
-        tblTargets = GameObject.FindGameObjectsWithTag("Enemy");
-
-        foreach (GameObject targets in tblTargets)
-        {
-            Vector3 tmp = targets.transform.position;
-
-            if (CalculateDistance(tmp, RealPlayer.transform.position) <= treshold)
-            {
-                return true;
-            }
-        }
+        if (Vector3.Distance(Closest.transform.position, RealPlayer.transform.position) <= treshold)
+            return true;
 
         return false;
     }
-    
+
 }

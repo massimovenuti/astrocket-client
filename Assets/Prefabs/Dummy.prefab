@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 195657340804508401}
   m_Layer: 0
   m_Name: Dummy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -699,13 +699,10 @@ MonoBehaviour:
   mitraillette: 0
   bazooka: 0
   homing: 0
+  heavy: 0
   rocket: {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
   homingMissile: {fileID: 6397604834857263136, guid: bc476ddccbf7e31498a0853c90d72bba,
     type: 3}
-  target: {fileID: 0}
-  RealPlayer: {fileID: 0}
-  BulletStorage: {fileID: 0}
-  targetTransform: {fileID: 0}
 --- !u!114 &6598717428612642682
 MonoBehaviour:
   m_ObjectHideFlags: 0
