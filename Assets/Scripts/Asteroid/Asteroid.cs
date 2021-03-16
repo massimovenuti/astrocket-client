@@ -10,9 +10,11 @@ public class Asteroid : NetworkBehaviour
     public float _asteroidForce = 10000f;
     public bool inMapBounds = false;
 
-    private int _size = 1;
     private GameObject _asteroidStorage;
     private Rigidbody _rb;
+
+    [SyncVar]
+    private int _size = 3;
 
     public void Start( )
     {
@@ -24,9 +26,8 @@ public class Asteroid : NetworkBehaviour
 
         this.transform.parent = _asteroidStorage.transform;
         _rb = GetComponent<Rigidbody>();
-        _rb.mass = 15;
+        _rb.mass = 10 * _size;
         _rb.AddForce(transform.forward * _asteroidForce);
-        //rb.AddTorque(transform.up * 10000); // DO NOT TOUCH
     }
 
     public int GetSize( )
@@ -34,8 +35,8 @@ public class Asteroid : NetworkBehaviour
         return _size;
     }
 
-    public void DecreaseSize( )
+    public void SetSize(int size)
     {
-        _size -= 1;
+        _size = size;
     }
 }

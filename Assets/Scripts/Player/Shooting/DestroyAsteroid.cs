@@ -7,45 +7,43 @@ public class DestroyAsteroid : NetworkBehaviour
 {
     private GameObject asteroidToDestroy;
     public GameObject asteroidPrefab;
-    public GameObject asteroidPrefab_1;
-    public GameObject asteroidPrefab_2;
 
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.tag == "Asteroid" || collision.gameObject.tag == "Asteroid1" || collision.gameObject.tag == "Asteroid2")
+        if (collision.gameObject.tag == "Asteroid")
         {
             asteroidToDestroy = collision.gameObject;
-            AsteroidDestruction(collision.gameObject.tag);
+            AsteroidDestruction();
         }
     }
 
     [Server]
-    private void AsteroidDestruction(string tag)
+    private void AsteroidDestruction()
     {
         NetworkServer.Destroy(this.gameObject);
 
-        switch (tag)
+        Debug.Log(asteroidToDestroy.GetComponent<Asteroid>().GetSize());
+
+        if (asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
         {
-            case "Asteroid":
-                DropRemains(asteroidPrefab_1);
-                break;
-            case "Asteroid1":
-                DropRemains(asteroidPrefab_2);
-                break;
-            case "Asteroid2":
-                DropPowerUP();
-                break;
-            default:
-                break;
+            DropRemains();
+        }
+        else
+        {
+            DropPowerUP();
         }
     }
 
     [Server]
-    private void DropRemains(GameObject asteroidPrefab)
+    private void DropRemains()
     {
         Vector3 vec = asteroidToDestroy.GetComponent<Rigidbody>().velocity;
         Vector3 origin = asteroidToDestroy.transform.localPosition;
+
+        Vector3 newScale = new Vector3(asteroidToDestroy.transform.localScale.x / 2, asteroidToDestroy.transform.localScale.y / 2, asteroidToDestroy.transform.localScale.z / 2);
+        float newMass = asteroidToDestroy.GetComponent<Rigidbody>().mass / 2;
+        int newSize = asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
 
         float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
         float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
@@ -60,6 +58,14 @@ public class DestroyAsteroid : NetworkBehaviour
 
         GameObject remain1 = (GameObject)Instantiate(asteroidPrefab, spawnPoint1, parLa);
         GameObject remain2 = (GameObject)Instantiate(asteroidPrefab, spawnPoint2, nonMaisParLa);
+
+        remain1.transform.localScale = newScale;
+        remain1.GetComponent<Rigidbody>().mass = newMass;
+        remain1.GetComponent<Asteroid>().SetSize(newSize);
+
+        remain2.transform.localScale = newScale;
+        remain2.GetComponent<Rigidbody>().mass = newMass;
+        remain2.GetComponent<Asteroid>().SetSize(newSize);
 
         NetworkServer.Destroy(asteroidToDestroy);
 
