@@ -16,7 +16,7 @@ public class PlayerHealth : NetworkBehaviour
 
     // Fonction diminuant la vie du joueur lorsqu'il
     // est touché par quelque chose
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (!isLocalPlayer)
             return;
@@ -33,6 +33,7 @@ public class PlayerHealth : NetworkBehaviour
         if (go.tag == "Asteroid")
         {
             Debug.Log("Touched by an asteroid");
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
             CmdDestroyObject(go);
             CmdDamage(25);
         }

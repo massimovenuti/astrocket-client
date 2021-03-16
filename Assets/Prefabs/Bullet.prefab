@@ -93,7 +93,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529621894446456818}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -269,8 +269,4 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
-    type: 3}
-  asteroidPrefab_1: {fileID: 7975735016790354320, guid: 47ba6c72ca5a0fd43b5f7a0e2077c247,
-    type: 3}
-  asteroidPrefab_2: {fileID: 7975735016790354320, guid: 2cb9247eaa4eb524faf3a52f6a6c6a01,
     type: 3}

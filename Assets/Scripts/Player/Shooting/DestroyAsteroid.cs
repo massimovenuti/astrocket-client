@@ -8,7 +8,7 @@ public class DestroyAsteroid : NetworkBehaviour
     private GameObject asteroidToDestroy;
     public GameObject asteroidPrefab;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Asteroid")
