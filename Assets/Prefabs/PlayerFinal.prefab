@@ -1582,7 +1582,11 @@ MonoBehaviour:
   akimbo: 0
   mitraillette: 0
   bazooka: 0
+  homing: 0
   rocket: {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
+  homingMissile: {fileID: 6397604834857263136, guid: bc476ddccbf7e31498a0853c90d72bba,
+    type: 3}
+  targetHomingMissile: {fileID: 0}
 --- !u!114 &8014777496973570340
 MonoBehaviour:
   m_ObjectHideFlags: 0

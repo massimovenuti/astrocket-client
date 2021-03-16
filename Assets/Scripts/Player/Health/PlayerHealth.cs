@@ -23,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
 
     private int _damageBullet = 20;
     private int _damageRocket = 40;
+    private int _damageHeavyLaser = 40;
     private int _damageCollisionAsteroid = 25;
     private int _damageCollisionPlayer = 25;
     private int _damageExplosion = 30;
@@ -117,6 +118,16 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("Touched by a rocket");
 
             _damageValue = _damageRocket;
+            dealDamage(_damageValue);
+
+            Destroy(collision.gameObject);
+        }
+
+        if(collision.gameObject.tag == "HeavyLaser")
+        {
+            // DEBUG
+            Debug.Log("Touched by a heavy laser");
+            _damageValue = _damageHeavyLaser;
             dealDamage(_damageValue);
 
             Destroy(collision.gameObject);

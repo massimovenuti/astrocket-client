@@ -45,7 +45,7 @@ public class DestroyAsteroid : MonoBehaviour
     /// </summary>
     private void OnCollisionEnter(Collision collision)
     {     
-        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket")
+        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket" || collision.gameObject.tag == "HeavyLaser")
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();

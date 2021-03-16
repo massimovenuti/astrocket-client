@@ -16,6 +16,8 @@ TagManager:
   - SmoothBorder
   - Rocket
   - Mine
+  - Enemy
+  - HeavyLaser
   layers:
   - Default
   - TransparentFX
