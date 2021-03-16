@@ -4,14 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class PlayerHealth : MonoBehaviour
+public class MOCKDummyHealth : MonoBehaviour
 {
     public Health playerHealth;
     public int shieldDurability;
-
-    public GameObject shield;
-    public PlayerDrone accessDrone;
-    public GameObject ui;
 
     // TODO: changes values
     private int _playerHealth = 100;
@@ -42,17 +38,12 @@ public class PlayerHealth : MonoBehaviour
         // DEBUG
         Debug.Log("Health : " + playerHealth.GetHealth());
 
-        shield = GameObject.Find("Shield");
-        shield.SetActive(false);
         hasShield = false;
         shieldDurability = 0;
 
         _isFantome = false;
         _isHacked = false;
 
-        accessDrone = this.GetComponent<PlayerDrone>();
-        ui = this.transform.parent.Find("CanvasPowerUp").GetComponent<Canvas>().gameObject;
-        ui.SetActive(false);
     }
 
     // Fonction Update, appelée à chaque frame
@@ -65,18 +56,13 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("The player is dead");
 
             // Réinitialise les power-ups
-            this.GetComponent<Movements>().ResetPowerUps();
-            this.GetComponent<GunController>().ResetPowerUps();
-            this.GetComponent<PlayerDrone>().DesactivateDrone();
             DesactivateShield();
             if (_isFantome)
             {
-                this.GetComponent<BoxCollider>().enabled = true;
                 _isFantome = false;
             }
             if (_isHacked)
             {
-                ui.SetActive(false);
                 _isHacked = false;
             }
 
@@ -123,7 +109,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        if(collision.gameObject.tag == "HeavyLaser")
+        if (collision.gameObject.tag == "HeavyLaser")
         {
             // DEBUG
             Debug.Log("Touched by a heavy laser");
@@ -192,11 +178,6 @@ public class PlayerHealth : MonoBehaviour
         {
             playerHealth.Damage(damageValue / 2);
             shieldDurability--;
-            if (shieldDurability <= 0)
-            {
-                shield.SetActive(false);
-                hasShield = false;
-            }
         }
     }
 
@@ -215,15 +196,11 @@ public class PlayerHealth : MonoBehaviour
         // DEBUG
         Debug.Log("Shield");
 
-        if (accessDrone.hasDrone)
-            accessDrone.DesactivateDrone();
-
         hasShield = true;
         shieldDurability = _shieldDurabilityMax;
-        shield.SetActive(true);
     }
 
-    public void PowerUpFantome( )
+    public void PowerUpFantome()
     {
         // DEBUG
         Debug.Log("Fantome");
@@ -234,30 +211,28 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(TimerFantome());
     }
 
-    public void PowerUpJammer( )
+    public void PowerUpJammer()
     {
         // DEBUG
         Debug.Log("Jammer");
 
         _isHacked = true;
-        ui.SetActive(true);
 
         StartCoroutine(TimerJammer());
     }
 
-    public void DesactivateShield( )
+    public void DesactivateShield()
     {
         if (shieldDurability > 0)
         {
             hasShield = false;
-            shield.SetActive(false);
             shieldDurability = 0;
         }
     }
 
     // Fonction attendant 5 secondes avant de
     // désactiver le power-up fantome
-    private IEnumerator TimerFantome( )
+    private IEnumerator TimerFantome()
     {
         // TODO: change value /!\ OP
         yield return new WaitForSeconds(5);
@@ -268,11 +243,11 @@ public class PlayerHealth : MonoBehaviour
 
     // Fonction attendant 5 secondes avant de
     // désactiver le power-up jammer
-    private IEnumerator TimerJammer( )
+    private IEnumerator TimerJammer()
     {
         yield return new WaitForSeconds(10);
 
-        ui.SetActive(false);
         _isHacked = false;
     }
 }
+
