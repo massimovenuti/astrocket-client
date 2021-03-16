@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using System;
+using API.Stats;
 
 namespace API.Auth
 {
@@ -12,6 +13,9 @@ namespace API.Auth
         private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
         private readonly Dictionary<string, string> _endpoints;
         private readonly HttpClient _httpClient = new HttpClient();
+        private ErrorMessage _message;
+
+        public ErrorMessage ErrorMessage { get => _message;  private set { _message = value; }}
 
         public AuthAPICall( )
         {
@@ -50,7 +54,7 @@ namespace API.Auth
             => PostLoginUser(new UserLogin() { Name = username, Password = password });
         public UserToken PostLoginUser(UserLogin ur)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["loginUser"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["loginUser"], RequestType.Post, APICallFunction.Login);
             if (res == null)
                 return null;
             else
@@ -68,7 +72,7 @@ namespace API.Auth
             => PostAddUser(new UserRegister() { Name = username, Password = password, Email = email });
         public UserToken PostAddUser(UserRegister ur)
         {
-            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["addUser"], RequestType.Post);
+            string res = DoApiCall(JsonUtility.ToJson(ur), _endpoints["addUser"], RequestType.Post, APICallFunction.Register);
             if (res == null)
                 return new UserToken() { Token = null };
             else
@@ -198,18 +202,23 @@ namespace API.Auth
                 return true;
         }
 
-        private string DoApiCall(string json, string called, RequestType type)
+        private string DoApiCall(string json, string called, RequestType rtype, APICallFunction ftype = APICallFunction.None)
         {
             HttpResponseMessage responseMessage;
-            if (type == RequestType.Get)
+            if (rtype == RequestType.Get)
                 responseMessage = _httpClient.GetAsync(called).Result;
             else
                 responseMessage = _httpClient.PostAsync(called, new StringContent(json, Encoding.UTF8, "application/json")).Result;
-
+            ErrorMessage = new ErrorMessage(ftype, responseMessage.StatusCode);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
                 return responseMessage.Content.ReadAsStringAsync().Result;
+        }
+
+        public static implicit operator AuthAPICall(StatsAPICall v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

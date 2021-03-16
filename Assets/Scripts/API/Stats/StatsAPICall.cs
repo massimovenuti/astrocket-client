@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using UnityEngine;
+using System.Linq;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace API.Stats
 {
-    // use [Serializable] to turn a class into structure JSON
     public class StatsAPICall
     {
         private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
         private readonly HttpClient _httpClient = new HttpClient();
+        private ErrorMessage _errorMessage;
+
+        public ErrorMessage ErrorMessage { get => _errorMessage; private set { _errorMessage = value; }}
 
         public StatsAPICall( )
         {
@@ -28,6 +30,7 @@ namespace API.Stats
         {
             HttpResponseMessage responseMessage;
             responseMessage = _httpClient.GetAsync("stats/").Result;
+            ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
 
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
@@ -43,7 +46,7 @@ namespace API.Stats
         public PlayerStats GetUserStats(string name)
         {
             HttpResponseMessage responseMessage = _httpClient.GetAsync($"stats/{name}").Result;
-
+            ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
@@ -58,6 +61,7 @@ namespace API.Stats
             {
                 message.Headers.Add("serverToken", token);
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
+                ErrorMessage = new ErrorMessage(APICallFunction.UpdateStats, responseMessage.StatusCode);
                 if (responseMessage.IsSuccessStatusCode)
                     return true;
             }
@@ -72,6 +76,7 @@ namespace API.Stats
             {
                 message.Headers.Add("serverToken", token);  
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
+                ErrorMessage = new ErrorMessage(APICallFunction.None, responseMessage.StatusCode);
                 if (responseMessage.IsSuccessStatusCode)
                     return true;
             }
@@ -80,12 +85,11 @@ namespace API.Stats
 
         public List<PlayerStats> GetRannkingByScore(long offset = 1, int limit = 10)
             => GetRannking(OrderByData.nbPoints, offset, limit);
-
         public List<PlayerStats> GetRannking(OrderByData data, long offset = 1, int limit = 10)
         {
             HttpResponseMessage responseMessage;
             responseMessage = _httpClient.GetAsync($"stats{(data != OrderByData.maxPoints ? "/" + data.ToString() : "")}?offset={offset}&limit={limit}").Result;
-
+            ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
