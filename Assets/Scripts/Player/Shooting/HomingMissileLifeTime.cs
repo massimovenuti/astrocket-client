@@ -43,7 +43,7 @@ public class HomingMissileLifeTime : MonoBehaviour
             targetTransform = target.GetComponent<Transform>();
         }
 
-        Destroy(gameObject, 10);
+        Destroy(gameObject, 5);
     }
 
     void FixedUpdate( )
@@ -69,18 +69,28 @@ public class HomingMissileLifeTime : MonoBehaviour
 
     private GameObject ClosestEnenmy( )
     {
-        //TODO CHANGE TAG
-        tblTargets = GameObject.FindGameObjectsWithTag("Enemy");
+        tblTargets = GameObject.FindGameObjectsWithTag("Player");
 
         if (tblTargets.Length == 0)
             return null;
 
+        if (tblTargets.Length == 1 && tblTargets[0] == RealPlayer)
+            return null;
+
         GameObject Truetarget = null;
 
-        Vector3 targetDistance = tblTargets[0].transform.position;
+        Vector3 targetDistance;
+
+        if (tblTargets[0] == RealPlayer)
+            targetDistance = tblTargets[1].transform.position;
+        else
+            targetDistance = tblTargets[0].transform.position;
 
         foreach (GameObject targets in tblTargets)
         {
+            if (targets == RealPlayer)
+                continue;
+
             Vector3 tmp = targets.transform.position;
 
             if (Vector3.Distance(tmp, RealPlayer.transform.position) <= Vector3.Distance(targetDistance, RealPlayer.transform.position))

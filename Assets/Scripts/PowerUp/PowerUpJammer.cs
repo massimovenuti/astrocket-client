@@ -12,7 +12,7 @@ public class PowerUpJammer : MonoBehaviour
         {
             players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject player in players)
-                // if (player != collider.gameObject)   // TODO: remove comment
+                if (player != collider.gameObject)
                     collider.GetComponent<PlayerHealth>().PowerUpJammer();
 
             Destroy(this.gameObject);
