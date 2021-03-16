@@ -15,6 +15,7 @@ TagManager:
   - AbsoluteBorder
   - SmoothBorder
   - Rocket
+  - Mine
   layers:
   - Default
   - TransparentFX

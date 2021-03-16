@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 
 public class PlayerHealth : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
 
     public GameObject shield;
     public PlayerDrone accessDrone;
+    public GameObject ui;
 
     // TODO: changes values
     private int _playerHealth = 100;
@@ -24,10 +26,12 @@ public class PlayerHealth : MonoBehaviour
     private int _damageCollisionAsteroid = 25;
     private int _damageCollisionPlayer = 25;
     private int _damageExplosion = 30;
+    private int _damageMine = 50;
     private int _damageValue;
 
     public bool hasShield;
     private bool _isFantome;
+    private bool _isHacked;
 
     // Start is called before the first frame update
     private void Start()
@@ -43,8 +47,11 @@ public class PlayerHealth : MonoBehaviour
         shieldDurability = 0;
 
         _isFantome = false;
+        _isHacked = false;
 
         accessDrone = this.GetComponent<PlayerDrone>();
+        ui = this.transform.parent.Find("CanvasPowerUp").GetComponent<Canvas>().gameObject;
+        ui.SetActive(false);
     }
 
     // Fonction Update, appelée à chaque frame
@@ -62,7 +69,15 @@ public class PlayerHealth : MonoBehaviour
             this.GetComponent<PlayerDrone>().DesactivateDrone();
             DesactivateShield();
             if (_isFantome)
+            {
                 this.GetComponent<BoxCollider>().enabled = true;
+                _isFantome = false;
+            }
+            if (_isHacked)
+            {
+                ui.SetActive(false);
+                _isHacked = false;
+            }
 
             // le joueur est mort, un script va le
             // désactiver pendant 2 secondes
@@ -130,6 +145,21 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        // collision avec un astéroide
+        if (collision.gameObject.tag == "Mine")
+        {
+            // DEBUG
+            Debug.Log("Collision with a mine");
+
+            _damageValue = _damageMine;
+            dealDamage(_damageValue);
+
+            Destroy(collision.gameObject);
+        }
+    }
+
     // Fonction diminuant la vie du joueur
     // quand il est affecté par une explosion
     public void ExplosionDamage()
@@ -181,10 +211,24 @@ public class PlayerHealth : MonoBehaviour
 
     public void PowerUpFantome( )
     {
+        // DEBUG
+        Debug.Log("Fantome");
+
         _isFantome = true;
         this.GetComponent<BoxCollider>().enabled = false;
 
         StartCoroutine(TimerFantome());
+    }
+
+    public void PowerUpJammer( )
+    {
+        // DEBUG
+        Debug.Log("Jammer");
+
+        _isHacked = true;
+        ui.SetActive(true);
+
+        StartCoroutine(TimerJammer());
     }
 
     public void DesactivateShield( )
@@ -206,5 +250,15 @@ public class PlayerHealth : MonoBehaviour
 
         this.GetComponent<BoxCollider>().enabled = true;
         _isFantome = false;
+    }
+
+    // Fonction attendant 5 secondes avant de
+    // désactiver le power-up jammer
+    private IEnumerator TimerJammer( )
+    {
+        yield return new WaitForSeconds(10);
+
+        ui.SetActive(false);
+        _isHacked = false;
     }
 }

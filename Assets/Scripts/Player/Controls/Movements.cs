@@ -14,15 +14,19 @@ public class Movements : MonoBehaviour
     private Plane _groundPlane;
 
     public bool flash;
+    public bool slow;
     private float _refSpeed;
     private float _powerUpSpeed;
+    private float _powerUpSlowSpeed;
 
     // Start is called before the first frame update
     private void Start( )
     {
         flash = false;
+        slow = false;
         _refSpeed = _forwardSpeed;
-        _powerUpSpeed = 2 * _forwardSpeed;
+        _powerUpSpeed = _forwardSpeed * 2;
+        _powerUpSlowSpeed = _forwardSpeed / 2;
     }
 
     /// <summary>
@@ -62,13 +66,38 @@ public class Movements : MonoBehaviour
         // DEBUG
         Debug.Log("Flash");
 
+        if (slow)
+        {
+            slow = false;
+            _forwardSpeed = _refSpeed;
+            return;
+        }
+
         flash = true;
         _forwardSpeed = _powerUpSpeed;
 
         StartCoroutine(TimerFlash());
     }
 
-    // Fonction attendant 5 secondes avant de
+    public void PowerUpSlowness( )
+    {
+        // DEBUG
+        Debug.Log("Slowness");
+
+        if (flash)
+        {
+            flash = false;
+            _forwardSpeed = _refSpeed;
+            return;
+        }
+
+        slow = true;
+        _forwardSpeed = _powerUpSlowSpeed;
+
+        StartCoroutine(TimerSlowness());
+    }
+
+    // Fonction attendant 10 secondes avant de
     // désactiver le power-up de vitesse
     private IEnumerator TimerFlash( )
     {
@@ -79,12 +108,24 @@ public class Movements : MonoBehaviour
         _forwardSpeed = _refSpeed;
     }
 
+    // Fonction attendant 10 secondes avant de
+    // désactiver le power-up de vitesse
+    private IEnumerator TimerSlowness( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(10);
+
+        slow = false;
+        _forwardSpeed = _refSpeed;
+    }
+
     public void ResetPowerUps( )
     {
         // DEBUG
         Debug.Log("Death: Reset power-ups (movements)");
 
         flash = false;
+        slow = false;
         _forwardSpeed = _refSpeed;
     }
 }
