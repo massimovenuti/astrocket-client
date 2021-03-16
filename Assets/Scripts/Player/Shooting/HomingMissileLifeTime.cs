@@ -35,17 +35,21 @@ public class HomingMissileLifeTime : MonoBehaviour
 
         target = ClosestEnenmy();
 
-        Debug.Log(target.name);
+        if (target != null)
+        {
+            // DEBUG
+            Debug.Log(target.name);
 
-        targetTransform = target.GetComponent<Transform>();
-        
+            targetTransform = target.GetComponent<Transform>();
+        }
+
         Destroy(gameObject, 10);
     }
 
     void FixedUpdate( )
     {
 
-        if (IsCloseEnemy(target))
+        if (target != null && IsCloseEnemy(target))
         { 
             
 
@@ -67,6 +71,9 @@ public class HomingMissileLifeTime : MonoBehaviour
     {
         //TODO CHANGE TAG
         tblTargets = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (tblTargets.Length == 0)
+            return null;
 
         GameObject Truetarget = null;
 

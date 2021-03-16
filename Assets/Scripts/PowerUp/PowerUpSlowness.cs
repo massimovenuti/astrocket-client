@@ -12,7 +12,7 @@ public class PowerUpSlowness : MonoBehaviour
         {
             players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject player in players)
-                if (player != collider.gameObject)
+                // if (player != collider.gameObject)   // TODO: remove comment
                     collider.GetComponent<Movements>().PowerUpSlowness();
 
             Destroy(this.gameObject);
