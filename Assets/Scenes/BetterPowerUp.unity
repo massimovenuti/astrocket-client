@@ -12253,6 +12253,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy
       objectReference: {fileID: 0}
+    - target: {fileID: 6124117077373759306, guid: 6a22211bdaa262c48b6e6dec8c009ffe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6124117077373759309, guid: 6a22211bdaa262c48b6e6dec8c009ffe,
         type: 3}
       propertyPath: m_RootOrder

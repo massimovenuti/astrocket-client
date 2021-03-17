@@ -71,10 +71,7 @@ public class HomingMissileLifeTime : MonoBehaviour
     {
         tblTargets = GameObject.FindGameObjectsWithTag("Player");
 
-        if (tblTargets.Length == 0)
-            return null;
-
-        if (tblTargets.Length == 1 && tblTargets[0] == RealPlayer)
+        if ((tblTargets.Length == 0) || (tblTargets.Length == 1 && tblTargets[0] == RealPlayer))
             return null;
 
         GameObject Truetarget = null;
