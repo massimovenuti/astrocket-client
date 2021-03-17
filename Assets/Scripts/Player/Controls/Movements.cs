@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class Movements : MonoBehaviour
@@ -31,6 +29,25 @@ public class Movements : MonoBehaviour
             _rgbody.AddForce(transform.forward * _forwardSpeed);
     }
 
+#if UNITY_ANDROID
+    private void LookAt()
+    {
+        Vector3 mousePosition = _inp.PointingAt();
+        if(mousePosition != Vector3.zero)
+        {
+            mousePosition = _mainCamera.WorldToScreenPoint(transform.position + mousePosition);
+            Ray cameraRay = _mainCamera.ScreenPointToRay(mousePosition);
+
+            if (_groundPlane.Raycast(cameraRay, out float rayLength))
+            {
+                Vector3 pointToLook = cameraRay.GetPoint(rayLength) + new Vector3(0f, transform.position.y, 0f);
+                Debug.DrawLine(cameraRay.origin, pointToLook, Color.red);
+                Quaternion lockOnLook = Quaternion.LookRotation(pointToLook - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lockOnLook, _rotationSpeed * Time.deltaTime);
+            }
+        }
+    }
+#else
     private void LookAt( )
     {
         Vector3 mousePosition = _inp.PointingAt();
@@ -43,5 +60,7 @@ public class Movements : MonoBehaviour
             Quaternion lockOnLook = Quaternion.LookRotation(pointToLook - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, lockOnLook, _rotationSpeed * Time.deltaTime);
         }
+
     }
+#endif
 }
