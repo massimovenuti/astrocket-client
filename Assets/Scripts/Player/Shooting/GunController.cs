@@ -21,7 +21,9 @@ public class GunController : MonoBehaviour
     private float _refShootRate;
     private float _mitrailletteShootRate;
     private float _bazookaShootRate;
+    private float _heavyLaserShootRate;
     private float _shootForceRocket;
+    private float _shootForceHeavyLaser;
     //NEW
     private float _homingShootRate;
     //
@@ -80,6 +82,8 @@ public class GunController : MonoBehaviour
         _bazookaShootRate = shootRate * 2;
         _shootForceRocket = (shootForce * 3) / 2;
         _homingShootRate = shootRate * 3;
+        _heavyLaserShootRate = shootRate * 4;
+        _shootForceHeavyLaser = shootForce * 2;
 
     }
 
@@ -178,15 +182,11 @@ public class GunController : MonoBehaviour
 
             go.transform.parent = _bulletSpawn.transform;
 
-            int DoubleDamageChance = Random.Range(1, 100);
+            go.tag = "HeavyLaser";
 
-            if(DoubleDamageChance <= 70)
-                go.tag = "HeavyLaser";
+            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * _shootForceHeavyLaser);
 
-
-            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
-
-            _lastShootingTimeRef = Time.time + shootRate;
+            _lastShootingTimeRef = Time.time + shootRate * 2;
         }
     }
 
@@ -288,7 +288,7 @@ public class GunController : MonoBehaviour
             homing = false;
 
         heavy = true;
-        shootRate = _refShootRate;
+        shootRate = _heavyLaserShootRate;
         StartCoroutine(TimerHeavyLaser());
     }
 
