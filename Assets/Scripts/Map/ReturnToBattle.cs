@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ReturnToBattle : MonoBehaviour
 {
-    public string RTBManagerName = "ReturnToBattleManager";
+    //public string RTBManagerName = "ReturnToBattleManager";
 
-    private GameObject _UI;
-    private GameObject _player;
+    public GameObject _UI;
+    public GameObject _player;
 
     private Image _indicator;
     private Image _background;
@@ -25,9 +25,9 @@ public class ReturnToBattle : MonoBehaviour
 
     private void Awake( )
     {
-        _player = GameObject.FindGameObjectsWithTag("Player").First();
+        //_player = GameObject.FindGameObjectsWithTag("Player").First();
 
-        _UI = GameObject.Find(RTBManagerName);
+        //_UI = GameObject.Find(RTBManagerName);
         Debug.Assert(_UI != null);
         // We can use public strings here if necessary (I find it overkill though)
         _background = _UI.FindObjectByName("Background").GetComponent<Image>();
