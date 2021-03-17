@@ -181,15 +181,7 @@ public class GunController : MonoBehaviour
             int DoubleDamageChance = Random.Range(1, 100);
 
             if(DoubleDamageChance <= 70)
-            {
                 go.tag = "HeavyLaser";
-                Debug.Log("Fait le double de degat");
-            }
-            else
-            {
-                Debug.Log("Fait degat normal");
-            }
-            
 
 
             go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);

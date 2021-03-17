@@ -16,6 +16,16 @@ public class DestroyAsteroid : MonoBehaviour
     public GameObject shield;
     public GameObject flash;
     public GameObject bazooka;
+    public GameObject fantome;
+    public GameObject slowness;
+    public GameObject jammer;
+    public GameObject teleportation;
+    public GameObject leurre;
+    public GameObject drone;
+    public GameObject homingMissile;
+    public GameObject heavyLaser;
+    public GameObject mine;
+    // public GameObject bonus;
 
     // la taille sera attribué au spawn de l'astéroide (entre 3 et 1)
     public int _Size; 
@@ -136,47 +146,66 @@ public class DestroyAsteroid : MonoBehaviour
     /// </summary>
     private void DropPowerUp()
     {
-        int dropChance = Random.Range(1, 100);
+        // 1 chance sur 2 de faire apparaitre
+        // un power-up
+        if (Random.value < 0.5)
+        {
+            // DEBUG
+            Debug.Log("Pas de power-up");
+
+            return;
+        }
+
+        int drop = Random.Range(1, 100);
 
         // TODO: change values
-        if (dropChance <= 50)
-        {
-            // pas de power-up
-            Debug.Log("Pas de power-up");
-        }
-        else if (dropChance >= 51 && dropChance <= 55)
-        {
-            // drop un power-up medikit
+        if (drop > 0 && drop <= 17)
             InstantiatePowerUp(medikit);
-        }
-        else if (dropChance >= 56 && dropChance <= 60)
-        {
-            // drop un power-up mitraillette
-            InstantiatePowerUp(mitraillette);
-        }
-        else if (dropChance >= 61 && dropChance <= 65)
-        {
-            // drop un power-up akimbo
-            InstantiatePowerUp(akimbo);
-        }
-        else if (dropChance >= 66 && dropChance <= 70)
-        {
-            // drop un power-up de vitesse
-            InstantiatePowerUp(flash);
-        }
-        else if (dropChance >= 71 && dropChance <= 75)
-        {
-            // drop un power-up shield
+
+        else if (drop > 17 && drop <= 29)
             InstantiatePowerUp(shield);
-        }
-        else if (dropChance >= 76 && dropChance <= 80)
-        {
-            // drop un power-up bazooka
+
+        else if (drop > 29 && drop <= 41)
+            InstantiatePowerUp(mine);
+
+        else if (drop > 41 && drop <= 53)
+            InstantiatePowerUp(flash);
+
+        else if (drop > 53 && drop <= 61)
+            InstantiatePowerUp(heavyLaser);
+
+        else if (drop > 61 && drop <= 69)
+            Debug.Log("Not implemented yet...");    // BONUS
+
+        else if (drop > 69 && drop <= 77)
+            InstantiatePowerUp(mitraillette);
+
+        else if (drop > 77 && drop <= 82)
+            InstantiatePowerUp(homingMissile);
+
+        else if (drop > 82 && drop <= 87)
+            InstantiatePowerUp(drone);
+
+        else if (drop > 87 && drop <= 90)
+            InstantiatePowerUp(leurre);
+
+        else if (drop > 90 && drop <= 93)
+            InstantiatePowerUp(teleportation);
+
+        else if (drop > 93 && drop <= 95)
+            InstantiatePowerUp(akimbo);
+
+        else if (drop > 95 && drop <= 97)
             InstantiatePowerUp(bazooka);
-        }
-        // DEBUG
+
+        else if (drop > 97 && drop <= 98)
+            InstantiatePowerUp(jammer);
+
+        else if (drop > 98 && drop <= 99)
+            InstantiatePowerUp(slowness);
+
         else
-            Debug.Log("Not implemented yet...");
+            InstantiatePowerUp(fantome);
     }
 
     // Fonction instanciant un power-up
@@ -185,7 +214,7 @@ public class DestroyAsteroid : MonoBehaviour
         // DEBUG
         Debug.Log("Drop Power-Up : " + powerUp.name);
 
-        GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, spawningRemains.rotation);
+        GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, Quaternion.Euler(0, 0, 0));
 
         // TODO: change values
         // détruit le power-up s'il n'est pas ramassé

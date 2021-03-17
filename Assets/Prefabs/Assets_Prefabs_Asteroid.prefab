@@ -122,6 +122,19 @@ MonoBehaviour:
   shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
   flash: {fileID: 3113505347714470143, guid: b520106ae4c221d438619ec2591c6dd0, type: 3}
   bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
+  fantome: {fileID: 6548912880923896772, guid: ab021b3059c5e824bb20ddd977cd03c7, type: 3}
+  slowness: {fileID: 4888334018939358227, guid: 7299f882a7fe56c44897105647796c29,
+    type: 3}
+  jammer: {fileID: 6697394780005706805, guid: 24f5ac1c191bdca499b6a89e601e09d3, type: 3}
+  teleportation: {fileID: 1044774880430879333, guid: ab441bb0d1c5b0b41bd133dc88d75fee,
+    type: 3}
+  leurre: {fileID: 4153722317872377270, guid: e0a2e73cb467910489b13629de325078, type: 3}
+  drone: {fileID: 3371782148132494092, guid: 16b35f60fe4bfc145a2efd6f36b4bab2, type: 3}
+  homingMissile: {fileID: 9058780976217022324, guid: 6d5f06eb3240f2346846def4c190f747,
+    type: 3}
+  heavyLaser: {fileID: 3806403625804872244, guid: 7ccb66cd4b5d56d449efa95a16798a47,
+    type: 3}
+  mine: {fileID: 6411412792061597259, guid: e3a5fce6fdded21429911676f7b2d659, type: 3}
   _Size: 3
   inMapBounds: 0
 --- !u!54 &7975735016790354321
