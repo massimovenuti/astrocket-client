@@ -13,6 +13,10 @@ public class PowerUpLeurre : MonoBehaviour
     // TODO: change values
     private float _asteroidVelocity = 1f;
 
+    /// <summary>
+    /// Quand le joueur entre dans la zone de trigger du power-up, instancie un astéroide derrière lui qui se déplace
+    /// et détruit le gameObject 
+    /// </summary>
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")

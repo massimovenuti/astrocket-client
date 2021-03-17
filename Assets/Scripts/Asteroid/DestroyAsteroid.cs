@@ -156,6 +156,7 @@ public class DestroyAsteroid : MonoBehaviour
             return;
         }
 
+        // Pourcentage de change d'avoir un power-up
         int drop = Random.Range(1, 100);
 
         // TODO: change values

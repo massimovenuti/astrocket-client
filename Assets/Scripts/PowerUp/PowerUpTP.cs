@@ -5,6 +5,10 @@ using UnityEngine;
 public class PowerUpTP : MonoBehaviour
 {
 
+    /// <summary>
+    /// Quand le joueur entre dans la zone de trigger du power-up, change la position du joueur en appellant la fonction "GetSafeRespawnPoint" du script "RespawnManager"
+    /// et détruit le gameObject 
+    /// </summary>
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")

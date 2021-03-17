@@ -14,19 +14,16 @@ public class GunController : MonoBehaviour
     public bool akimbo;
     public bool mitraillette;
     public bool bazooka;
-    //NEW
     public bool homing;
     public bool heavy;
-    //
+
     private float _refShootRate;
     private float _mitrailletteShootRate;
     private float _bazookaShootRate;
     private float _heavyLaserShootRate;
     private float _shootForceRocket;
     private float _shootForceHeavyLaser;
-    //NEW
     private float _homingShootRate;
-    //
 
     private InputManager _inp;
 
@@ -34,7 +31,7 @@ public class GunController : MonoBehaviour
     private GameObject _barrelAkimbo1;
     private GameObject _barrelAkimbo2;
     public GameObject rocket;
-    //private ?
+
     public GameObject homingMissile;
 
     private GameObject _bulletSpawn;
@@ -118,6 +115,9 @@ public class GunController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instancie, pour chaque barelAkimbo, un tir
+    /// </summary>
     private void ShootAkimbo( )
     {
         if (Time.time > _lastShootingTimeRef)
@@ -141,6 +141,9 @@ public class GunController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instancie une rocket 
+    /// </summary>
     private void ShootBazooka( )
     {
         if (Time.time > _lastShootingTimeRef)
@@ -155,7 +158,9 @@ public class GunController : MonoBehaviour
         }
     }
 
-    //TODO
+    /// <summary>
+    /// Instancie un missile
+    /// </summary>
     private void ShootHomingMissile()
     {
         if (Time.time > _lastShootingTimeRef)
@@ -169,7 +174,9 @@ public class GunController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Instancie un heavy laser (laser puissant)
+    /// </summary>
     private void ShootHeavyLaser( )
     {
         if (Time.time > _lastShootingTimeRef)
@@ -190,7 +197,10 @@ public class GunController : MonoBehaviour
         }
     }
 
-    //A MODIF
+    /// <summary>
+    /// Augmente la cadence de tir pour le power-up Mitraillette
+    /// et désactive tout les autres power-up de tir
+    /// </summary>
     public void PowerUpNewShootRate( )
     {
         // DEBUG
@@ -213,6 +223,10 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerMitraillette());
     }
 
+    /// <summary>
+    /// Augmente la cadence de tir pour le power-up Akimbo
+    /// et désactive tout les autres power-up de tir
+    /// </summary>
     public void PowerUpAkimbo( )
     {
         // DEBUG
@@ -233,6 +247,10 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerAkimbo());
     }
 
+    /// <summary>
+    /// Augmente la cadence de tir pour le power-up Bazooka
+    /// et désactive tout les autres power-up de tir
+    /// </summary>
     public void PowerUpBazooka( )
     {
         // DEBUG
@@ -253,7 +271,10 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerBazooka());
     }
 
-    //TODO
+    /// <summary>
+    /// Augmente la cadence de tir pour le power-up Homing Missile
+    /// et désactive tout les autres power-up de tir
+    /// </summary>
     public void PowerUpHomingMissile()
     {
         //DEBUG
@@ -273,6 +294,10 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerHomingMissile());
     }
 
+    /// <summary>
+    /// Augmente la cadence de tir pour le power-up Heavy laser
+    /// et désactive tout les autres power-up de tir
+    /// </summary>
     public void PowerUpHeavyLaser( )
     {
         //DEBUG
@@ -293,7 +318,7 @@ public class GunController : MonoBehaviour
     }
 
 
-    // Fonction attendant 5 secondes avant de
+    // Fonction attendant 10 secondes avant de
     // désactiver le power-up akimbo
     private IEnumerator TimerAkimbo( )
     {
@@ -304,7 +329,7 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
-    // Fonction attendant 5 secondes avant de
+    // Fonction attendant 10 secondes avant de
     // désactiver le power-up mitraillette
     private IEnumerator TimerMitraillette( )
     {
@@ -315,7 +340,7 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
-    // Fonction attendant 5 secondes avant de
+    // Fonction attendant 30 secondes avant de
     // désactiver le power-up bazooka
     private IEnumerator TimerBazooka( )
     {
@@ -340,7 +365,7 @@ public class GunController : MonoBehaviour
     }
 
     // Fonction attendant 15 secondes avant de
-    // désactiver le power-up homing missile
+    // désactiver le power-up heavy laser
     private IEnumerator TimerHeavyLaser( )
     {
         // TODO: change value
@@ -351,7 +376,9 @@ public class GunController : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Supprime tout les tirs spéciaux liés aux power-up, utilisé quand un joueur meurt
+    /// </summary>
     public void ResetPowerUps( )
     {
         // DEBUG

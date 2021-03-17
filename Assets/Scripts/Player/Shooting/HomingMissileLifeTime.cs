@@ -19,7 +19,7 @@ public class HomingMissileLifeTime : MonoBehaviour
     GameObject[] tblTargets;
 
     //A MODIFIER POUR L'EQUILIBRAGE
-    float treshold = 15f;
+    float threshold = 15f;
 
 
     // Start is called before the first frame update
@@ -67,6 +67,9 @@ public class HomingMissileLifeTime : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Trouve l'ennemi le plus proche et devient la cible du homing missile
+    /// </summary>
     private GameObject ClosestEnenmy( )
     {
         tblTargets = GameObject.FindGameObjectsWithTag("Player");
@@ -100,9 +103,13 @@ public class HomingMissileLifeTime : MonoBehaviour
         return Truetarget;
     }
 
+    /// <summary>
+    /// Test s'il y a des ennemis proches.
+    /// Si la distance entre un ennemi et le vaiseau est supérieur au seuil, alors il n'est pas proche
+    /// </summary>
     private bool IsCloseEnemy(GameObject Closest)
     {
-        if (Vector3.Distance(Closest.transform.position, RealPlayer.transform.position) <= treshold)
+        if (Vector3.Distance(Closest.transform.position, RealPlayer.transform.position) <= threshold)
             return true;
 
         return false;

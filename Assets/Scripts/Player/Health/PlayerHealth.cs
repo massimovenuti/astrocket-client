@@ -123,6 +123,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
+        //Touché par un heavy laser (laser puissant)
         if(collision.gameObject.tag == "HeavyLaser")
         {
             // DEBUG

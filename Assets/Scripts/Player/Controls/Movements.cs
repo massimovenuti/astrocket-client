@@ -61,11 +61,15 @@ public class Movements : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Augmente la vitesse du vaiseau
+    /// </summary>
     public void PowerUpFlash( )
     {
         // DEBUG
         Debug.Log("Flash");
 
+        //si on est ralentit, on repasse à la vitesse normale
         if (slow)
         {
             slow = false;
@@ -79,11 +83,15 @@ public class Movements : MonoBehaviour
         StartCoroutine(TimerFlash());
     }
 
+    /// <summary>
+    /// Diminue la vitesse du vaiseau
+    /// </summary>
     public void PowerUpSlowness( )
     {
         // DEBUG
         Debug.Log("Slowness");
 
+        //si on a le power-up "flash", on repasse à la vitesse normale
         if (flash)
         {
             flash = false;
@@ -97,6 +105,7 @@ public class Movements : MonoBehaviour
         StartCoroutine(TimerSlowness());
     }
 
+
     // Fonction attendant 10 secondes avant de
     // désactiver le power-up de vitesse
     private IEnumerator TimerFlash( )
@@ -109,7 +118,7 @@ public class Movements : MonoBehaviour
     }
 
     // Fonction attendant 10 secondes avant de
-    // désactiver le power-up de vitesse
+    // désactiver le power-up de ralentissement
     private IEnumerator TimerSlowness( )
     {
         // TODO: change value
@@ -119,6 +128,9 @@ public class Movements : MonoBehaviour
         _forwardSpeed = _refSpeed;
     }
 
+    /// <summary>
+    /// Supprime tout les états liés aux power-up, utilisé quand un joueur meurt
+    /// </summary>
     public void ResetPowerUps( )
     {
         // DEBUG
