@@ -7,8 +7,8 @@ public class PowerUpJammer : MonoBehaviour
     private GameObject[] players;
 
     /// <summary>
-    /// Quand le joueur entre dans la zone de trigger du power-up, appel de la fonction "PowerUpJammer()" dans le script "PlayerHealth"
-    /// et détruit le gameObject 
+    /// Quand le joueur entre dans la zone de trigger du power-up, appel de la fonction "PowerUpJammer()" 
+    /// dans le script "PlayerHealth" de tous les joueurs, excepté lui-même, puis détruit le gameObject 
     /// </summary>
     public void OnTriggerEnter(Collider collider)
     {

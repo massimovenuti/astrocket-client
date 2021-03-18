@@ -98,6 +98,9 @@ public class GunController : MonoBehaviour
             Shoot();
     }
 
+    /// <summary>
+    /// Fonction de tir de base (instancie un tir)
+    /// </summary>
     private void Shoot( )
     {
         if (Time.time > _lastShootingTimeRef)
@@ -203,9 +206,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void PowerUpNewShootRate( )
     {
-        // DEBUG
-        Debug.Log("Mitraillette");
-
         // on ne peut avoir qu'un power-up de
         // tir à la fois
         if (akimbo)
@@ -229,9 +229,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void PowerUpAkimbo( )
     {
-        // DEBUG
-        Debug.Log("Akimbo");
-
         if (bazooka)
             bazooka = false;
         else if (mitraillette)
@@ -253,9 +250,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void PowerUpBazooka( )
     {
-        // DEBUG
-        Debug.Log("Bazooka");
-
         if (akimbo)
             akimbo = false;
         else if (mitraillette)
@@ -277,9 +271,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void PowerUpHomingMissile()
     {
-        //DEBUG
-        Debug.Log("HomingMissile");
-
         if (akimbo)
             akimbo = false;
         else if (mitraillette)
@@ -300,9 +291,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void PowerUpHeavyLaser( )
     {
-        //DEBUG
-        Debug.Log("HeavyLaser");
-
         if (akimbo)
             akimbo = false;
         else if (mitraillette)
@@ -317,9 +305,10 @@ public class GunController : MonoBehaviour
         StartCoroutine(TimerHeavyLaser());
     }
 
-
-    // Fonction attendant 10 secondes avant de
-    // désactiver le power-up akimbo
+    /// <summary>
+    /// Fonction attendant 10 secondes avant de
+    /// désactiver le power-up akimbo
+    /// </summary>
     private IEnumerator TimerAkimbo( )
     {
         // TODO: change value
@@ -329,8 +318,10 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
-    // Fonction attendant 10 secondes avant de
-    // désactiver le power-up mitraillette
+    /// <summary>
+    /// Fonction attendant 10 secondes avant de
+    /// désactiver le power-up mitraillette
+    /// </summary>
     private IEnumerator TimerMitraillette( )
     {
         // TODO: change value
@@ -340,8 +331,10 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
-    // Fonction attendant 30 secondes avant de
-    // désactiver le power-up bazooka
+    /// <summary>
+    /// Fonction attendant 30 secondes avant de
+    /// désactiver le power-up bazooka
+    /// </summary>
     private IEnumerator TimerBazooka( )
     {
         // TODO: change value
@@ -351,9 +344,10 @@ public class GunController : MonoBehaviour
         shootRate = _refShootRate;
     }
 
-
-    // Fonction attendant 30 secondes avant de
-    // désactiver le power-up homing missile
+    /// <summary>
+    /// Fonction attendant 30 secondes avant de
+    /// désactiver le power-up homing missile
+    /// </summary>
     private IEnumerator TimerHomingMissile( )
     {
         // TODO: change value
@@ -364,8 +358,10 @@ public class GunController : MonoBehaviour
         
     }
 
-    // Fonction attendant 15 secondes avant de
-    // désactiver le power-up heavy laser
+    /// <summary>
+    /// Fonction attendant 15 secondes avant de
+    /// désactiver le power-up heavy laser
+    /// </summary>
     private IEnumerator TimerHeavyLaser( )
     {
         // TODO: change value
@@ -381,9 +377,6 @@ public class GunController : MonoBehaviour
     /// </summary>
     public void ResetPowerUps( )
     {
-        // DEBUG
-        Debug.Log("Death: Reset power-ups (guns)");
-
         if (akimbo)
         {
             akimbo = false;

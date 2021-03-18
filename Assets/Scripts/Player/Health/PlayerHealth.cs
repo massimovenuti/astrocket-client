@@ -34,37 +34,41 @@ public class PlayerHealth : MonoBehaviour
     private bool _isFantome;
     private bool _isHacked;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     private void Start()
     {
         playerHealth = new Health(_playerHealth);
 
-        // DEBUG
-        Debug.Log("Health : " + playerHealth.GetHealth());
-
+        // récupère le bouclier du joueur et l'initialise
         shield = GameObject.Find("Shield");
         shield.SetActive(false);
         hasShield = false;
         shieldDurability = 0;
 
+        // initialise les booléens des power-ups 
+        // (fantome et jammer) à faux
         _isFantome = false;
         _isHacked = false;
 
+        // pour accéder plus tard au drone du joueur
         accessDrone = this.GetComponent<PlayerDrone>();
+
+        // récupère l'UI du power-up jammer et la désactive
         ui = this.transform.parent.Find("CanvasPowerUp").GetComponent<Canvas>().gameObject;
         ui.SetActive(false);
     }
 
-    // Fonction Update, appelée à chaque frame
+    /// <summary>
+    /// Fonction Update, appelée à chaque frame
+    /// </summary>
     private void Update()
     {
         // si le joueur est mort
         if (playerHealth.GetDead())
         {
-            // DEBUG
-            Debug.Log("The player is dead");
-
-            // Réinitialise les power-ups
+            // réinitialise les power-ups
             this.GetComponent<Movements>().ResetPowerUps();
             this.GetComponent<GunController>().ResetPowerUps();
             this.GetComponent<PlayerDrone>().DesactivateDrone();
@@ -85,49 +89,43 @@ public class PlayerHealth : MonoBehaviour
             GameObject handler = GameObject.Find("Map");
             handler.SendMessage("SwitchPlayerActivation", gameObject);
 
-            // Réinitialise la vie, et indique que
+            // réinitialise la vie, et indique que
             // le joueur est à nouveau vivant
             playerHealth.SetDead(false);
             playerHealth.SetHealth(_playerHealth);
 
-            // Réinitialise l'inertie
+            // réinitialise l'inertie
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
-    // Fonction diminuant la vie du joueur lorsqu'il
-    // est touché par quelque chose
+    /// <summary>
+    /// Fonction diminuant la vie du joueur lorsqu'il
+    /// est touché par quelque chose
+    /// </summary>
     private void OnCollisionEnter(Collision collision)
     {
         // touché par un laser
         if (collision.gameObject.tag == "Bullet")
         {
-            // DEBUG
-            Debug.Log("Touched by a bullet");
-
             _damageValue = _damageBullet;
             dealDamage(_damageValue);
 
             Destroy(collision.gameObject);
         }
 
-        // touché par une rocket
+        // touché par une roquette
         if (collision.gameObject.tag == "Rocket")
         {
-            // DEBUG
-            Debug.Log("Touched by a rocket");
-
             _damageValue = _damageRocket;
             dealDamage(_damageValue);
 
             Destroy(collision.gameObject);
         }
 
-        //Touché par un heavy laser (laser puissant)
+        // touché par un heavy laser (power-up)
         if(collision.gameObject.tag == "HeavyLaser")
         {
-            // DEBUG
-            Debug.Log("Touched by a heavy laser");
             _damageValue = _damageHeavyLaser;
             dealDamage(_damageValue);
 
@@ -137,9 +135,6 @@ public class PlayerHealth : MonoBehaviour
         // collision avec un astéroide
         if (collision.gameObject.tag == "Asteroid")
         {
-            // DEBUG
-            Debug.Log("Collision with an asteroid");
-
             _damageValue = _damageCollisionAsteroid;
             dealDamage(_damageValue);
 
@@ -149,22 +144,19 @@ public class PlayerHealth : MonoBehaviour
         // collision avec un joueur
         if (collision.gameObject.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Collision with a player");
-
             _damageValue = _damageCollisionPlayer;
             dealDamage(_damageValue);
         }
     }
 
+    /// <summary>
+    /// Fonction gérant l'entrée du joueur dans un
+    /// trigger: sert uniquement pour la mine
+    /// </summary>
     private void OnTriggerEnter(Collider collision)
     {
-        // collision avec un astéroide
         if (collision.gameObject.tag == "Mine")
         {
-            // DEBUG
-            Debug.Log("Collision with a mine");
-
             _damageValue = _damageMine;
             dealDamage(_damageValue);
 
@@ -172,19 +164,20 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    // Fonction diminuant la vie du joueur
-    // quand il est affecté par une explosion
+    /// <summary>
+    /// Fonction appelant dealDamage quand le
+    /// joueur est affecté par une explosion
+    /// </summary>
     public void ExplosionDamage()
     {
-        // DEBUG
-        Debug.Log("Affected by an explosion");
-
         _damageValue = _damageExplosion;
         dealDamage(_damageValue);
     }
 
-    // Fonction générale diminuant la vie du joueur
-    // en gérant le bouclier
+    /// <summary>
+    /// Fonction générale diminuant la vie du joueur
+    /// en gérant le bouclier
+    /// </summary>
     private void dealDamage(int damageValue)
     {
         if (shieldDurability <= 0)
@@ -201,21 +194,19 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    // Fonction augmantant la vie du joueur
+    /// <summary>
+    /// Fonction augmantant la vie du joueur
+    /// </summary>
     public void PowerUpMedikit()
     {
-        // DEBUG
-        Debug.Log("Medikit");
-
         playerHealth.Heal(_healValue);
     }
 
-    // Fonction donnant un bouclier au joueur
+    /// <summary>
+    /// Fonction activant le bouclier du joueur
+    /// </summary>
     public void PowerUpShield()
     {
-        // DEBUG
-        Debug.Log("Shield");
-
         if (accessDrone.hasDrone)
             accessDrone.DesactivateDrone();
 
@@ -224,28 +215,32 @@ public class PlayerHealth : MonoBehaviour
         shield.SetActive(true);
     }
 
+    /// <summary>
+    /// Fonction activant le power-up fantome
+    /// </summary>
     public void PowerUpFantome( )
     {
-        // DEBUG
-        Debug.Log("Fantome");
-
         _isFantome = true;
         this.GetComponent<BoxCollider>().enabled = false;
 
         StartCoroutine(TimerFantome());
     }
 
+    /// <summary>
+    /// Fonction activant l'UI du malus jammer
+    /// </summary>
     public void PowerUpJammer( )
     {
-        // DEBUG
-        Debug.Log("Jammer");
-
         _isHacked = true;
         ui.SetActive(true);
 
         StartCoroutine(TimerJammer());
     }
 
+    /// <summary>
+    /// Fonction réinitialisant à 0 et désactivant
+    /// le shield du joueur
+    /// </summary>
     public void DesactivateShield( )
     {
         if (shieldDurability > 0)
@@ -256,21 +251,26 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    // Fonction attendant 5 secondes avant de
-    // désactiver le power-up fantome
+    /// <summary>
+    /// Fonction attendant 5 secondes avant de
+    /// désactiver le power-up fantome
+    /// </summary>
     private IEnumerator TimerFantome( )
     {
-        // TODO: change value /!\ OP
+        // OP /!\
         yield return new WaitForSeconds(5);
 
         this.GetComponent<BoxCollider>().enabled = true;
         _isFantome = false;
     }
 
-    // Fonction attendant 5 secondes avant de
-    // désactiver le power-up jammer
+    /// <summary>
+    /// Fonction attendant 10 secondes avant de
+    /// désactiver le power-up jammer
+    /// </summary>
     private IEnumerator TimerJammer( )
     {
+        // TODO: change value
         yield return new WaitForSeconds(10);
 
         ui.SetActive(false);

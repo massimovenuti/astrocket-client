@@ -18,37 +18,50 @@ public class PlayerDrone : MonoBehaviour
     private float _droneShootForce = 3000f;
     private float _lastShootingTimeRef;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     private void Start( )
     {
+        // on désactive le drone au tout début
         drone = GameObject.Find("Drone");
         drone.SetActive(false);
         hasDrone = false;
 
+        // on récupère le point de tir du drone
         _droneBarrel = transform.gameObject.FindObjectByName("DroneBarrel");
 
+        // on récupère le joueur auquel appartient le drone
         _player = this.gameObject.transform.GetChild(2).gameObject;
 
+        // pour accéder au bouclier du joueur
         accessShield = this.GetComponent<PlayerHealth>();
     }
 
+    /// <summary>
+    /// Fonction faisant tourner le drone autour du joueur
+    /// </summary>
     private void Update( )
     {
         drone.transform.RotateAround(_player.transform.position, Vector3.up, 80 * Time.deltaTime);
         drone.transform.Rotate(Vector3.up * Time.deltaTime, Space.Self);
     }
 
+    /// <summary>
+    /// Fonction détéctant si un objet entre dans le rayon de
+    /// tir du drone
+    /// </summary>
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Asteroid" || collider.tag == "Player")
         {
-            // DEBUG
-            Debug.Log("Something enters the trigger");
-
             DroneShoot(collider);
         }
     }
 
+    /// <summary>
+    /// Fonction de tir du drone
+    /// </summary>
     private void DroneShoot(Collider collider)
     {
         if (Time.time > _lastShootingTimeRef)
@@ -68,12 +81,12 @@ public class PlayerDrone : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Fonction activant le drone du joueur lorsqu'il
+    /// récupère le power-up correspondant
+    /// </summary>
     public void PowerUpDrone()
     {
-        // DEBUG
-        Debug.Log("Drone");
-
         if (accessShield.hasShield)
             accessShield.DesactivateShield();
 
@@ -82,8 +95,10 @@ public class PlayerDrone : MonoBehaviour
         StartCoroutine(TimerDrone());
     }
 
-    // Fonction attendant 30 secondes avant de
-    // désactiver le drone
+    /// <summary>
+    /// Fonction attendant 30 secondes avant de
+    /// désactiver le drone
+    /// </summary>
     private IEnumerator TimerDrone( )
     {
         // TODO: change value
@@ -93,6 +108,9 @@ public class PlayerDrone : MonoBehaviour
         hasDrone = false;
     }
 
+    /// <summary>
+    /// Fonction désactivant le drone du joueur
+    /// </summary>
     public void DesactivateDrone( )
     {
         drone.SetActive(false);

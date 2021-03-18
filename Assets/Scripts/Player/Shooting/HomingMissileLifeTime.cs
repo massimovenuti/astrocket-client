@@ -18,47 +18,43 @@ public class HomingMissileLifeTime : MonoBehaviour
 
     GameObject[] tblTargets;
 
-    //A MODIFIER POUR L'EQUILIBRAGE
+    // TODO: change value
     float threshold = 15f;
 
-
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     void Start( )
     {
-
+        // on récupère le joueur ayant tiré le missile
         BulletStorage = this.transform.parent.gameObject;
         PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
         RealPlayer = PlayerParent.gameObject.transform.Find("Player").gameObject;
 
         _rb = GetComponent<Rigidbody>();
 
-
+        // on récupère la cible la plus proche du joueur
         target = ClosestEnenmy();
 
         if (target != null)
-        {
-            // DEBUG
-            Debug.Log(target.name);
-
             targetTransform = target.GetComponent<Transform>();
-        }
 
         Destroy(gameObject, 5);
     }
 
     void FixedUpdate( )
     {
-
+        // si on a une cible proche du joueur, on modifie
+        // la trajectoire du missible
         if (target != null && IsCloseEnemy(target))
-        { 
-            
-
+        {
             direction = targetTransform.position - _rb.position;
             direction.Normalize();
             Vector3 rotationAmount = Vector3.Cross(transform.up, direction);
             _rb.angularVelocity = rotationAmount * _rotateMissileSpeed;
             _rb.velocity = transform.up * _force;
         }
+        // sinon il va tout droit
         else
         {
             _rb.velocity = transform.up * _force;
@@ -81,6 +77,7 @@ public class HomingMissileLifeTime : MonoBehaviour
 
         Vector3 targetDistance;
 
+        // pour éviter que le joueur ne se cible lui-même
         if (tblTargets[0] == RealPlayer)
             targetDistance = tblTargets[1].transform.position;
         else

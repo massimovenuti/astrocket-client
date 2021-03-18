@@ -14,15 +14,21 @@ public class DroneBullet : MonoBehaviour
     private float _rotateMissileSpeed = 4f;
     private float _force = 35f;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
 
+        // le laser a une durée de vie de 3 secondes
         Destroy(gameObject, 3);
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Fonction modifiant la trajectoire du laser
+    /// tant que sa cible n'est pas détruite
+    /// </summary>
     void FixedUpdate()
     {
         if (target != null)

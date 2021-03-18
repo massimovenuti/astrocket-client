@@ -150,9 +150,6 @@ public class DestroyAsteroid : MonoBehaviour
         // un power-up
         if (Random.value < 0.5)
         {
-            // DEBUG
-            Debug.Log("Pas de power-up");
-
             return;
         }
 
@@ -209,12 +206,11 @@ public class DestroyAsteroid : MonoBehaviour
             InstantiatePowerUp(fantome);
     }
 
-    // Fonction instanciant un power-up
+    /// <summary>
+    /// Fonction instanciant un power-up
+    /// </summary>
     private void InstantiatePowerUp(GameObject powerUp)
     {
-        // DEBUG
-        Debug.Log("Drop Power-Up : " + powerUp.name);
-
         GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, Quaternion.Euler(0, 0, 0));
 
         // TODO: change values
@@ -225,7 +221,7 @@ public class DestroyAsteroid : MonoBehaviour
     }
 
     /// <summary>
-    /// Inflige des dégats au vaisseau
+    /// Fonction détruisant l'astéroïde
     /// </summary>
     private void HitByAsteroid( )
     {

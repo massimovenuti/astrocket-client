@@ -66,9 +66,6 @@ public class Movements : MonoBehaviour
     /// </summary>
     public void PowerUpFlash( )
     {
-        // DEBUG
-        Debug.Log("Flash");
-
         //si on est ralentit, on repasse à la vitesse normale
         if (slow)
         {
@@ -88,9 +85,6 @@ public class Movements : MonoBehaviour
     /// </summary>
     public void PowerUpSlowness( )
     {
-        // DEBUG
-        Debug.Log("Slowness");
-
         //si on a le power-up "flash", on repasse à la vitesse normale
         if (flash)
         {
@@ -129,13 +123,12 @@ public class Movements : MonoBehaviour
     }
 
     /// <summary>
-    /// Supprime tout les états liés aux power-up, utilisé quand un joueur meurt
+    /// Supprime tout les états liés aux power-up 
+    /// et réinitialise la vitesse:
+    /// utilisé quand un joueur meurt
     /// </summary>
     public void ResetPowerUps( )
     {
-        // DEBUG
-        Debug.Log("Death: Reset power-ups (movements)");
-
         flash = false;
         slow = false;
         _forwardSpeed = _refSpeed;
