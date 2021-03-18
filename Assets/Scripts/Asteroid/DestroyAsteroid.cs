@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class DestroyAsteroid : MonoBehaviour
+public class DestroyAsteroid : MonoBehaviour, IScoreable
 {
     public string AsteroidStorageTagName = "AsteroidStorage";
     public Transform spawningRemains;
@@ -11,18 +11,19 @@ public class DestroyAsteroid : MonoBehaviour
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
     public int size; 
     public bool inMapBounds = false;
+    public long Score { get; set; }
 
     private GameObject _asteroidStorage;
     private Rigidbody _rb;
-
     private void Awake( )
     {
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
-
         if (go == null)
             Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
         else
             _asteroidStorage = go;
+
+        Score = 100;
     }
 
     private void Start()
@@ -41,6 +42,7 @@ public class DestroyAsteroid : MonoBehaviour
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();
+            addScore("id", Score, ScoreManager.Instance);
         }       
 
         if (collision.gameObject.tag == "Player")
@@ -149,5 +151,9 @@ public class DestroyAsteroid : MonoBehaviour
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
         ph.playerHealth.Damage(25);
         Debug.Log("Meow've been hit :'(");
+    }
+    public void addScore(string token, long score, ScoreManager scm)
+    {
+        scm.AddScore(token, score);
     }
 }
