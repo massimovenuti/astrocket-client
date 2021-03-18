@@ -13,15 +13,17 @@ using UnityEngine.UI;
 
 public class PlayerScore : MonoBehaviour
 {
-    private ScoreObserver observer;
-    Text textScore;
+    private Text textScore;
+    private ScoreManager observer;
+    private string _mockPlayerId = "id";
 
     /// <summary>
     /// Initialisation des objets
     /// </summary>
     void Start()
     {
-        observer = GameObject.Find("PlayerFinal").GetComponent<ScoreObserver>();
+        observer = ScoreManager.Instance;
+        observer.AddPlayer(_mockPlayerId);
         textScore = GetComponent<Text>();
     }
 
@@ -30,6 +32,6 @@ public class PlayerScore : MonoBehaviour
     /// </summary>
     void Update()
     {
-        textScore.text = "Score: " + observer.Score;
+        textScore.text = "Score: " + observer.Scores[_mockPlayerId];
     }
 }
