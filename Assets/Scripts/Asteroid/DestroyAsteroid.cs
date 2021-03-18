@@ -15,14 +15,21 @@ public class DestroyAsteroid : MonoBehaviour
     private GameObject _asteroidStorage;
     private Rigidbody _rb;
 
+    protected ScoreObserver observer;
+    protected uint Score;
+
     private void Awake( )
     {
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
+
+        observer = GameObject.Find("PlayerFinal").GetComponent<ScoreObserver>();
 
         if (go == null)
             Debug.LogError($"There were no GameObjects with tag {AsteroidStorageTagName} assigned self");
         else
             _asteroidStorage = go;
+
+        Score = 100;
     }
 
     private void Start()
@@ -41,6 +48,8 @@ public class DestroyAsteroid : MonoBehaviour
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();
+            observer.addScore(Score);
+            GameManager.Instance.
         }       
 
         if (collision.gameObject.tag == "Player")
