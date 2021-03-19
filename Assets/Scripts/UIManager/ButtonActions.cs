@@ -5,6 +5,8 @@ using TMPro;
 
 public class ButtonActions : MonoBehaviour
 {
+    public GameObject loginForm, signupForm;
+
     private UICameraManager _cam;
 
 
@@ -79,5 +81,17 @@ public class ButtonActions : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void OnClickToggleLogIn( )
+    {
+        loginForm.SetActive(true);
+        signupForm.SetActive(false);
+    }
+
+    public void OnClickToggleSignUp( )
+    {
+        loginForm.SetActive(false);
+        signupForm.SetActive(true);
     }
 }
