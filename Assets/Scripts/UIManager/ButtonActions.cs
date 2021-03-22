@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 
@@ -6,9 +7,9 @@ using TMPro;
 public class ButtonActions : MonoBehaviour
 {
     public GameObject loginForm, signupForm;
+    public Button loginButton, signupButton;
 
     private UICameraManager _cam;
-
 
     private void Awake( )
     {
@@ -18,8 +19,8 @@ public class ButtonActions : MonoBehaviour
     public void OnClickLogin( )
     {
         TMP_InputField mdp, user;
-        user = GameObject.Find("Username").GetComponent<TMP_InputField>();
-        mdp = GameObject.Find("Password").GetComponent<TMP_InputField>();
+        user = GameObject.Find("UsernameField").GetComponent<TMP_InputField>();
+        mdp = GameObject.Find("PasswordField").GetComponent<TMP_InputField>();
 
         if(user == null || mdp == null)
             Debug.LogError("Couldn't find password or username field");
@@ -87,11 +88,15 @@ public class ButtonActions : MonoBehaviour
     {
         loginForm.SetActive(true);
         signupForm.SetActive(false);
+        loginButton.interactable = false;
+        signupButton.interactable = true;
     }
 
     public void OnClickToggleSignUp( )
     {
         loginForm.SetActive(false);
         signupForm.SetActive(true);
+        loginButton.interactable = true;
+        signupButton.interactable = false;
     }
 }
