@@ -2,8 +2,6 @@
 using UnityEngine.UI;
 using TMPro;
 
-
-
 public class ButtonActions : MonoBehaviour
 {
     public GameObject loginForm, signupForm;
@@ -22,7 +20,7 @@ public class ButtonActions : MonoBehaviour
         user = GameObject.Find("UsernameField").GetComponent<TMP_InputField>();
         mdp = GameObject.Find("PasswordField").GetComponent<TMP_InputField>();
 
-        if(user == null || mdp == null)
+        if (user == null || mdp == null)
             Debug.LogError("Couldn't find password or username field");
         else
         {
@@ -34,18 +32,30 @@ public class ButtonActions : MonoBehaviour
             }
             else
                 _cam.ToLoginPanel();
-
-
         }        
     }
 
     public void OnClickRegister( )
     {
-        if(_cam.OnPanel == CurrentPanel.Register)
+        TMP_InputField mdp, user, email, mdpConf;
+        user = GameObject.Find("UsernameField").GetComponent<TMP_InputField>();
+        email = GameObject.Find("EmailField").GetComponent<TMP_InputField>();
+        mdp = GameObject.Find("PasswordField").GetComponent<TMP_InputField>();
+        mdpConf = GameObject.Find("PasswordConfirmField").GetComponent<TMP_InputField>();
+
+        if (user == null || email == null || mdp == null || mdpConf == null)
+            Debug.LogError("Couldn't find password or username field");
+        else
         {
-            // TODO : API call here
+            if (_cam.OnPanel == CurrentPanel.Login)
+            {
+                // TODO : Register API call here
+                if (true)
+                    _cam.ToMainMenu();
+            }
+            else
+                _cam.ToLoginPanel();
         }
-        _cam.ToRegistrationPanel();
     }
 
     public void OnClickLogOut()

@@ -9,7 +9,6 @@ public class UICameraManager : MonoBehaviour
     private GameObject _title;
     private GameObject _server;
     private GameObject _settings;
-    private GameObject _register;
 
 
     private CurrentPanel _state;
@@ -19,7 +18,6 @@ public class UICameraManager : MonoBehaviour
     private void Awake( )
     {
         _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
-        _register = GameObject.Find("RegistrationScreen");
         _login = GameObject.Find("LogInScreen");
         _title = GameObject.Find("TitleScreen");
         _settings = GameObject.Find("SettingsScreen");
@@ -31,11 +29,6 @@ public class UICameraManager : MonoBehaviour
     {
         _mainCamera.transform.LookAt(_login.transform);
         _state = CurrentPanel.Login;
-    }
-    public void ToRegistrationPanel()
-    {
-        _mainCamera.transform.LookAt(_register.transform);
-        _state = CurrentPanel.Register;
     }
 
     public void ToMainMenu( )
@@ -75,6 +68,5 @@ public enum CurrentPanel
     Main,
     Login,
     Server,
-    Register,
     Settings
 }
