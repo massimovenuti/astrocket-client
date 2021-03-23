@@ -10,22 +10,26 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     public Transform spawningRemains;
 
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
-    public int size; 
+    public int size;
+
     public GameObject medikit;
-    public GameObject mitraillette;
     public GameObject akimbo;
     public GameObject shield;
-    public GameObject flash;
     public GameObject bazooka;
+    public GameObject jammer;
+    public GameObject drone;
+
+    /*
     public GameObject fantome;
     public GameObject slowness;
-    public GameObject jammer;
+    public GameObject flash;
+    public GameObject mitraillette;
     public GameObject teleportation;
     public GameObject leurre;
-    public GameObject drone;
     public GameObject homingMissile;
     public GameObject heavyLaser;
     public GameObject mine;
+    */
     // public GameObject bonus;
 
     public bool inMapBounds = false;
@@ -82,7 +86,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         if (--size >= 1)
             DropRemains(vector, origin);
         else
-            DropPowerUP();
+            DropPowerUp();
     }
 
     /// <summary>
@@ -153,53 +157,26 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         int drop = Random.Range(1, 100);
 
         // TODO: change values
-        if (drop > 0 && drop <= 17)
+        if (drop > 0 && drop <= 35)
             InstantiatePowerUp(medikit);
 
-        else if (drop > 17 && drop <= 29)
+        else if (drop > 36 && drop <= 55)
             InstantiatePowerUp(shield);
 
-        else if (drop > 29 && drop <= 41)
-            InstantiatePowerUp(mine);
-
-        else if (drop > 41 && drop <= 53)
-            InstantiatePowerUp(flash);
-
-        else if (drop > 53 && drop <= 61)
-            InstantiatePowerUp(heavyLaser);
-
-        else if (drop > 61 && drop <= 69)
+        else if (drop > 56 && drop <= 75)
             Debug.Log("Not implemented yet...");    // BONUS
 
-        else if (drop > 69 && drop <= 77)
-            InstantiatePowerUp(mitraillette);
-
-        else if (drop > 77 && drop <= 82)
-            InstantiatePowerUp(homingMissile);
-
-        else if (drop > 82 && drop <= 87)
+        else if (drop > 76 && drop <= 85)
             InstantiatePowerUp(drone);
 
-        else if (drop > 87 && drop <= 90)
-            InstantiatePowerUp(leurre);
-
-        else if (drop > 90 && drop <= 93)
-            InstantiatePowerUp(teleportation);
-
-        else if (drop > 93 && drop <= 95)
+        else if (drop > 86 && drop <= 92)
             InstantiatePowerUp(akimbo);
 
-        else if (drop > 95 && drop <= 97)
+        else if (drop > 93 && drop <= 99)
             InstantiatePowerUp(bazooka);
 
-        else if (drop > 97 && drop <= 98)
-            InstantiatePowerUp(jammer);
-
-        else if (drop > 98 && drop <= 99)
-            InstantiatePowerUp(slowness);
-
         else
-            InstantiatePowerUp(fantome);
+            InstantiatePowerUp(jammer);
     }
 
     /// <summary>
