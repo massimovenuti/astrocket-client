@@ -47,6 +47,8 @@ public class ButtonActions : MonoBehaviour
             Debug.LogError("Couldn't find password or username field");
         else
         {
+            if (mdp.text != mdpConf.text)
+                Debug.LogError("Passwords must be identical"); // TODO : Affichage d'un texte custom
             if (_cam.OnPanel == CurrentPanel.Login)
             {
                 // TODO : Register API call here

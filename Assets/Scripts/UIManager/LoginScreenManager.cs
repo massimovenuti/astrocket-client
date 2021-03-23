@@ -6,7 +6,7 @@ using TMPro;
 public class LoginScreenManager : MonoBehaviour
 {
 
-    public void Login(string mdp, string password)
+    public void Login(string username, string password)
     {
         // Use API call here
     }
