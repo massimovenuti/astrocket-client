@@ -18,6 +18,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     public GameObject bazooka;
     public GameObject jammer;
     public GameObject drone;
+    public GameObject bonus;
 
     /*
     public GameObject fantome;
@@ -30,7 +31,6 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     public GameObject heavyLaser;
     public GameObject mine;
     */
-    // public GameObject bonus;
 
     public bool inMapBounds = false;
     public long Score { get; set; }
@@ -164,7 +164,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
             InstantiatePowerUp(shield);
 
         else if (drop > 56 && drop <= 75)
-            Debug.Log("Not implemented yet...");    // BONUS
+            InstantiatePowerUp(bonus);
 
         else if (drop > 76 && drop <= 85)
             InstantiatePowerUp(drone);
