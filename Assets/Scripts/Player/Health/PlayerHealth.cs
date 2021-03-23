@@ -31,6 +31,7 @@ public class PlayerHealth : MonoBehaviour
     private int _damageValue;
 
     public bool hasShield;
+    public bool bonus;
     private bool _isFantome;
     private bool _isHacked;
 
@@ -51,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
         // (fantome et jammer) à faux
         _isFantome = false;
         _isHacked = false;
+        bonus = false;
 
         // pour accéder plus tard au drone du joueur
         accessDrone = this.GetComponent<PlayerDrone>();
@@ -83,6 +85,8 @@ public class PlayerHealth : MonoBehaviour
                 ui.SetActive(false);
                 _isHacked = false;
             }
+            if (bonus)
+                bonus = false;
 
             // le joueur est mort, un script va le
             // désactiver pendant 2 secondes
@@ -238,6 +242,17 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
+    /// Fonction passant à true le booléen activant
+    /// le bonus de score pour le joueur
+    /// </summary>
+    public void PowerUpScore( )
+    {
+        bonus = true;
+
+        StartCoroutine(TimerBonus());
+    }
+
+    /// <summary>
     /// Fonction réinitialisant à 0 et désactivant
     /// le shield du joueur
     /// </summary>
@@ -275,5 +290,17 @@ public class PlayerHealth : MonoBehaviour
 
         ui.SetActive(false);
         _isHacked = false;
+    }
+
+    /// <summary>
+    /// Fonction attendant 10 secondes avant de
+    /// désactiver le power-up de bonus de score
+    /// </summary>
+    private IEnumerator TimerBonus( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(10);
+
+        bonus = false;
     }
 }

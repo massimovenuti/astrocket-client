@@ -12,6 +12,10 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
     public int size;
 
+    public GameObject BulletStorage;
+    public GameObject PlayerParent;
+    public GameObject RealPlayer;
+
     public GameObject medikit;
     public GameObject akimbo;
     public GameObject shield;
@@ -62,9 +66,17 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     {     
         if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket" || collision.gameObject.tag == "HeavyLaser")
         {
+            // on récupère le joueur ayant tiré le missile
+            BulletStorage = collision.transform.parent.gameObject;
+            PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
+            RealPlayer = PlayerParent.gameObject.transform.Find("Player").gameObject;
+
             Destroy(collision.gameObject);
             DestructionAsteroid();
-            addScore("id", Score, ScoreManager.Instance);
+            if (RealPlayer.GetComponent<PlayerHealth>().bonus)
+                addScore("id", Score * 2, ScoreManager.Instance);
+            else
+                addScore("id", Score, ScoreManager.Instance);
         }       
 
         if (collision.gameObject.tag == "Player")
