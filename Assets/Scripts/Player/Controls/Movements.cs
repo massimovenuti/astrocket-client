@@ -11,6 +11,22 @@ public class Movements : MonoBehaviour
     private InputManager _inp;
     private Plane _groundPlane;
 
+    public bool flash;
+    public bool slow;
+    private float _refSpeed;
+    private float _powerUpSpeed;
+    private float _powerUpSlowSpeed;
+
+    // Start is called before the first frame update
+    private void Start( )
+    {
+        flash = false;
+        slow = false;
+        _refSpeed = _forwardSpeed;
+        _powerUpSpeed = _forwardSpeed * 2;
+        _powerUpSlowSpeed = _forwardSpeed / 2;
+    }
+
     /// <summary>
     /// Trouver le rigidbody du vaisseau
     /// </summary>
@@ -63,4 +79,77 @@ public class Movements : MonoBehaviour
 
     }
 #endif
+
+    /// <summary>
+    /// Augmente la vitesse du vaiseau
+    /// </summary>
+    public void PowerUpFlash( )
+    {
+        //si on est ralentit, on repasse à la vitesse normale
+        if (slow)
+        {
+            slow = false;
+            _forwardSpeed = _refSpeed;
+            return;
+        }
+
+        flash = true;
+        _forwardSpeed = _powerUpSpeed;
+
+        StartCoroutine(TimerFlash());
+    }
+
+    /// <summary>
+    /// Diminue la vitesse du vaiseau
+    /// </summary>
+    public void PowerUpSlowness( )
+    {
+        //si on a le power-up "flash", on repasse à la vitesse normale
+        if (flash)
+        {
+            flash = false;
+            _forwardSpeed = _refSpeed;
+            return;
+        }
+
+        slow = true;
+        _forwardSpeed = _powerUpSlowSpeed;
+
+        StartCoroutine(TimerSlowness());
+    }
+
+
+    // Fonction attendant 10 secondes avant de
+    // désactiver le power-up de vitesse
+    private IEnumerator TimerFlash( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(10);
+
+        flash = false;
+        _forwardSpeed = _refSpeed;
+    }
+
+    // Fonction attendant 10 secondes avant de
+    // désactiver le power-up de ralentissement
+    private IEnumerator TimerSlowness( )
+    {
+        // TODO: change value
+        yield return new WaitForSeconds(10);
+
+        slow = false;
+        _forwardSpeed = _refSpeed;
+    }
+
+    /// <summary>
+    /// Supprime tout les états liés aux power-up 
+    /// et réinitialise la vitesse:
+    /// utilisé quand un joueur meurt
+    /// </summary>
+    public void ResetPowerUps( )
+    {
+        flash = false;
+        slow = false;
+        _forwardSpeed = _refSpeed;
+    }
 }

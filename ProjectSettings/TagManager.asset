@@ -14,6 +14,10 @@ TagManager:
   - WarningBorder
   - AbsoluteBorder
   - SmoothBorder
+  - Rocket
+  - Mine
+  - Enemy
+  - HeavyLaser
   layers:
   - Default
   - TransparentFX

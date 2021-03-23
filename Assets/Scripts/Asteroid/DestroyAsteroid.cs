@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.Linq;
 
 public class DestroyAsteroid : MonoBehaviour, IScoreable
@@ -10,6 +11,23 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
 
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
     public int size; 
+    public GameObject medikit;
+    public GameObject mitraillette;
+    public GameObject akimbo;
+    public GameObject shield;
+    public GameObject flash;
+    public GameObject bazooka;
+    public GameObject fantome;
+    public GameObject slowness;
+    public GameObject jammer;
+    public GameObject teleportation;
+    public GameObject leurre;
+    public GameObject drone;
+    public GameObject homingMissile;
+    public GameObject heavyLaser;
+    public GameObject mine;
+    // public GameObject bonus;
+
     public bool inMapBounds = false;
     public long Score { get; set; }
 
@@ -38,7 +56,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     /// </summary>
     private void OnCollisionEnter(Collision collision)
     {     
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket" || collision.gameObject.tag == "HeavyLaser")
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();
@@ -54,7 +72,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     /// <summary>
     /// Fractionne l'astéroïde ou le détruit
     /// </summary>
-    private void DestructionAsteroid()
+    public void DestructionAsteroid()
     {
         Vector3 vector = this.GetComponent<Rigidbody>().velocity;
         Vector3 origin = this.transform.localPosition;
@@ -124,34 +142,88 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     /// <summary>
     /// Laisse tomber les power-up
     /// </summary>
-    private void DropPowerUP()
+    private void DropPowerUp()
     {
-       int dropRate = Random.Range(1,100);
+        // 1 chance sur 2 de faire apparaitre
+        // un power-up
+        if (Random.value < 0.5)
+            return;
 
-        if (dropRate <= 20)
-        {
-            if (dropRate <= 10)
-                Debug.Log("Power-up : Regen vie");
+        // Pourcentage de change d'avoir un power-up
+        int drop = Random.Range(1, 100);
 
-            if (dropRate > 10)
-                Debug.Log("Power-up : Shield");
-        }
+        // TODO: change values
+        if (drop > 0 && drop <= 17)
+            InstantiatePowerUp(medikit);
+
+        else if (drop > 17 && drop <= 29)
+            InstantiatePowerUp(shield);
+
+        else if (drop > 29 && drop <= 41)
+            InstantiatePowerUp(mine);
+
+        else if (drop > 41 && drop <= 53)
+            InstantiatePowerUp(flash);
+
+        else if (drop > 53 && drop <= 61)
+            InstantiatePowerUp(heavyLaser);
+
+        else if (drop > 61 && drop <= 69)
+            Debug.Log("Not implemented yet...");    // BONUS
+
+        else if (drop > 69 && drop <= 77)
+            InstantiatePowerUp(mitraillette);
+
+        else if (drop > 77 && drop <= 82)
+            InstantiatePowerUp(homingMissile);
+
+        else if (drop > 82 && drop <= 87)
+            InstantiatePowerUp(drone);
+
+        else if (drop > 87 && drop <= 90)
+            InstantiatePowerUp(leurre);
+
+        else if (drop > 90 && drop <= 93)
+            InstantiatePowerUp(teleportation);
+
+        else if (drop > 93 && drop <= 95)
+            InstantiatePowerUp(akimbo);
+
+        else if (drop > 95 && drop <= 97)
+            InstantiatePowerUp(bazooka);
+
+        else if (drop > 97 && drop <= 98)
+            InstantiatePowerUp(jammer);
+
+        else if (drop > 98 && drop <= 99)
+            InstantiatePowerUp(slowness);
+
         else
-        {
-            Debug.Log("Pas de Power-up");
-        }
+            InstantiatePowerUp(fantome);
     }
 
     /// <summary>
-    /// Inflige des dégats au vaisseau
+    /// Fonction instanciant un power-up
+    /// </summary>
+    private void InstantiatePowerUp(GameObject powerUp)
+    {
+        GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, Quaternion.Euler(0, 0, 0));
+
+        // TODO: change values
+        // détruit le power-up s'il n'est pas ramassé
+        // au bout de 15 secondes
+        Destroy(PowerUp, 15);
+
+    }
+
+    /// <summary>
+    /// Fonction détruisant l'astéroïde
     /// </summary>
     private void HitByAsteroid(GameObject player)
     {
         Destroy(this.gameObject);
-        PlayerHealth ph = player.GetComponent<PlayerHealth>();
-        ph.playerHealth.Damage(25);
-        Debug.Log("Meow've been hit :'(");
     }
+    
     public void addScore(string token, long score, ScoreManager scm)
     {
         scm.AddScore(token, score);

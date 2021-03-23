@@ -10,7 +10,9 @@ public class Health
     private int healthMax;
     private bool isDead;
 
-    // Fonction initialisant la vie d'un objet
+    /// <summary>
+    /// Fonction initialisant la vie d'un objet
+    /// </summary>
     public Health(int healthMax) 
     {
         this.healthMax = healthMax;
@@ -18,34 +20,44 @@ public class Health
         isDead = false;
     }
 
-    // Fonction retournant la vie d'un objet
+    /// <summary>
+    /// Fonction retournant la vie d'un objet
+    /// </summary>
     public int GetHealth() 
     {
         return health;
     }
 
-    // Fonction changeant la valeur de la vie
-    // d'un objet
+    /// <summary>
+    /// Fonction changeant la valeur de la vie
+    /// d'un objet
+    /// </summary>
     public void SetHealth(int health)
     {
         this.health = health;
     }
 
-    // Fonction retournant true si l'objet
-    // est "mort" et false sinon
+    /// <summary>
+    /// Fonction retournant true si l'objet
+    /// est "mort" et false sinon
+    /// </summary>
     public bool GetDead()
     {
         return isDead;
     }
 
-    // Fonction changeant l'état de mort de
-    // l'objet
+    /// <summary>
+    /// Fonction changeant l'état de mort de
+    /// l'objet
+    /// </summary>
     public void SetDead(bool isDead)
     {
         this.isDead = isDead;
     }
 
-    // Fonction diminuant la vie d'un objet
+    /// <summary>
+    /// Fonction diminuant la vie d'un objet
+    /// </summary>
     public void Damage(int damageValue) 
     {
         health -= damageValue;
@@ -54,19 +66,15 @@ public class Health
             health = 0;
             isDead = true;
         }
-
-        // DEBUG
-        Debug.Log("Health : " + GetHealth());
     }
 
-    // Fonction augmentant la vie d'un objet
+    /// <summary>
+    /// Fonction augmentant la vie d'un objet
+    /// </summary>
     public void Heal(int healValue) 
     {
         health += healValue;
         if (health > healthMax)
             health = healthMax;
-
-        // DEBUG
-        Debug.Log("Health : " +  GetHealth());
     }
 }

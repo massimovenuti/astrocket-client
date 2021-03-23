@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 8bf1b896f4e24d441975cb6f11f92e74
+<<<<<<< HEAD:Assets/Libs/Joystick Pack/Scripts/Editor.meta
+guid: bbf5f29107db50f42b0dd063cac2ce1c
+=======
+guid: 4c0dd21ca035a3148b610a49d5dc46ac
+>>>>>>> feature/powerUp:Assets/Scripts/PowerUp.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
