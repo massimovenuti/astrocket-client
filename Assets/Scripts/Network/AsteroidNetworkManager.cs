@@ -19,7 +19,7 @@ public class AsteroidNetworkManager : NetworkManager
     private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
 
-    private float precision = 0.3f; // 0 => very precise
+    private float precision = 20; // variation de la précision en degré
 
     [Server]
     public override void OnStartServer( )
@@ -65,7 +65,6 @@ public class AsteroidNetworkManager : NetworkManager
             go.transform.parent = _asteroidSpawner.transform;
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation((Vector3.zero - go.transform.position).normalized);
-            Debug.Log(go.transform.rotation);
             _asteroidSpawnerList.Add(go);
         }
     }
@@ -84,7 +83,8 @@ public class AsteroidNetworkManager : NetworkManager
             _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
             Transform tf = _asteroidSpawnerList[_randomIndex].transform;
-            Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y + Random.Range(-precision, precision), tf.rotation.z, tf.rotation.w);
+            Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w);
+            rot *= Quaternion.Euler(Vector3.up * Random.Range(-precision, precision));
 
             GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
             NetworkServer.Spawn(go);
