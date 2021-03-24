@@ -13,7 +13,6 @@ TagManager:
   - AsteroidStorage
   - WarningBorder
   - AbsoluteBorder
-  - SmoothBorder
   - Asteroid1
   - Asteroid2
   layers:

@@ -38,7 +38,6 @@ public class DestroyAsteroid : NetworkBehaviour
         Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
         float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 1;
         int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
-        bool newInMapBounds = _asteroidToDestroy.GetComponent<Asteroid>().IsInMapBounds();
 
         float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
         float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
@@ -57,12 +56,10 @@ public class DestroyAsteroid : NetworkBehaviour
         remain1.transform.localScale = newScale;
         remain1.GetComponent<Rigidbody>().mass = newMass;
         remain1.GetComponent<Asteroid>().SetSize(newSize);
-        remain1.GetComponent<Asteroid>().SetInMapBounds(newInMapBounds);
 
         remain2.transform.localScale = newScale;
         remain2.GetComponent<Rigidbody>().mass = newMass;
         remain2.GetComponent<Asteroid>().SetSize(newSize);
-        remain2.GetComponent<Asteroid>().SetInMapBounds(newInMapBounds);
 
         NetworkServer.Destroy(_asteroidToDestroy);
 
