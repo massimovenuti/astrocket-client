@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Mirror;
 
-public class Movements : NetworkBehaviour
+public class Movements : MonoBehaviour
 {
     private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
 
-    public Camera _mainCamera;
+    private Camera _mainCamera;
     private Rigidbody _rgbody;
     private InputManager _inp;
     private Plane _groundPlane;
@@ -23,15 +22,17 @@ public class Movements : NetworkBehaviour
         //_mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        // GET IN CHILDREN
+        _mainCamera = gameObject.GetComponentInChildren<Camera>();
     }
 
     private void Update()
     {
-        if (isLocalPlayer)
+        LookAt();
+        if (_inp.IsBoosting())
         {
-            LookAt();
-            if (_inp.IsBoosting())
-                _rgbody.AddForce(transform.forward * _forwardSpeed);
+            _rgbody.AddForce(transform.forward * _forwardSpeed);
         }
     }
 

@@ -8,7 +8,6 @@ public class ReturnToBattle : MonoBehaviour
     //public string RTBManagerName = "ReturnToBattleManager";
 
     public GameObject _UI;
-    public GameObject _player;
 
     private Image _indicator;
     private Image _background;
@@ -50,12 +49,10 @@ public class ReturnToBattle : MonoBehaviour
 
             if (_timer <= 0 && _trigger)
             {
-                PlayerHealth ph = _player.GetComponent<PlayerHealth>();
-                ph.playerHealth.Damage(ph.playerHealth.GetHealth());
+                PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
+                ph.Revive();
                 _trigger = false;
                 _timer = 10f;
-
-                Debug.Log("Dead");
             }
             else
             {
@@ -72,23 +69,28 @@ public class ReturnToBattle : MonoBehaviour
                 _timer += Time.deltaTime;
         }
     }
-
-    public void EnterArea( )
+    private void OnTriggerEnter(Collider intruder)
     {
-        _trigger = false;
-        _UI.SetActive(_trigger);
-        _background.color = _initialAlpha;
+        if (intruder.CompareTag("WarningBorder"))
+        {
+            _trigger = false;
+            _UI.SetActive(_trigger);
+            _background.color = _initialAlpha;
+        }
     }
 
-    public void ExitArea( )
+    private void OnTriggerExit(Collider intruder)
     {
-        _trigger = true;
-        _UI.SetActive(_trigger);
+        if (intruder.CompareTag("WarningBorder"))
+        {
+            _trigger = true;
+            _UI.SetActive(_trigger);
+        }
     }
 
     private void CalcIndicator( )
     {
-        float rotRadian = Mathf.Atan2(_player.transform.position.z, _player.transform.position.x);
+        float rotRadian = Mathf.Atan2(gameObject.transform.position.z, gameObject.transform.position.x);
         float rot = Mathf.Rad2Deg * rotRadian;
         _indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
 

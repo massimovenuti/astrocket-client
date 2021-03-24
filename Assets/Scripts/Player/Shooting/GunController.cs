@@ -44,9 +44,15 @@ public class GunController : NetworkBehaviour
 
     private void Update( )
     {
-        if (isLocalPlayer)
-            if (_inp.IsShooting())
-                CmdShoot();
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        if (_inp.IsShooting())
+        {
+            CmdShoot();
+        }
     }
 
     [Command]

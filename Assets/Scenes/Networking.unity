@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RespawnPointStorageTagName: RespawnPointStorage
   RespawnPointName: RespawnPoint
-  checkRadius: 0
+  checkRadius: 25
   checkLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -10008,8 +10008,8 @@ MonoBehaviour:
   - {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
   - {fileID: 7975735016790354320, guid: 47ba6c72ca5a0fd43b5f7a0e2077c247, type: 3}
   - {fileID: 7975735016790354320, guid: 2cb9247eaa4eb524faf3a52f6a6c6a01, type: 3}
-  AsteroidSpawnerStorageTagName: AsteroidSpawnerStorage
-  AsteroidSpawnerName: AsteroidSpawner
+  _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
+  _asteroidSpawnerName: AsteroidSpawner
 --- !u!4 &886936862
 Transform:
   m_ObjectHideFlags: 0
@@ -10036,7 +10036,6 @@ GameObject:
   - component: {fileID: 1000608717}
   - component: {fileID: 1000608716}
   - component: {fileID: 1000608715}
-  - component: {fileID: 1000608714}
   m_Layer: 0
   m_Name: AbsoluteBorder
   m_TagString: AbsoluteBorder
@@ -10058,18 +10057,6 @@ Transform:
   m_Father: {fileID: 217060920}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1000608714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000608712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c35869ae8a755f340af8d61999546eb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &1000608715
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10207,7 +10194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1204395849}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 32, z: 1}
+  m_LocalPosition: {x: 0, y: 200, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1788622023}
@@ -10225,7 +10212,6 @@ GameObject:
   - component: {fileID: 1477074006}
   - component: {fileID: 1477074005}
   - component: {fileID: 1477074004}
-  - component: {fileID: 1477074003}
   m_Layer: 0
   m_Name: SmoothBorder
   m_TagString: SmoothBorder
@@ -10247,18 +10233,6 @@ Transform:
   m_Father: {fileID: 217060920}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1477074003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1477074001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c35869ae8a755f340af8d61999546eb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &1477074004
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10392,7 +10366,6 @@ GameObject:
   - component: {fileID: 1831813877}
   - component: {fileID: 1831813876}
   - component: {fileID: 1831813875}
-  - component: {fileID: 1831813874}
   m_Layer: 0
   m_Name: WarningBorder
   m_TagString: WarningBorder
@@ -10414,18 +10387,6 @@ Transform:
   m_Father: {fileID: 217060920}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1831813874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831813872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c35869ae8a755f340af8d61999546eb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &1831813875
 SphereCollider:
   m_ObjectHideFlags: 0

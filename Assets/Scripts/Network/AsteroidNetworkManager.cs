@@ -5,29 +5,33 @@ using Mirror;
 
 public class AsteroidNetworkManager : NetworkManager
 {
-    public string AsteroidSpawnerStorageTagName = "AsteroidSpawnerStorage";
-    public string AsteroidSpawnerName = "AsteroidSpawner";
+    [SerializeField] string _asteroidSpawnerStorageTagName = "AsteroidSpawnerStorage";
+
+    [SerializeField] string _asteroidSpawnerName = "AsteroidSpawner";
 
     private GameObject _asteroidSpawner;
+
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 16;
+
     private int _mapRadiusLen = 160;
+
     private float _yAxis = 0f;
 
     //private float _asteroidVelocity = 10f;
-    private int _barrierVelocitySensitivity = 6;
 
     private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
 
     private float precision = 0.3f; // 0 => very precise
 
+    [Server]
     public override void OnStartServer( )
     {
-        GameObject go = GameObject.FindGameObjectsWithTag(AsteroidSpawnerStorageTagName)[0];
+        GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
         if (go == null)
-            Debug.LogError($"There were no GameObjects with tag {AsteroidSpawnerStorageTagName} assigned self");
+            Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
         else
             _asteroidSpawner = go;
 
@@ -37,6 +41,7 @@ public class AsteroidNetworkManager : NetworkManager
         StartCoroutine(SpawnAsteroid());
     }
 
+    [Server]
     public override void OnStopServer( )
     {
         StopAllCoroutines();
@@ -49,6 +54,7 @@ public class AsteroidNetworkManager : NetworkManager
         base.OnStopServer();
     }
 
+    [Server]
     private void InstantiateAsteroidSpawners( )
     {
         float angleStep = 360f / _asteroidSpawnerAmount;
@@ -60,7 +66,7 @@ public class AsteroidNetworkManager : NetworkManager
             pos.x = _mapRadiusLen * Mathf.Cos(theta * Mathf.Deg2Rad);
             pos.z = _mapRadiusLen * Mathf.Sin(theta * Mathf.Deg2Rad);
 
-            GameObject go = new GameObject(AsteroidSpawnerName + (i + 1));
+            GameObject go = new GameObject(_asteroidSpawnerName + (i + 1));
             go.transform.parent = _asteroidSpawner.transform;
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation((Vector3.zero - go.transform.position).normalized);
@@ -68,6 +74,7 @@ public class AsteroidNetworkManager : NetworkManager
         }
     }
 
+    [Server]
     private IEnumerator SpawnAsteroid( )
     {
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
@@ -84,6 +91,7 @@ public class AsteroidNetworkManager : NetworkManager
             tf.rotation = new Quaternion(tf.rotation.x, tf.rotation.y + Random.Range(-precision, precision), tf.rotation.z, tf.rotation.w);
             
             GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, tf.rotation);
+
             NetworkServer.Spawn(go);
         }
         else
@@ -91,23 +99,8 @@ public class AsteroidNetworkManager : NetworkManager
             Debug.Log("Max number of asteroids reached : " + asteroidCount);
         }
 
-        CheckAsteroidPosition(asteroids);
-
         yield return new WaitForSeconds(1f);
 
         StartCoroutine(SpawnAsteroid());
     }
-
-    private void CheckAsteroidPosition(GameObject[] asteroids)
-    {
-        foreach (GameObject asteroid in asteroids)
-        {
-            bool inMapBounds = asteroid.GetComponent<Asteroid>().inMapBounds;
-            float speed = asteroid.GetComponent<Rigidbody>().velocity.magnitude;
-
-            if (!inMapBounds && speed < _barrierVelocitySensitivity)
-                NetworkServer.Destroy(asteroid);
-        }
-    }
-
 }

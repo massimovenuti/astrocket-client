@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Mirror;
 
-public class Health : NetworkBehaviour
+public class Health
 {
     private int health;
+
     private int healthMax;
+
     private bool isDead;
+
 
     // Fonction initialisant la vie d'un objet
     public Health(int healthMax)
@@ -33,7 +35,7 @@ public class Health : NetworkBehaviour
 
     // Fonction retournant true si l'objet
     // est "mort" et false sinon
-    public bool GetDead( )
+    public bool IsDead( )
     {
         return isDead;
     }
@@ -54,6 +56,7 @@ public class Health : NetworkBehaviour
             health = 0;
             isDead = true;
         }
+        Debug.Log("Health : " + health);
     }
 
     // Fonction augmentant la vie d'un objet
@@ -62,9 +65,6 @@ public class Health : NetworkBehaviour
         health += healValue;
         if (health > healthMax)
             health = healthMax;
-
-        // DEBUG
-        Debug.Log("Health : " + GetHealth());
     }
 
     public void ResetHealth( )

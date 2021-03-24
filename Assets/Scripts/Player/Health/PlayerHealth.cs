@@ -1,91 +1,104 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 using Mirror;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    public Health playerHealth;
+    private Health _playerHealth;
+
+    [SerializeField] int bulletDmg = 20;
+
+    [SerializeField] int asteroidDmgRate = 10;
+
+    [SerializeField] int maxPlayerHealth = 100;
+
 
     // Start is called before the first frame update
     private void Start( )
     {
-        playerHealth = new Health(100);
-
-        // DEBUG
-        Debug.Log("Health : " + playerHealth.GetHealth());
+        _playerHealth =  new Health(maxPlayerHealth);
     }
 
-    // Fonction diminuant la vie du joueur lorsqu'il
-    // est touché par quelque chose
-    private void OnTriggerEnter(Collider collision)
+    // Fonction diminuant la vie du joueur lorsqu'il est touché par quelque chose
+    private void OnTriggerEnter(Collider other)
     {
         if (!isLocalPlayer)
+        {
             return;
-
-        GameObject go = collision.gameObject;
-
-        if (go.tag == "Bullet" && go.GetComponent<Bullet>().ownerId != netId)
-        {
-            Debug.Log("(" + netId + ") Touched by a bullet from : " + go.GetComponent<Bullet>().ownerId);
-            CmdDestroyObject(go);
-            CmdDamage(20);
         }
 
-        if (go.tag == "Asteroid")
+        GameObject go = other.gameObject;
+
+        if (other.CompareTag("Bullet") && go.GetComponent<Bullet>().ownerId != netId)
         {
-            Debug.Log("Touched by an asteroid");
+            _playerHealth.Damage(bulletDmg);
+        }
+
+        if (other.CompareTag("Asteroid"))
+        {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
-            CmdDestroyObject(go);
-            CmdDamage(25);
+            _playerHealth.Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
         }
 
-        Debug.Log("Health : " + playerHealth.GetHealth());
-
-        if (playerHealth.GetDead())
+        if (_playerHealth.IsDead())
         {
-            // DEBUG
-            Debug.Log("It's dead :(");
-            CmdRevive();
+            Revive();
         }
     }
 
-    [Command]
-    private void CmdDamage(int damage)
+    private void OnTriggerExit(Collider other)
     {
-        RpcDamage(damage);
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        if (other.CompareTag("AbsoluteBorder"))
+        {
+            Revive();
+        }
     }
 
-    [Command]
-    private void CmdRevive()
+    public void Revive()
     {
-        RpcRevive();
-    }
-
-    [TargetRpc]
-    private void RpcDamage(int damage)
-    {
-        playerHealth.Damage(damage);
-    }
-
-    [TargetRpc]
-    private void RpcRevive( )
-    {
-        // le joueur est mort, un script va le
-        // désactiver pendant X secondes
+        CmdActive(false);
         GameObject handler = GameObject.Find("Map");
         handler.SendMessage("SwitchPlayerActivation", gameObject);
-
-        // Réinitialise la vie, et indique que
-        // le joueur est à nouveau vivant
-        playerHealth.SetDead(false);
-        playerHealth.ResetHealth();
-
-        // reset l'inertie
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
-    [Command]
-    private void CmdDestroyObject(GameObject go)
+
+    private void OnEnable( )
     {
-        NetworkServer.Destroy(go);
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        
+        // Reset l'inertie
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        // Réinitialise la vie, et indique que le joueur est à nouveau vivant
+        _playerHealth.SetDead(false);
+        _playerHealth.ResetHealth();
+
+        CmdActive(true);
+    }
+
+
+    [Command]
+    private void CmdActive(bool active)
+    {
+        RpcActive(active);
+    }
+
+    [ClientRpc]
+    private void RpcActive(bool active)
+    {
+        if (!isLocalPlayer)
+        {
+            gameObject.SetActive(active);
+        }
     }
 }

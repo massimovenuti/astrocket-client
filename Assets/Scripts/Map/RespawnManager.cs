@@ -5,22 +5,26 @@ using System.Linq;
 
 public class RespawnManager : MonoBehaviour
 {
-    public string RespawnPointStorageTagName = "RespawnPointStorage";
-    public string RespawnPointName = "RespawnPoint";
+    [SerializeField] string RespawnPointStorageTagName = "RespawnPointStorage";
 
-    public float checkRadius;
+    [SerializeField] string RespawnPointName = "RespawnPoint";
 
-    public LayerMask checkLayers;
+    [SerializeField] float checkRadius = 25f;
 
-    public GameObject enemyMockPrefab;
+    [SerializeField] LayerMask checkLayers;
 
-    private float yAxis = 0f;
+    [SerializeField] GameObject enemyMockPrefab;
+
+    private float _yAxis = 0f;
 
     private GameObject _respawnManager;
+
     private List<GameObject> _respawnPointsList;
 
     private readonly float _radius = 80f;
+
     private readonly float _gridStep = 50f;
+
 
     private void Awake( )
     {
@@ -31,22 +35,21 @@ public class RespawnManager : MonoBehaviour
             _respawnManager = go;
 
         _respawnPointsList = new List<GameObject>();
-        checkRadius = 25f;
     }
 
-    private void Start()
+    private void Start( )
     {
         InstantiateRespawnPoints();
         //GenerateEnemiesToSpot();
     }
 
-    private void Update()
+    private void Update( )
     {
         if (Input.GetKeyDown("k"))
-            Debug.Log("Safe : "+ GetSafeRespawnPoint());
+            Debug.Log("Safe : " + GetSafeRespawnPoint());
     }
 
-    private IEnumerable<Vector2> GetGridPointsInCircle()
+    private IEnumerable<Vector2> GetGridPointsInCircle( )
     {
         int i1 = (int)Mathf.Ceil(-_radius / _gridStep);
         int i2 = (int)Mathf.Floor(_radius / _gridStep);
@@ -69,7 +72,7 @@ public class RespawnManager : MonoBehaviour
         }
     }
 
-    private void InstantiateRespawnPoints()
+    private void InstantiateRespawnPoints( )
     {
         int i = 0;
 
@@ -77,15 +80,15 @@ public class RespawnManager : MonoBehaviour
         {
             GameObject go = new GameObject(RespawnPointName + (++i));
             go.transform.parent = _respawnManager.transform;
-            
-            Vector3 pos = new Vector3(rsp.x, yAxis, rsp.y);
+
+            Vector3 pos = new Vector3(rsp.x, _yAxis, rsp.y);
             go.transform.position = pos;
 
             _respawnPointsList.Add(go);
         }
     }
 
-    public Vector3 GetSafeRespawnPoint()
+    public Vector3 GetSafeRespawnPoint( )
     {
         List<GameObject> l = new List<GameObject>();
         GameObject bestRespawnPoint = null;
@@ -105,18 +108,18 @@ public class RespawnManager : MonoBehaviour
             {
                 float minDistance = _radius;
 
-                foreach(Collider c in colliders)
+                foreach (Collider c in colliders)
                 {
                     // the distance is computed directly with the center of the collider and not the collider itself
                     // this implies the fact it may behave strangely with objects of different size like asteroids 
                     // we may compute it differently afterwards
                     float d = Vector3.Distance(rsp.transform.position, c.transform.position);
-                    if(d < minDistance)
+                    if (d < minDistance)
                         minDistance = d;
 
                 }
 
-                if(minDistance > maxDistance && minDistance < checkRadius + 1f)
+                if (minDistance > maxDistance && minDistance < checkRadius + 1f)
                 {
                     maxDistance = minDistance;
                     bestRespawnPoint = rsp;
@@ -130,39 +133,36 @@ public class RespawnManager : MonoBehaviour
         return go.transform.position;
     }
 
-    private void GenerateEnemiesToSpot()
+    private void GenerateEnemiesToSpot( )
     {
         int enemiesToSpawn = 20;
 
-        for(int i = 0; i < enemiesToSpawn; i++)
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             Vector3 pos = new Vector3((Random.value - 0.5f) * _radius * 2, 1f, (Random.value - 0.5f) * _radius * 2);
             Instantiate(enemyMockPrefab, pos, Quaternion.identity);
         }
     }
 
-    // Fonction désactivant le joueur et lançant
-    // le compte à rebours avant la réactivation
+    // Fonction désactivant le joueur et lançant le compte à rebours avant la réactivation
     private void SwitchPlayerActivation(GameObject Player)
     {
         Player.SetActive(false);
         StartCoroutine(WaitForReactivation(Player));
     }
 
-    // Fonction attendant 2 secondes avant de
-    // réactiver le joueur
+    // Fonction attendant 2 secondes avant de réactiver le joueur
     private IEnumerator WaitForReactivation(GameObject Player)
     {
         // TODO: change value
         yield return new WaitForSeconds(2);
 
-        // le joueur est téléporté à son point
-        // de réapparition
+        // le joueur est téléporté à son point de réapparition
         Player.transform.position = GetSafeRespawnPoint();
         Player.SetActive(true);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmos( )
     {
         if (!Application.isPlaying) return;
 

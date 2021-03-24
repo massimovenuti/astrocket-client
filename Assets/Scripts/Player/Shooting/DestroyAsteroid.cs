@@ -5,69 +5,64 @@ using Mirror;
 
 public class DestroyAsteroid : NetworkBehaviour
 {
-    private GameObject asteroidToDestroy;
-    public GameObject asteroidPrefab;
+    [SerializeField] GameObject _asteroidPrefab;
 
-    private void OnTriggerEnter(Collider collision)
+    private GameObject _asteroidToDestroy;
+
+    [ServerCallback]
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.tag == "Asteroid")
+        if (other.CompareTag("Asteroid"))
         {
-            asteroidToDestroy = collision.gameObject;
-            AsteroidDestruction();
-        }
-    }
+            _asteroidToDestroy = other.gameObject;
 
-    [Server]
-    private void AsteroidDestruction()
-    {
-        NetworkServer.Destroy(this.gameObject);
-
-        Debug.Log(asteroidToDestroy.GetComponent<Asteroid>().GetSize());
-
-        if (asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
-        {
-            DropRemains();
-        }
-        else
-        {
-            DropPowerUP();
+            if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
+            {
+                DropRemains();
+            }
+            else
+            {
+                DropPowerUP();
+            }
         }
     }
 
     [Server]
     private void DropRemains()
     {
-        Vector3 vec = asteroidToDestroy.GetComponent<Rigidbody>().velocity;
-        Vector3 origin = asteroidToDestroy.transform.localPosition;
+        Vector3 vec = _asteroidToDestroy.GetComponent<Rigidbody>().velocity;
+        Vector3 origin = _asteroidToDestroy.transform.localPosition;
 
-        Vector3 newScale = new Vector3(asteroidToDestroy.transform.localScale.x / 2, asteroidToDestroy.transform.localScale.y / 2, asteroidToDestroy.transform.localScale.z / 2);
-        float newMass = asteroidToDestroy.GetComponent<Rigidbody>().mass / 2;
-        int newSize = asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
+        Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
+        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 2;
+        int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
+        bool newInMapBounds = _asteroidToDestroy.GetComponent<Asteroid>().IsInMapBounds();
 
         float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
         float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
         float spawnPoint2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
         float spawnPoint2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
 
-        Vector3 spawnPoint1 = new Vector3(spawnPoint1_X, 0, spawnPoint1_Z).normalized * (asteroidToDestroy.transform.localScale.x / 20) + origin;
-        Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (asteroidToDestroy.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint1 = new Vector3(spawnPoint1_X, 0, spawnPoint1_Z).normalized * (_asteroidToDestroy.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (_asteroidToDestroy.transform.localScale.x / 20) + origin;
 
-        Quaternion parLa = new Quaternion(asteroidToDestroy.transform.rotation.x, asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), asteroidToDestroy.transform.rotation.z, asteroidToDestroy.transform.rotation.w);
-        Quaternion nonMaisParLa = new Quaternion(asteroidToDestroy.transform.rotation.x, asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), asteroidToDestroy.transform.rotation.z, asteroidToDestroy.transform.rotation.w);
+        Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
+        Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
 
-        GameObject remain1 = (GameObject)Instantiate(asteroidPrefab, spawnPoint1, parLa);
-        GameObject remain2 = (GameObject)Instantiate(asteroidPrefab, spawnPoint2, nonMaisParLa);
+        GameObject remain1 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint1, parLa);
+        GameObject remain2 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint2, nonMaisParLa);
 
         remain1.transform.localScale = newScale;
         remain1.GetComponent<Rigidbody>().mass = newMass;
         remain1.GetComponent<Asteroid>().SetSize(newSize);
+        remain1.GetComponent<Asteroid>().SetInMapBounds(newInMapBounds);
 
         remain2.transform.localScale = newScale;
         remain2.GetComponent<Rigidbody>().mass = newMass;
         remain2.GetComponent<Asteroid>().SetSize(newSize);
+        remain2.GetComponent<Asteroid>().SetInMapBounds(newInMapBounds);
 
-        NetworkServer.Destroy(asteroidToDestroy);
+        NetworkServer.Destroy(_asteroidToDestroy);
 
         NetworkServer.Spawn(remain1);
         NetworkServer.Spawn(remain2);
@@ -91,7 +86,7 @@ public class DestroyAsteroid : NetworkBehaviour
             Debug.Log("Pas de Power-up");
         }
 
-        NetworkServer.Destroy(asteroidToDestroy);
+        NetworkServer.Destroy(_asteroidToDestroy);
     }
 
     /*
@@ -102,8 +97,8 @@ public class DestroyAsteroid : NetworkBehaviour
         float angle1 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
         float angle2 = Random.Range(Mathf.PI / 16, Mathf.PI / 8);
 
-        GameObject remain1 = (GameObject)Instantiate(asteroidPrefab, spawningRemains.position, Random.rotation);
-        GameObject remain2 = (GameObject)Instantiate(asteroidPrefab, spawningRemains.position, Random.rotation);
+        GameObject remain1 = (GameObject)Instantiate(_asteroidPrefab, spawningRemains.position, Random.rotation);
+        GameObject remain2 = (GameObject)Instantiate(_asteroidPrefab, spawningRemains.position, Random.rotation);
 
         Rigidbody rb1 = remain1.GetComponent<Rigidbody>();
         Rigidbody rb2 = remain2.GetComponent<Rigidbody>();

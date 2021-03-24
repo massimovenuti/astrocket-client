@@ -5,7 +5,8 @@ using Mirror;
 
 public class PlayerSetup : NetworkBehaviour
 {
-    public Behaviour[] toDisable;
+    [SerializeField] Behaviour[] toDisable;
+
     // Start is called before the first frame update
     void Start()
     {
