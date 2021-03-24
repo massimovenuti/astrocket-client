@@ -36,7 +36,7 @@ public class DestroyAsteroid : NetworkBehaviour
         Vector3 origin = _asteroidToDestroy.transform.localPosition;
 
         Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
-        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 2;
+        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 1;
         int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
         bool newInMapBounds = _asteroidToDestroy.GetComponent<Asteroid>().IsInMapBounds();
 

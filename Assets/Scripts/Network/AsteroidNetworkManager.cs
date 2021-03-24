@@ -10,16 +10,11 @@ public class AsteroidNetworkManager : NetworkManager
     [SerializeField] string _asteroidSpawnerName = "AsteroidSpawner";
 
     private GameObject _asteroidSpawner;
-
     private List<GameObject> _asteroidSpawnerList;
 
     private int _asteroidSpawnerAmount = 16;
-
     private int _mapRadiusLen = 160;
-
     private float _yAxis = 0f;
-
-    //private float _asteroidVelocity = 10f;
 
     private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
@@ -70,6 +65,7 @@ public class AsteroidNetworkManager : NetworkManager
             go.transform.parent = _asteroidSpawner.transform;
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation((Vector3.zero - go.transform.position).normalized);
+            Debug.Log(go.transform.rotation);
             _asteroidSpawnerList.Add(go);
         }
     }
@@ -88,10 +84,9 @@ public class AsteroidNetworkManager : NetworkManager
             _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
             Transform tf = _asteroidSpawnerList[_randomIndex].transform;
-            tf.rotation = new Quaternion(tf.rotation.x, tf.rotation.y + Random.Range(-precision, precision), tf.rotation.z, tf.rotation.w);
-            
-            GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, tf.rotation);
+            Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y + Random.Range(-precision, precision), tf.rotation.z, tf.rotation.w);
 
+            GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
             NetworkServer.Spawn(go);
         }
         else
