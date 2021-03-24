@@ -24,6 +24,8 @@ public class DestroyAsteroid : NetworkBehaviour
             {
                 DropPowerUP();
             }
+
+            NetworkServer.Destroy(this.gameObject);
         }
     }
 

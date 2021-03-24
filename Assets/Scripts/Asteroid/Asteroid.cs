@@ -71,11 +71,6 @@ public class Asteroid : NetworkBehaviour
         {
             this._inMapBounds = true;
         }
-
-        if (other.CompareTag("Player"))
-        {
-            NetworkServer.Destroy(gameObject);
-        }
     }
 
     public int GetSize( )

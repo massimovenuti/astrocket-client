@@ -33,13 +33,15 @@ public class PlayerHealth : NetworkBehaviour
 
         if (other.CompareTag("Bullet") && go.GetComponent<Bullet>().ownerId != netId)
         {
+            CmdDestroyGo(go);
             _playerHealth.Damage(bulletDmg);
         }
 
         if (other.CompareTag("Asteroid"))
         {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
             _playerHealth.Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            CmdDestroyGo(go);
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
         if (_playerHealth.IsDead())
@@ -100,5 +102,11 @@ public class PlayerHealth : NetworkBehaviour
         {
             gameObject.SetActive(active);
         }
+    }
+
+    [Command]
+    private void CmdDestroyGo(GameObject go)
+    {
+        NetworkServer.Destroy(go);
     }
 }

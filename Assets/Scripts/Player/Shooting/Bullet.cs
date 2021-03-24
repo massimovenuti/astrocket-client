@@ -25,22 +25,6 @@ public class Bullet : NetworkBehaviour
         rigidBody.AddForce(transform.forward * force);
     }
 
-    [ServerCallback]
-    private void OnTriggerEnter(Collider other)
-    {
-        GameObject go = other.gameObject;
-
-        if (other.CompareTag("Player") && go.GetComponent<NetworkIdentity>().netId != ownerId)
-        {
-            NetworkServer.Destroy(gameObject);
-        }
-
-        if (other.CompareTag("Asteroid"))
-        {
-            NetworkServer.Destroy(gameObject);
-        }
-    }
-
     [Server]
     private void DestroySelf( )
     {
