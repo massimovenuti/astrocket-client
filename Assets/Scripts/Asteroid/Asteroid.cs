@@ -31,7 +31,8 @@ public class Asteroid : NetworkBehaviour
 
         this.transform.parent = _asteroidStorage.transform;
 
-        GetComponent<Rigidbody>().mass = 10 * _size;
+        if(_size == _maxSize)
+            GetComponent<Rigidbody>().mass = 10 * _size;
         GetComponent<Rigidbody>().AddForce(transform.forward * _asteroidForce);
     }
 

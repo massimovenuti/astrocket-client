@@ -32,23 +32,37 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void DropRemains()
     {
-        Vector3 vec = _asteroidToDestroy.GetComponent<Rigidbody>().velocity;
-        Vector3 origin = _asteroidToDestroy.transform.localPosition;
+        Vector3 origin = _asteroidToDestroy.transform.position;
 
         Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
-        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 1;
+        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 1.5f;
         int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
 
-        float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
-        float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
-        float spawnPoint2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
-        float spawnPoint2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
+        float angle;
+        Vector3 angleAxis;
+        (Quaternion.identity * Quaternion.Inverse(_asteroidToDestroy.transform.rotation)).ToAngleAxis(out angle, out angleAxis);
+        if (Vector3.Angle(Vector3.up, angleAxis) > 90f)
+        {
+            angle = -angle;
+        }
+        angle = Mathf.DeltaAngle(0f, angle);
+        angle *= -1;
 
-        Vector3 spawnPoint1 = new Vector3(spawnPoint1_X, 0, spawnPoint1_Z).normalized * (_asteroidToDestroy.transform.localScale.x / 20) + origin;
-        Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (_asteroidToDestroy.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint1 = new Vector3(-newScale.x / 16, 0, 0);
+        Vector3 spawnPoint2 = new Vector3( newScale.x / 16, 0, 0);
 
-        Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
-        Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y + Random.Range(Mathf.PI / 16, Mathf.PI / 8), _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
+        spawnPoint1 = Quaternion.Euler(0, angle, 0) * spawnPoint1 + origin;
+        spawnPoint2 = Quaternion.Euler(0, angle, 0) * spawnPoint2 + origin;
+
+        Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
+        Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
+
+        int r1 = Random.Range(-10, -50);
+        int r2 = Random.Range(10, 50);
+        Debug.Log(r1 + " " + r2);
+
+        parLa *= Quaternion.Euler(Vector3.up * r1);
+        nonMaisParLa *= Quaternion.Euler(Vector3.up * r2);
 
         GameObject remain1 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint1, parLa);
         GameObject remain2 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint2, nonMaisParLa);
