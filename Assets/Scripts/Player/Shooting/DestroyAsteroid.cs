@@ -35,7 +35,6 @@ public class DestroyAsteroid : NetworkBehaviour
         Vector3 origin = _asteroidToDestroy.transform.position;
 
         Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
-        float newMass = _asteroidToDestroy.GetComponent<Rigidbody>().mass / 1.5f;
         int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
 
         float angle;
@@ -68,11 +67,9 @@ public class DestroyAsteroid : NetworkBehaviour
         GameObject remain2 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint2, nonMaisParLa);
 
         remain1.transform.localScale = newScale;
-        remain1.GetComponent<Rigidbody>().mass = newMass;
         remain1.GetComponent<Asteroid>().SetSize(newSize);
 
         remain2.transform.localScale = newScale;
-        remain2.GetComponent<Rigidbody>().mass = newMass;
         remain2.GetComponent<Asteroid>().SetSize(newSize);
 
         NetworkServer.Destroy(_asteroidToDestroy);

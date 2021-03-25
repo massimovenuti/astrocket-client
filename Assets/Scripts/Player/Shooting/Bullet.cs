@@ -5,11 +5,11 @@ using Mirror;
 
 public class Bullet : NetworkBehaviour
 {
-    [SerializeField] float destroyAfter = 1;
+    [SerializeField] float destroyAfter = 0.5f;
 
     [SerializeField] Rigidbody rigidBody;
 
-    public float force = 3000f;
+    [SerializeField] float _speed = 100f;
     
     [SyncVar]
     public uint ownerId;
@@ -22,7 +22,7 @@ public class Bullet : NetworkBehaviour
 
     private void Start( )
     {
-        rigidBody.AddForce(transform.forward * force);
+        GetComponent<Rigidbody>().velocity = transform.forward * _speed;
     }
 
     [Server]

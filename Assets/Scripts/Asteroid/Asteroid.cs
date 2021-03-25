@@ -7,10 +7,11 @@ using Mirror;
 public class Asteroid : NetworkBehaviour
 {
     [SerializeField] string _asteroidStorageTagName = "AsteroidStorage";
+
     private GameObject _asteroidStorage;
 
+    [SerializeField] float _speed = 10f;
 
-    [SerializeField] float _asteroidForce = 10000f;
     [SerializeField] int _maxSize = 3;
 
     [SyncVar]
@@ -31,9 +32,7 @@ public class Asteroid : NetworkBehaviour
 
         this.transform.parent = _asteroidStorage.transform;
 
-        if(_size == _maxSize)
-            GetComponent<Rigidbody>().mass = 10 * _size;
-        GetComponent<Rigidbody>().AddForce(transform.forward * _asteroidForce);
+        GetComponent<Rigidbody>().velocity = transform.forward * _speed;
     }
 
     [ServerCallback]

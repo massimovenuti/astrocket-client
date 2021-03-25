@@ -16,7 +16,6 @@ public class AsteroidNetworkManager : NetworkManager
     private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
-    private int _maxAsteroidCount = 50;
     private int _randomIndex = 0;
 
     private float precision = 20; // variation de la précision en degré
@@ -72,27 +71,17 @@ public class AsteroidNetworkManager : NetworkManager
     [Server]
     private IEnumerator SpawnAsteroid( )
     {
-        GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
-        int asteroidCount = asteroids.Length;
+        int tmp = Random.Range(0, _asteroidSpawnerAmount);
 
-        if (asteroidCount < _maxAsteroidCount)
-        {
-            int tmp = Random.Range(0, _asteroidSpawnerAmount);
+        // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
+        _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
-            // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
-            _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
+        Transform tf = _asteroidSpawnerList[_randomIndex].transform;
+        Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w);
+        rot *= Quaternion.Euler(Vector3.up * Random.Range(-precision, precision));
 
-            Transform tf = _asteroidSpawnerList[_randomIndex].transform;
-            Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w);
-            rot *= Quaternion.Euler(Vector3.up * Random.Range(-precision, precision));
-
-            GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
-            NetworkServer.Spawn(go);
-        }
-        else
-        {
-            Debug.Log("Max number of asteroids reached : " + asteroidCount);
-        }
+        GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
+        NetworkServer.Spawn(go);
 
         yield return new WaitForSeconds(1f);
 
