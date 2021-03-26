@@ -34,7 +34,7 @@ public class DestroyAsteroid : NetworkBehaviour
     {
         Vector3 origin = _asteroidToDestroy.transform.position;
 
-        Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 2, _asteroidToDestroy.transform.localScale.y / 2, _asteroidToDestroy.transform.localScale.z / 2);
+        Vector3 newScale = new Vector3(_asteroidToDestroy.transform.localScale.x / 1.5f, _asteroidToDestroy.transform.localScale.y / 1.5f, _asteroidToDestroy.transform.localScale.z / 1.5f);
         int newSize = _asteroidToDestroy.GetComponent<Asteroid>().GetSize() - 1;
 
         float angle;

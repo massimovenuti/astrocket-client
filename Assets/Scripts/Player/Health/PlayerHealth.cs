@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Mirror;
+using UnityEngine.UI;
 
 public class PlayerHealth : NetworkBehaviour
 {
@@ -12,10 +13,23 @@ public class PlayerHealth : NetworkBehaviour
 
     [SerializeField] int maxPlayerHealth = 100;
 
-    private int health;
+    [SerializeField] Slider slider;
+
+    [SerializeField] Gradient gradient;
+
+    [SerializeField] Image fill;
+
+    [SyncVar(hook="OnHealthChange")]
+    public int health;
 
     private bool isDead = false;
 
+    [ClientCallback]
+    private void Awake( )
+    {
+        slider.maxValue = maxPlayerHealth;
+        slider.value = maxPlayerHealth;
+    }
 
     [ServerCallback]
     public void Start( )
@@ -85,6 +99,15 @@ public class PlayerHealth : NetworkBehaviour
         RpcResetVelocity();
         this.health = this.maxPlayerHealth;
         this.isDead = false;
+    }
+
+    [ClientCallback]
+    void OnHealthChange(int oldValue, int newValue)
+    {
+        if(isLocalPlayer)
+        {
+            slider.value = newValue;
+        }
     }
 
     [TargetRpc]

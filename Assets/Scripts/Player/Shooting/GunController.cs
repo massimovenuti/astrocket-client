@@ -5,7 +5,7 @@ using Mirror;
 public class GunController : NetworkBehaviour
 {
     public GameObject bullet;
-    public float shootRate = 0.2f;
+    public float shootRate = 0.1f;
     public Material bulletMaterial;
     public float shootForce = 3000f;
     public string ShootingFrom = "Barrel";
