@@ -8,6 +8,7 @@ public class PlayerRespawn : NetworkBehaviour
     [Server]
     public void Respawn( )
     {
+        GetComponent<BoxCollider>().enabled = false;
         RpcActive(false);
         RpcRespawn();
         StartCoroutine(WaitForReactivation());
@@ -19,6 +20,7 @@ public class PlayerRespawn : NetworkBehaviour
     {
         yield return new WaitForSeconds(2);
         RpcActive(true);
+        GetComponent<BoxCollider>().enabled = true;
     }
 
     [ClientRpc]
