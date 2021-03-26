@@ -6,107 +6,93 @@ using Mirror;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    private Health _playerHealth;
-
     [SerializeField] int bulletDmg = 20;
 
     [SerializeField] int asteroidDmgRate = 10;
 
     [SerializeField] int maxPlayerHealth = 100;
 
+    private int health;
 
-    // Start is called before the first frame update
-    private void Start( )
+    private bool isDead = false;
+
+
+    [ServerCallback]
+    public void Start( )
     {
-        _playerHealth =  new Health(maxPlayerHealth);
+        this.health = this.maxPlayerHealth;
+    }
+
+    // Fonction diminuant la vie d'un objet
+    [Server]
+    public void Damage(int damageValue)
+    {
+        health -= damageValue;
+        if (health <= 0)
+        {
+            health = 0;
+            isDead = true;
+        }
+    }
+
+    // Fonction augmentant la vie d'un objet
+    [Server]
+    public void Heal(int healValue)
+    {
+        health += healValue;
+        if (health > maxPlayerHealth)
+            health = maxPlayerHealth;
     }
 
     // Fonction diminuant la vie du joueur lorsqu'il est touché par quelque chose
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
         GameObject go = other.gameObject;
 
         if (other.CompareTag("Bullet") && go.GetComponent<Bullet>().ownerId != netId)
         {
-            CmdDestroyGo(go);
-            _playerHealth.Damage(bulletDmg);
+            NetworkServer.Destroy(go);
+            Damage(bulletDmg);
         }
 
         if (other.CompareTag("Asteroid"))
         {
-            _playerHealth.Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
-            CmdDestroyGo(go);
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            NetworkServer.Destroy(go);
+            RpcResetVelocity();
         }
 
-        if (_playerHealth.IsDead())
+        if (isDead)
         {
             Revive();
         }
     }
 
+    [ServerCallback]
     private void OnTriggerExit(Collider other)
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
         if (other.CompareTag("AbsoluteBorder"))
         {
             Revive();
         }
     }
 
-    public void Revive()
+    [Server]
+    public void Revive( )
     {
-        CmdActive(false);
-        GameObject handler = GameObject.Find("Map");
-        handler.SendMessage("SwitchPlayerActivation", gameObject);
+        GetComponent<PlayerRespawn>().Respawn();
+        RpcResetVelocity();
+        this.health = this.maxPlayerHealth;
+        this.isDead = false;
     }
 
-
-    private void OnEnable( )
+    [TargetRpc]
+    private void RpcResetVelocity()
     {
-        if (!isLocalPlayer)
+        if (isLocalPlayer)
         {
-            return;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
-        
-        // Reset l'inertie
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        // Réinitialise la vie, et indique que le joueur est à nouveau vivant
-        _playerHealth.SetDead(false);
-        _playerHealth.ResetHealth();
-
-        CmdActive(true);
-    }
-
-
-    [Command]
-    private void CmdActive(bool active)
-    {
-        RpcActive(active);
-    }
-
-    [ClientRpc]
-    private void RpcActive(bool active)
-    {
-        if (!isLocalPlayer)
-        {
-            gameObject.SetActive(active);
-        }
-    }
-
-    [Command]
-    private void CmdDestroyGo(GameObject go)
-    {
-        NetworkServer.Destroy(go);
     }
 }

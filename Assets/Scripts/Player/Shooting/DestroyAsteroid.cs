@@ -58,7 +58,6 @@ public class DestroyAsteroid : NetworkBehaviour
 
         int r1 = Random.Range(-10, -50);
         int r2 = Random.Range(10, 50);
-        Debug.Log(r1 + " " + r2);
 
         parLa *= Quaternion.Euler(Vector3.up * r1);
         nonMaisParLa *= Quaternion.Euler(Vector3.up * r2);

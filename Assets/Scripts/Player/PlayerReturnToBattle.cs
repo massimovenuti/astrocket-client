@@ -2,12 +2,13 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class ReturnToBattle : MonoBehaviour
+public class PlayerReturnToBattle : NetworkBehaviour
 {
     //public string RTBManagerName = "ReturnToBattleManager";
 
-    public GameObject _UI;
+    [SerializeField] GameObject _UI;
 
     private Image _indicator;
     private Image _background;
@@ -22,6 +23,7 @@ public class ReturnToBattle : MonoBehaviour
 
     private bool _trigger = false;
 
+    [ClientCallback]
     private void Awake( )
     {
         //_player = GameObject.FindGameObjectsWithTag("Player").First();
@@ -32,62 +34,124 @@ public class ReturnToBattle : MonoBehaviour
         _background = _UI.FindObjectByName("Background").GetComponent<Image>();
         _indicator = _UI.FindObjectByName("CenterIndicator").GetComponent<Image>();
         _timerText = _UI.FindObjectByName("TimerText").GetComponent<TextMeshProUGUI>();
+
+        _initialAlpha = _background.color;
+        _tmpAlpha = _initialAlpha;
+
+        _UI.SetActive(false);
     }
 
     private void Start( )
     {
-        _timer = _initialTimer;
-        _initialAlpha = _background.color;
-        _tmpAlpha = _initialAlpha;
+        Reset();
     }
 
     private void Update( )
     {
+        if (!isServer && !isLocalPlayer)
+        {
+            return;
+        }
+
         if (_trigger)
         {
-            _timerText.text = _timer.ToString("F1");
+            if (isLocalPlayer)
+            {
+                _timerText.text = _timer.ToString("F1");
+            }
 
             if (_timer <= 0 && _trigger)
             {
-                PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
-                ph.Revive();
-                _trigger = false;
-                _timer = 10f;
+                if (isServer)
+                {
+                    Reset();
+                    PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
+                    ph.Revive();
+                }
             }
             else
             {
-                _timer -= Time.deltaTime;
-                _tmpAlpha.a = _initialAlpha.a + (_initialTimer - _timer) / _alphaFactor;
-                _background.color = _tmpAlpha;
+                _timer = (_timer == 0) ? _timer : _timer - Time.deltaTime;
+                if (isLocalPlayer)
+                {
+                    _tmpAlpha.a = _initialAlpha.a + (_initialTimer - _timer) / _alphaFactor;
+                    _background.color = _tmpAlpha;
+                }
             }
-
-            CalcIndicator();
+            if (isLocalPlayer)
+            {
+                CalcIndicator();
+            }
         }
         else
         {
             if (_timer <= 10f)
+            {
                 _timer += Time.deltaTime;
+            }
         }
     }
+
+
+    [Client]
+    private void OnEnable( )
+    {
+        if (isLocalPlayer)
+        {
+            _UI.SetActive(false);
+            _background.color = _initialAlpha;
+            Reset();
+        }
+    }
+
+    private void Reset( )
+    {
+        _trigger = false;
+        _timer = _initialTimer;
+    }
+
+    [ServerCallback]
     private void OnTriggerEnter(Collider intruder)
     {
         if (intruder.CompareTag("WarningBorder"))
         {
             _trigger = false;
-            _UI.SetActive(_trigger);
-            _background.color = _initialAlpha;
+            RpcEnterMap();
         }
     }
 
+    [ServerCallback]
     private void OnTriggerExit(Collider intruder)
     {
         if (intruder.CompareTag("WarningBorder"))
         {
             _trigger = true;
-            _UI.SetActive(_trigger);
+            RpcExitMap();
         }
     }
 
+    [TargetRpc]
+    private void RpcEnterMap()
+    {
+        if (isLocalPlayer)
+        {
+            _trigger = false;
+            _UI.SetActive(false);
+            _background.color = _initialAlpha;
+        }
+    }
+
+    [TargetRpc]
+    private void RpcExitMap( )
+    {
+        if (isLocalPlayer)
+        {
+            _trigger = true;
+            _UI.SetActive(true);
+        }
+    }
+
+    [Client]
     private void CalcIndicator( )
     {
         float rotRadian = Mathf.Atan2(gameObject.transform.position.z, gameObject.transform.position.x);

@@ -49,9 +49,10 @@ public class GunController : NetworkBehaviour
             return;
         }
 
-        if (_inp.IsShooting())
+        if (Time.time > _lastShootingTimeRef && _inp.IsShooting())
         {
             CmdShoot();
+            _lastShootingTimeRef = Time.time + shootRate;
         }
     }
 
@@ -68,6 +69,7 @@ public class GunController : NetworkBehaviour
 
             //go.transform.parent = _bulletSpawn.transform;
             NetworkServer.Spawn(go);
+
             _lastShootingTimeRef = Time.time + shootRate;
         }
     }

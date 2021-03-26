@@ -179,8 +179,9 @@ GameObject:
   - component: {fileID: 2934155474638270666}
   - component: {fileID: 1148402343745421485}
   - component: {fileID: 1148402343745421484}
-  - component: {fileID: 1148402343745421483}
-  - component: {fileID: 233304587605223279}
+  - component: {fileID: -2613886313007990320}
+  - component: {fileID: -192637252064161751}
+  - component: {fileID: -388936429497671462}
   m_Layer: 8
   m_Name: PlayerFinal
   m_TagString: Player
@@ -286,9 +287,8 @@ MonoBehaviour:
   - {fileID: 7009584487976183915}
   - {fileID: 3807681227363289976}
   - {fileID: 2480200736715621151}
-  - {fileID: 6406138143445792007}
   - {fileID: 1148402343745421485}
-  - {fileID: 233304587605223279}
+  - {fileID: 6406138143445792007}
 --- !u!114 &1148402343745421485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   shootForce: 3000
   ShootingFrom: Barrel
   BulletStorageTagName: BulletStorage
---- !u!114 &1148402343745421483
+--- !u!114 &-2613886313007990320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -330,15 +330,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1148402343745421481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aa5718ca784f464f8ce04d2f4c0a874, type: 3}
+  m_Script: {fileID: 11500000, guid: f281c8221f2be2744a77525529696898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  bulletDmg: 20
-  asteroidDmgRate: 10
-  maxPlayerHealth: 100
---- !u!114 &233304587605223279
+--- !u!114 &-192637252064161751
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -350,7 +347,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95f9e04e6a6c9c499e1d46b44da7f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _UI: {fileID: 3408988657549841955}
+--- !u!114 &-388936429497671462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148402343745421481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de32952aa0ee9f8418b397bbcf34d699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  bulletDmg: 20
+  asteroidDmgRate: 10
+  maxPlayerHealth: 100
 --- !u!1 &1530848785449590614
 GameObject:
   m_ObjectHideFlags: 0
