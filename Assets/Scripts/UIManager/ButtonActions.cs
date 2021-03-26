@@ -5,7 +5,7 @@ using TMPro;
 public class ButtonActions : MonoBehaviour
 {
     public GameObject loginForm, signupForm;
-    public Button loginButton, signupButton;
+    public Button loginToggleButton, signupToggleButton;
 
     private UICameraManager _cam;
 
@@ -100,15 +100,15 @@ public class ButtonActions : MonoBehaviour
     {
         loginForm.SetActive(true);
         signupForm.SetActive(false);
-        loginButton.interactable = false;
-        signupButton.interactable = true;
+        loginToggleButton.interactable = false;
+        signupToggleButton.interactable = true;
     }
 
     public void OnClickToggleSignUp( )
     {
         loginForm.SetActive(false);
         signupForm.SetActive(true);
-        loginButton.interactable = true;
-        signupButton.interactable = false;
+        loginToggleButton.interactable = true;
+        signupToggleButton.interactable = false;
     }
 }
