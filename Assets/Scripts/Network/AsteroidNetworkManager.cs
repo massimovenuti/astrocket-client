@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
@@ -19,6 +20,8 @@ public class AsteroidNetworkManager : NetworkManager
     private int _randomIndex = 0;
 
     private float precision = 20; // variation de la précision en degré
+
+    private Tuple<bool, Color>[] playersColor = { new Tuple<bool, Color>(true, Color.red), new Tuple<bool, Color>(true, Color.blue), new Tuple<bool, Color>(true, Color.green), new Tuple<bool, Color>(true, Color.yellow) };
 
     [Server]
     public override void OnStartServer( )
@@ -48,6 +51,62 @@ public class AsteroidNetworkManager : NetworkManager
         base.OnStopServer();
     }
 
+    private Color getPlayerColor()
+    {
+        for (int i = 0; i < playersColor.Length; i++)
+        {
+            if (playersColor[i].Item1)
+            {
+                playersColor[i] = new Tuple<bool, Color>(false, playersColor[i].Item2);
+                return playersColor[i].Item2;
+            }
+        }
+
+        return Color.white;
+    }
+
+    private void freePlayerColor(Color playerColor)
+    {
+        for (int i = 0; i < playersColor.Length; i++)
+        {
+            if (playersColor[i].Item2 == playerColor)
+            {
+                playersColor[i] = new Tuple<bool, Color>(true, playersColor[i].Item2);
+                break;
+            }
+        }
+    }
+
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        Transform startPos = GetStartPosition();
+        GameObject player = startPos != null
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
+
+        player.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
+
+        NetworkServer.AddPlayerForConnection(conn, player);
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        NetworkIdentity[] clientObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];
+        conn.clientOwnedObjects.CopyTo(clientObjects);
+        
+        foreach (NetworkIdentity co in clientObjects)
+        {
+            GameObject go = NetworkIdentity.spawned[co.netId].gameObject;
+            if (go.tag == "Player")
+            {
+                freePlayerColor(go.GetComponent<PlayerSetup>().playerColor);
+                break;
+            }
+        }
+
+        base.OnServerDisconnect(conn);
+    }
+
     [Server]
     private void InstantiateAsteroidSpawners( )
     {
@@ -71,14 +130,14 @@ public class AsteroidNetworkManager : NetworkManager
     [Server]
     private IEnumerator SpawnAsteroid( )
     {
-        int tmp = Random.Range(0, _asteroidSpawnerAmount);
+        int tmp = UnityEngine.Random.Range(0, _asteroidSpawnerAmount);
 
         // random asteroid spawner (if the asteroid spawns two times at the same position, the second time will be transfered to another position)
         _randomIndex = (tmp == _randomIndex) ? (_randomIndex + 3) % _asteroidSpawnerAmount : tmp;
 
         Transform tf = _asteroidSpawnerList[_randomIndex].transform;
         Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w);
-        rot *= Quaternion.Euler(Vector3.up * Random.Range(-precision, precision));
+        rot *= Quaternion.Euler(Vector3.up * UnityEngine.Random.Range(-precision, precision));
 
         GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
         NetworkServer.Spawn(go);

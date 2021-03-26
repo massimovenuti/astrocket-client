@@ -9963,7 +9963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e9ccf0f80396c4e872809df1897f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugEnabled: 0
+  DebugEnabled: 1
   ServerBindAll: 1
   ServerBindAddress: 192.168.1.30
   CommunicationPort: 7777
@@ -10005,8 +10005,6 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b, type: 3}
   - {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
-  - {fileID: 7975735016790354320, guid: 47ba6c72ca5a0fd43b5f7a0e2077c247, type: 3}
-  - {fileID: 7975735016790354320, guid: 2cb9247eaa4eb524faf3a52f6a6c6a01, type: 3}
   _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
   _asteroidSpawnerName: AsteroidSpawner
 --- !u!4 &886936862
