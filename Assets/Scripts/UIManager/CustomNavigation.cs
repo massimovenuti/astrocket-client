@@ -4,14 +4,7 @@ using UnityEngine.EventSystems;
 
 public class CustomNavigation : MonoBehaviour
 {
-    public GameObject def;
-
-    private void Start( )
-    {
-        EventSystem.current.SetSelectedGameObject(def);
-    }
-
-    private void Update( )
+    public void Update( )
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {

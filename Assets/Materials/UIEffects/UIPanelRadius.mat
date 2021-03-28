@@ -32,4 +32,4 @@ Material:
     - _StencilWriteMask: 255
     - _UseUIAlphaClip: 0
     m_Colors:
-    - _WidthHeightRadius: {r: 325.16553, g: 355.13998, b: 12, a: 0}
+    - _WidthHeightRadius: {r: 325.16553, g: 833.14996, b: 12, a: 0}
