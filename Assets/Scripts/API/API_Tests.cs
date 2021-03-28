@@ -14,10 +14,8 @@ namespace API
 
         private void Awake( )
         {
-            Debug.Log(JsonUtility.ToJson(new UserToken() { Token = "65455645" }));
-            Debug.Log(JsonUtility.ToJson(new BanItem() { Token = "65455645", Name = "testuser" }));
-            Debug.Log(JsonUtility.ToJson(new UserLogin() { Name = "testuser", Password = "testpass" }));
-            Debug.Log(JsonUtility.ToJson(new UserRegister() { Name = "testuser", Password = "testpass", Email = "test@example.com" }));
+            AuthApiPostLoginUserTest();
+
         }
 
         public bool AuthApiTests( )
@@ -50,13 +48,6 @@ namespace API
             List<PlayerStats> player_stats1, player_stats2;
             player_stats1 = _stats.GetRannkingByScore();
             Debug.Assert(_stats.ErrorMessage.Status == System.Net.HttpStatusCode.OK);
-            player_stats2 = _stats.GetRannkingByScore(1, 20);
-            Debug.Assert(_stats.ErrorMessage.Status == System.Net.HttpStatusCode.OK);
-            Debug.Assert(player_stats1.Count == 10 && player_stats2.Count == 20);
-
-            player_stats1 = _stats.GetRannking(0);
-            Debug.Assert(player_stats1 == null);
-            Debug.Assert(_stats.ErrorMessage.Status != System.Net.HttpStatusCode.OK);
             return false;
         }
 
@@ -91,16 +82,19 @@ namespace API
 
         private bool AuthApiPostLoginUserTest( )
         {
-            UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "", Password = "" });
+            UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "test", Password = "testpassword" });
+            Debug.Log(_auth.ErrorMessage.Status);
             Debug.Assert(t != null);
             return true;
         }
 
         private bool AuthApiPostAddUserTest( )
         {
-            UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "", Password = "" });
-            Debug.Assert(t != null);
-            return false;
+            UserToken t = _auth.PostAddUser(new UserRegister() { Name = "TestUser", Password = "testpassword", Email = "test@example.fr" });
+            Debug.Log(_auth.ErrorMessage);
+            if (t == null)
+                return false;
+            return true;
         }
 
         private bool AuthApiPostCheckUserTokenTest( )

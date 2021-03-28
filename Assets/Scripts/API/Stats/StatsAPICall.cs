@@ -9,16 +9,20 @@ namespace API.Stats
 {
     public class StatsAPICall
     {
-        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
-        private readonly HttpClient _httpClient = new HttpClient();
-        private ErrorMessage _errorMessage;
+        private readonly string STATS_API_URL = @"stats.aw.alexandre-vogel.fr";
+        private readonly HttpClient _httpClient;
+        private ErrorMessage _message;
 
-        public ErrorMessage ErrorMessage { get => _errorMessage; private set { _errorMessage = value; }}
+        public ErrorMessage ErrorMessage { get => _message; private set { _message = value; } }
 
         public StatsAPICall( )
         {
             // Default URL for Auth API call
-            _httpClient.BaseAddress = AUTH_API_URL;
+            UriBuilder uri = new UriBuilder("https", STATS_API_URL, 3000);
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = uri.Uri
+            };
 
             // Allow for HTTPS communication
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -84,12 +88,14 @@ namespace API.Stats
         }
 
         public List<PlayerStats> GetRannkingByScore(long offset = 1, int limit = 10)
-            => GetRannking(OrderByData.nbPoints, offset, limit);
+            => GetRannking(OrderByData.nbPoints);
         public List<PlayerStats> GetRannking(OrderByData data, long offset = 1, int limit = 10)
         {
             HttpResponseMessage responseMessage;
+            Debug.Log(_httpClient.BaseAddress + $"stats/ranking{(data != OrderByData.maxPoints ? "/" + data.ToString() : "")}?offset={offset}&limit={limit}");
             responseMessage = _httpClient.GetAsync($"stats{(data != OrderByData.maxPoints ? "/" + data.ToString() : "")}?offset={offset}&limit={limit}").Result;
             ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
+            Debug.Log(responseMessage.StatusCode);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else

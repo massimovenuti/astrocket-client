@@ -10,9 +10,9 @@ namespace API.Auth
 {
     public class AuthAPICall
     {
-        private readonly Uri AUTH_API_URL = new Uri(@"https://auth.aw.alexandre-vogel.fr/");
+        private readonly string AUTH_API_URL = @"auth.aw.alexandre-vogel.fr";
         private readonly Dictionary<string, string> _endpoints;
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private ErrorMessage _message;
 
         public ErrorMessage ErrorMessage { get => _message;  private set { _message = value; }}
@@ -20,7 +20,11 @@ namespace API.Auth
         public AuthAPICall( )
         {
             // Default URL for Auth API call
-            _httpClient.BaseAddress = AUTH_API_URL;
+            UriBuilder uri = new UriBuilder("https", AUTH_API_URL, 3010);
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = uri.Uri
+            };
 
             // Allow for HTTPS communication
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -202,23 +206,19 @@ namespace API.Auth
                 return true;
         }
 
-        private string DoApiCall(string json, string called, RequestType rtype, APICallFunction ftype = APICallFunction.None)
+        private string DoApiCall(string json, string endpoint, RequestType rtype, APICallFunction ftype = APICallFunction.None)
         {
             HttpResponseMessage responseMessage;
+            Debug.Log(_httpClient.BaseAddress + endpoint);
             if (rtype == RequestType.Get)
-                responseMessage = _httpClient.GetAsync(called).Result;
+                responseMessage = _httpClient.GetAsync(endpoint).Result;
             else
-                responseMessage = _httpClient.PostAsync(called, new StringContent(json, Encoding.UTF8, "application/json")).Result;
+                responseMessage = _httpClient.PostAsync(endpoint, new StringContent(json, Encoding.UTF8, "application/json")).Result;
             ErrorMessage = new ErrorMessage(ftype, responseMessage.StatusCode);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
                 return responseMessage.Content.ReadAsStringAsync().Result;
-        }
-
-        public static implicit operator AuthAPICall(StatsAPICall v)
-        {
-            throw new NotImplementedException();
         }
     }
 }
