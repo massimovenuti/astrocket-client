@@ -8,6 +8,6 @@ public class SkyboxManager : MonoBehaviour
 
     void Update()
     {
-        GetComponent<Skybox>().material.SetFloat("_Rotation", Time.time * _rotationSpeed);
+        GetComponent<Skybox>().material.SetFloat("_Rotation", 150f + Time.time * _rotationSpeed);
     }
 }
