@@ -23,7 +23,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
 
     private bool _trigger = false;
 
-    [ClientCallback]
     private void Awake( )
     {
         //_player = GameObject.FindGameObjectsWithTag("Player").First();
@@ -91,7 +90,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
             }
         }
     }
-
 
     [Client]
     private void OnEnable( )

@@ -9998,13 +9998,20 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1148402343745421481, guid: 59aebfaacadfe6b498f0010a344f43c8,
+  playerPrefab: {fileID: 2958615548390935055, guid: 59aebfaacadfe6b498f0010a344f43c8,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b, type: 3}
   - {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
+  - {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
+  - {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
+  - {fileID: 6697394780005706805, guid: 24f5ac1c191bdca499b6a89e601e09d3, type: 3}
+  - {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
+  - {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
+  - {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
+  - {fileID: 9058780976217022324, guid: 6d5f06eb3240f2346846def4c190f747, type: 3}
   _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
   _asteroidSpawnerName: AsteroidSpawner
 --- !u!4 &886936862
@@ -10405,7 +10412,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140212964}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2adb1042376a3d248a0f1f6768b1cd60, type: 3}

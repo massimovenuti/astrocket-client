@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class PowerUpJammer : MonoBehaviour
+public class PowerUpJammer : NetworkBehaviour
 {
     private GameObject[] players;
 
@@ -10,6 +11,7 @@ public class PowerUpJammer : MonoBehaviour
     /// Quand le joueur entre dans la zone de trigger du power-up, appel de la fonction "PowerUpJammer()" 
     /// dans le script "PlayerHealth" de tous les joueurs, excepté lui-même, puis détruit le gameObject 
     /// </summary>
+    [ServerCallback]
     public void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
@@ -19,7 +21,7 @@ public class PowerUpJammer : MonoBehaviour
                 if (player != collider.gameObject)
                     player.GetComponent<PlayerHealth>().PowerUpJammer();
 
-            Destroy(this.gameObject);
+            NetworkServer.Destroy(this.gameObject);
         }
     }
 }

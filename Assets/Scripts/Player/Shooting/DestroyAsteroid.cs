@@ -30,7 +30,7 @@ public class DestroyAsteroid : NetworkBehaviour
             }
             else
             {
-                DropPowerUP();
+                DropPowerUp();
             }
 
             NetworkServer.Destroy(this.gameObject);
@@ -88,35 +88,40 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void DropPowerUp()
     {
+        InstantiatePowerUp(medikit);
+
+        /*
         // 1 chance sur 2 de faire apparaitre
         // un power-up
-        if (Random.value < 0.5)
-            return;
+        if (Random.value >= 0.5)
+        {
+            // Pourcentage de change d'avoir un power-up
+            int drop = Random.Range(1, 100);
 
-        // Pourcentage de change d'avoir un power-up
-        int drop = Random.Range(1, 100);
+            // TODO: change values
+            if (drop > 0 && drop <= 35)
+                InstantiatePowerUp(medikit);
 
-        // TODO: change values
-        if (drop > 0 && drop <= 35)
-            InstantiatePowerUp(medikit);
+            else if (drop > 36 && drop <= 55)
+                InstantiatePowerUp(shield);
 
-        else if (drop > 36 && drop <= 55)
-            InstantiatePowerUp(shield);
+            else if (drop > 56 && drop <= 75)
+                Debug.Log("Not implemented yet...");    // BONUS
 
-        else if (drop > 56 && drop <= 75)
-            Debug.Log("Not implemented yet...");    // BONUS
+            else if (drop > 76 && drop <= 85)
+                InstantiatePowerUp(drone);
 
-        else if (drop > 76 && drop <= 85)
-            InstantiatePowerUp(drone);
+            else if (drop > 86 && drop <= 92)
+                InstantiatePowerUp(akimbo);
 
-        else if (drop > 86 && drop <= 92)
-            InstantiatePowerUp(akimbo);
+            else if (drop > 93 && drop <= 99)
+                InstantiatePowerUp(bazooka);
 
-        else if (drop > 93 && drop <= 99)
-            InstantiatePowerUp(bazooka);
-
-        else
-            InstantiatePowerUp(jammer);
+            else
+                InstantiatePowerUp(jammer);
+        }
+        */
+        NetworkServer.Destroy(_asteroidToDestroy);
     }
 
     /// <summary>
@@ -125,12 +130,7 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void InstantiatePowerUp(GameObject powerUp)
     {
-        GameObject PowerUp = (GameObject)Instantiate(powerUp, spawningRemains.position, Quaternion.Euler(0, 0, 0));
-
-        // TODO: change values
-        // détruit le power-up s'il n'est pas ramassé
-        // au bout de 15 secondes
-        Destroy(PowerUp, 15);
-
+        GameObject PowerUp = (GameObject)Instantiate(powerUp, _asteroidToDestroy.GetComponent<Transform>().position, Quaternion.Euler(0, 0, 0));
+        NetworkServer.Spawn(PowerUp);
     }
 }

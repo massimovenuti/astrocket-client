@@ -31,7 +31,6 @@ public class PlayerSetup : NetworkBehaviour
         {
             foreach (Material m in r.materials)
             {
-                Debug.Log(m.name);
                 if (m.name.Contains("accent"))
                 {
                     m.color = newValue;

@@ -19,6 +19,7 @@ public class Movements : MonoBehaviour
     private float _powerUpSpeed;
     private float _powerUpSlowSpeed;
 
+
     // Start is called before the first frame update
     private void Start( )
     {
@@ -48,7 +49,7 @@ public class Movements : MonoBehaviour
         LookAt();
         if (_inp.IsBoosting())
         {
-            _rgbody.AddForce(transform.forward * _forwardSpeed);
+            _rgbody.AddForce(transform.forward * _forwardSpeed * 2);
         }
     }
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class DroneBullet : MonoBehaviour
+public class DroneBullet : NetworkBehaviour
 {
     public Collider target;
 
@@ -17,18 +18,17 @@ public class DroneBullet : MonoBehaviour
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
+    [ServerCallback]
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-
-        // le laser a une durée de vie de 3 secondes
-        Destroy(gameObject, 3);
     }
 
     /// <summary>
     /// Fonction modifiant la trajectoire du laser
     /// tant que sa cible n'est pas détruite
     /// </summary>
+    [ServerCallback]
     void FixedUpdate()
     {
         if (target != null)

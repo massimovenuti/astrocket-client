@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class Bullet : NetworkBehaviour
+public class Ammo : NetworkBehaviour
 {
     [SerializeField] float destroyAfter = 0.5f;
 
-    [SerializeField] Rigidbody rigidBody;
+    private Rigidbody rigidBody;
 
     [SerializeField] float _speed = 100f;
     

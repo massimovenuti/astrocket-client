@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 6328543714441839000}
   - component: {fileID: 4186764807684818235}
   - component: {fileID: 2240155041876578850}
+  - component: {fileID: 3458831468282579717}
+  - component: {fileID: 1026161254797878331}
+  - component: {fileID: -8583813186653545474}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Rocket
@@ -119,7 +122,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5023371703109089499}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ec28d20085d419429c8f14e790df29c, type: 3}
   m_Name: 
@@ -127,6 +130,9 @@ MonoBehaviour:
   radius: 5
   power: 10
   explosionPosition: {x: 0, y: 0, z: 0}
+  BulletStorage: {fileID: 0}
+  PlayerParent: {fileID: 0}
+  RealPlayer: {fileID: 0}
   ExplosionVFX: {fileID: 2993552907803997183, guid: c213675d5856141418f286581d75a50b,
     type: 3}
 --- !u!96 &2240155041876578850
@@ -235,3 +241,58 @@ TrailRenderer:
   m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &3458831468282579717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023371703109089499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &1026161254797878331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023371703109089499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 850105e2ee4d9a64c8c6bd4291343f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
+    type: 3}
+  medikit: {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
+  akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
+  shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
+  bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
+  jammer: {fileID: 6697394780005706805, guid: 24f5ac1c191bdca499b6a89e601e09d3, type: 3}
+  drone: {fileID: 3371782148132494092, guid: 16b35f60fe4bfc145a2efd6f36b4bab2, type: 3}
+--- !u!114 &-8583813186653545474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023371703109089499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b5e57456cd8af4a8afc85fc7bb7422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  destroyAfter: 0.5
+  _speed: 50
+  ownerId: 0

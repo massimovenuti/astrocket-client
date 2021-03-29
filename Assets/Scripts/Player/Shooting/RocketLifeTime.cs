@@ -63,8 +63,8 @@ public class RocketLifeTime : MonoBehaviour
                     if (rb != null)
                         rb.AddExplosionForce(power, explosionPosition, radius, 3.0f);
 
-                    if (hit.tag == "Asteroid")
-                        hit.gameObject.GetComponent<DestroyAsteroid>().DestructionAsteroid();
+                    //if (hit.tag == "Asteroid")
+                        //hit.gameObject.GetComponent<DestroyAsteroid>().DestructionAsteroid();
 
                     if (hit.tag == "Player")
                         hit.gameObject.GetComponent<PlayerHealth>().ExplosionDamage();

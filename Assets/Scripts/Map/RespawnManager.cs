@@ -133,17 +133,6 @@ public class RespawnManager : MonoBehaviour
         return go.transform.position;
     }
 
-    private void GenerateEnemiesToSpot( )
-    {
-        int enemiesToSpawn = 20;
-
-        for (int i = 0; i < enemiesToSpawn; i++)
-        {
-            Vector3 pos = new Vector3((Random.value - 0.5f) * _radius * 2, 1f, (Random.value - 0.5f) * _radius * 2);
-            Instantiate(enemyMockPrefab, pos, Quaternion.identity);
-        }
-    }
-
     // Fonction désactivant le joueur et lançant
     // le compte à rebours avant la réactivation
     public void SwitchPlayerActivation(GameObject Player)

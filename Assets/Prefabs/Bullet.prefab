@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 531237884777375409}
   - component: {fileID: 5736028829998019851}
   - component: {fileID: 3337810025864409140}
-  - component: {fileID: 2959660685197905538}
   - component: {fileID: 1923235959055590005}
+  - component: {fileID: 4408489740172959938}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -32,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529621894446456818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -236,24 +236,6 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &2959660685197905538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529621894446456818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b5e57456cd8af4a8afc85fc7bb7422, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  destroyAfter: 1
-  rigidBody: {fileID: 531237884777375409}
-  _speed: 70
-  ownerId: 0
 --- !u!114 &1923235959055590005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,3 +252,26 @@ MonoBehaviour:
   syncInterval: 0.1
   _asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
     type: 3}
+  medikit: {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
+  akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
+  shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
+  bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
+  jammer: {fileID: 6697394780005706805, guid: 24f5ac1c191bdca499b6a89e601e09d3, type: 3}
+  drone: {fileID: 3371782148132494092, guid: 16b35f60fe4bfc145a2efd6f36b4bab2, type: 3}
+--- !u!114 &4408489740172959938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529621894446456818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b5e57456cd8af4a8afc85fc7bb7422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  destroyAfter: 0.5
+  _speed: 80
+  ownerId: 0

@@ -12,6 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3bc74d82950214cb2687e1493c1844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-9030506704191989742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3371782148132494092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1001 &6089502795682288397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82,7 +98,7 @@ PrefabInstance:
     - target: {fileID: 8811498798176323585, guid: 0fe2089918fbb204e867c07eec83a5f4,
         type: 3}
       propertyPath: m_Name
-      value: PowerUpDrone
+      value: PowerUpDrone Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fe2089918fbb204e867c07eec83a5f4, type: 3}
