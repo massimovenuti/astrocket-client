@@ -4237,7 +4237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &364056287
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5152,7 +5152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &437201080
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5437,7 +5437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b0defbf9f010647bb76bc45e993389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: 150
 --- !u!1 &443633288
 GameObject:
   m_ObjectHideFlags: 0
@@ -5944,7 +5943,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 480219377}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d8a77855a07f646b511ee5e5da5906, type: 3}
+  m_Script: {fileID: 11500000, guid: 24a492f87e877864e842e566a33ae8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nextPage: {fileID: 98209357}
@@ -6200,7 +6199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &537161174
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11826,7 +11825,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Server 1
+  m_text: Server Beta
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 97a9257087aabaf41a6ef163b14b5836, type: 2}
   m_sharedMaterial: {fileID: 8997689235248344276, guid: 97a9257087aabaf41a6ef163b14b5836,
@@ -18944,7 +18943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1950845062
 RectTransform:
   m_ObjectHideFlags: 0

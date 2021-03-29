@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mirror;
 
 public class AsteroidNetworkManager : NetworkManager
@@ -106,6 +107,13 @@ public class AsteroidNetworkManager : NetworkManager
 
         base.OnServerDisconnect(conn);
     }
+
+    public override void OnStopClient( )
+    {
+        base.OnStopClient();
+        SceneManager.LoadScene("MainMenu");
+    }
+
 
     [Server]
     private void InstantiateAsteroidSpawners( )

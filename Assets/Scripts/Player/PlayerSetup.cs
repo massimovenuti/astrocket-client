@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 public class PlayerSetup : NetworkBehaviour
@@ -19,6 +20,10 @@ public class PlayerSetup : NetworkBehaviour
             {
                 obj.enabled = false;
             }
+        } else
+        {
+            Button disconnectButton = GameObject.Find("DisconnectButton").GetComponent<Button>();
+            disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
         }
     }
 
