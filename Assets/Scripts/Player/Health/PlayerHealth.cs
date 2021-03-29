@@ -255,10 +255,10 @@ public class PlayerHealth : NetworkBehaviour
     /// </summary>
     public void PowerUpShield()
     {
-        if (accessDrone.hasDrone)
+        /*if (accessDrone.hasDrone)
         {
             accessDrone.DesactivateDrone();
-        }
+        }*/
 
         hasShield = true;
         shieldDurability = _shieldDurabilityMax;

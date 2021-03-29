@@ -88,9 +88,7 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void DropPowerUp()
     {
-        InstantiatePowerUp(medikit);
-
-        /*
+        
         // 1 chance sur 2 de faire apparaitre
         // un power-up
         if (Random.value >= 0.5)
@@ -109,7 +107,8 @@ public class DestroyAsteroid : NetworkBehaviour
                 Debug.Log("Not implemented yet...");    // BONUS
 
             else if (drop > 76 && drop <= 85)
-                InstantiatePowerUp(drone);
+                //InstantiatePowerUp(drone);
+                Debug.Log("Not Net implemented yet...");
 
             else if (drop > 86 && drop <= 92)
                 InstantiatePowerUp(akimbo);
@@ -118,9 +117,10 @@ public class DestroyAsteroid : NetworkBehaviour
                 InstantiatePowerUp(bazooka);
 
             else
-                InstantiatePowerUp(jammer);
+                //InstantiatePowerUp(jammer);
+                Debug.Log("Le chef est pas sur");
         }
-        */
+
         NetworkServer.Destroy(_asteroidToDestroy);
     }
 
