@@ -9963,9 +9963,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e9ccf0f80396c4e872809df1897f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugEnabled: 1
+  DebugEnabled: 0
   ServerBindAll: 1
-  ServerBindAddress: 192.168.1.30
+  ServerBindAddress: 127.0.0.1
   CommunicationPort: 7777
   MaximumPeerCCU: 100
   EnetServerPollTimeout: 1

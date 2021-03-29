@@ -49,7 +49,7 @@ public class Movements : MonoBehaviour
         LookAt();
         if (_inp.IsBoosting())
         {
-            _rgbody.AddForce(transform.forward * _forwardSpeed * 2);
+            _rgbody.AddForce(transform.forward * _forwardSpeed);
         }
     }
 
