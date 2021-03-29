@@ -12,6 +12,11 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
+<<<<<<< HEAD
     path: Assets/Scenes/Networking.unity
     guid: 1e674dcd787abd944a412091e8850277
+=======
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3ec0aa4a42bf3da4f8ad1f60e6a2b6bb
+>>>>>>> origin/feature/main-ui
   m_configObjects: {}
