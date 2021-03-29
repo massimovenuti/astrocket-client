@@ -35,16 +35,21 @@ public class Movements : MonoBehaviour
     private void Awake()
     {
         _inp = FindObjectOfType<InputManager>();
-        _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
+        //_mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        // GET IN CHILDREN
+        _mainCamera = gameObject.GetComponentInChildren<Camera>();
     }
 
     private void Update()
     {
         LookAt();
         if (_inp.IsBoosting())
+        {
             _rgbody.AddForce(transform.forward * _forwardSpeed);
+        }
     }
 
 #if UNITY_ANDROID

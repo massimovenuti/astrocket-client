@@ -3,24 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Linq;
+using Mirror;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : NetworkBehaviour
 {
-    public Health playerHealth;
+    [SerializeField] int maxPlayerHealth = 100;
+
+    [SerializeField] Slider slider;
+    [SerializeField] Gradient gradient;
+    [SerializeField] Image fill;
+
     public int shieldDurability;
 
     public GameObject shield;
     public PlayerDrone accessDrone;
     public GameObject ui;
 
-    // TODO: changes values
-    private int _playerHealth = 100;
-
     private int _healValue = 40;
 
     private int _shieldDurabilityMax = 8;
     private int _shieldDurability;
 
+    [SerializeField] int bulletDmg = 20;
+    [SerializeField] int asteroidDmgRate = 10;
     private int _damageBullet = 20;
     private int _damageRocket = 40;
     private int _damageHeavyLaser = 40;
@@ -34,12 +40,22 @@ public class PlayerHealth : MonoBehaviour
     private bool _isFantome;
     private bool _isHacked;
 
-    /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
-    private void Start()
+    [SyncVar(hook="OnHealthChange")]
+    public int health;
+
+    private bool isDead = false;
+
+    [ClientCallback]
+    private void Awake( )
     {
-        playerHealth = new Health(_playerHealth);
+        slider.maxValue = maxPlayerHealth;
+        slider.value = maxPlayerHealth;
+    }
+
+    [ServerCallback]
+    public void Start( )
+    {
+        this.health = this.maxPlayerHealth;
 
         // récupère le bouclier du joueur et l'initialise
         shield = GameObject.Find("Shield");
@@ -61,130 +77,19 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Fonction Update, appelée à chaque frame
-    /// </summary>
-    private void Update()
-    {
-        // si le joueur est mort
-        if (playerHealth.GetDead())
-        {
-            // réinitialise les power-ups
-            this.GetComponent<Movements>().ResetPowerUps();
-            this.GetComponent<GunController>().ResetPowerUps();
-            this.GetComponent<PlayerDrone>().DesactivateDrone();
-            DesactivateShield();
-            if (_isFantome)
-            {
-                this.GetComponent<BoxCollider>().enabled = true;
-                _isFantome = false;
-            }
-            if (_isHacked)
-            {
-                ui.SetActive(false);
-                _isHacked = false;
-            }
-
-            // le joueur est mort, un script va le
-            // désactiver pendant 2 secondes
-            GameObject handler = GameObject.Find("Map");
-            handler.SendMessage("SwitchPlayerActivation", gameObject);
-
-            // réinitialise la vie, et indique que
-            // le joueur est à nouveau vivant
-            playerHealth.SetDead(false);
-            playerHealth.SetHealth(_playerHealth);
-
-            // réinitialise l'inertie
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-        }
-    }
-
-    /// <summary>
-    /// Fonction diminuant la vie du joueur lorsqu'il
-    /// est touché par quelque chose
-    /// </summary>
-    private void OnCollisionEnter(Collision collision)
-    {
-        // touché par un laser
-        if (collision.gameObject.tag == "Bullet")
-        {
-            _damageValue = _damageBullet;
-            dealDamage(_damageValue);
-
-            Destroy(collision.gameObject);
-        }
-
-        // touché par une roquette
-        if (collision.gameObject.tag == "Rocket")
-        {
-            _damageValue = _damageRocket;
-            dealDamage(_damageValue);
-
-            Destroy(collision.gameObject);
-        }
-
-        // touché par un heavy laser (power-up)
-        if(collision.gameObject.tag == "HeavyLaser")
-        {
-            _damageValue = _damageHeavyLaser;
-            dealDamage(_damageValue);
-
-            Destroy(collision.gameObject);
-        }
-
-        // collision avec un astéroide
-        if (collision.gameObject.tag == "Asteroid")
-        {
-            _damageValue = _damageCollisionAsteroid;
-            dealDamage(_damageValue);
-
-            collision.gameObject.GetComponent<DestroyAsteroid>().DestructionAsteroid();
-        }
-
-        // collision avec un joueur
-        if (collision.gameObject.tag == "Player")
-        {
-            _damageValue = _damageCollisionPlayer;
-            dealDamage(_damageValue);
-        }
-    }
-
-    /// <summary>
-    /// Fonction gérant l'entrée du joueur dans un
-    /// trigger: sert uniquement pour la mine
-    /// </summary>
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (collision.gameObject.tag == "Mine")
-        {
-            _damageValue = _damageMine;
-            dealDamage(_damageValue);
-
-            Destroy(collision.gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Fonction appelant dealDamage quand le
-    /// joueur est affecté par une explosion
-    /// </summary>
-    public void ExplosionDamage()
-    {
-        _damageValue = _damageExplosion;
-        dealDamage(_damageValue);
-    }
-
-    /// <summary>
     /// Fonction générale diminuant la vie du joueur
     /// en gérant le bouclier
     /// </summary>
-    private void dealDamage(int damageValue)
+    [Server]
+    public void Damage(int damageValue)
     {
         if (shieldDurability <= 0)
-            playerHealth.Damage(damageValue);
+        {
+            health -= damageValue;
+        }
         else
         {
-            playerHealth.Damage(damageValue / 2);
+            health -= damageValue/2;
             shieldDurability--;
             if (shieldDurability <= 0)
             {
@@ -192,6 +97,141 @@ public class PlayerHealth : MonoBehaviour
                 hasShield = false;
             }
         }
+        if (health <= 0)
+        {
+            health = 0;
+            isDead = true;
+        }
+    }
+
+    // Fonction augmentant la vie d'un objet
+    [Server]
+    public void Heal(int healValue)
+    {
+        health += healValue;
+        if (health > maxPlayerHealth)
+            health = maxPlayerHealth;
+    }
+
+    // Fonction diminuant la vie du joueur lorsqu'il est touché par quelque chose
+    [ServerCallback]
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject go = other.gameObject;
+
+        if (other.CompareTag("Bullet") && go.GetComponent<Bullet>().ownerId != netId)
+        {
+            _damageValue = _damageBullet;
+            Damage(_damageValue);
+            NetworkServer.Destroy(go);
+        }
+
+        if (other.CompareTag("Asteroid"))
+        {
+            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            NetworkServer.Destroy(go);
+            RpcResetVelocity();
+        }
+
+        // touché par une roquette
+        if (other.CompareTag("Rocket"))
+        {
+            _damageValue = _damageRocket;
+            Damage(_damageValue);
+            NetworkServer.Destroy(go);
+        }
+
+        // touché par un heavy laser (power-up)
+        if(other.CompareTag("HeavyLaser"))
+        {
+            _damageValue = _damageHeavyLaser;
+            Damage(_damageValue);
+            NetworkServer.Destroy(go);
+        }
+
+        if (other.CompareTag("Mine"))
+        {
+            _damageValue = _damageMine;
+            dealDamage(_damageValue);
+            NetworkServer.Destroy(go);
+        }
+
+        if (isDead)
+        {
+            Revive();
+        }
+    }
+
+    [ServerCallback]
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("AbsoluteBorder"))
+        {
+            Revive();
+        }
+    }
+
+    [Server]
+    public void Revive( )
+    {
+        // le joueur est mort, un script va le
+        // désactiver pendant 2 secondes
+        GetComponent<PlayerRespawn>().Respawn();
+
+        // réinitialise l'inertie
+        RpcResetVelocity();
+
+        // réinitialise la vie, et indique que
+        // le joueur est à nouveau vivant
+        this.health = this.maxPlayerHealth;
+        this.isDead = false;
+
+        // réinitialise les power-ups
+        this.GetComponent<Movements>().ResetPowerUps();
+        this.GetComponent<GunController>().ResetPowerUps();
+        this.GetComponent<PlayerDrone>().DesactivateDrone();
+        DesactivateShield();
+
+        if (_isFantome)
+        {
+            this.GetComponent<BoxCollider>().enabled = true;
+            _isFantome = false;
+        }
+
+        if (_isHacked)
+        {
+            ui.SetActive(false);
+            _isHacked = false;
+        }
+    }
+
+    [ClientCallback]
+    void OnHealthChange(int oldValue, int newValue)
+    {
+        if(isLocalPlayer)
+        {
+            slider.value = newValue;
+        }
+    }
+
+    private void OnCollisionEnter(GameObject collision)
+    {
+        // collision avec un joueur
+        if (collision.gameObject.tag == "Player")
+        {
+            _damageValue = _damageCollisionPlayer;
+            Damage(_damageValue);
+        }
+    }
+
+    /// <summary>
+    /// Fonction appelant Damage quand le
+    /// joueur est affecté par une explosion
+    /// </summary>
+    public void ExplosionDamage()
+    {
+        _damageValue = _damageExplosion;
+        Damage(_damageValue);
     }
 
     /// <summary>
@@ -199,7 +239,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void PowerUpMedikit()
     {
-        playerHealth.Heal(_healValue);
+        Heal(_healValue);
     }
 
     /// <summary>
@@ -275,5 +315,14 @@ public class PlayerHealth : MonoBehaviour
 
         ui.SetActive(false);
         _isHacked = false;
+    }
+    
+    [TargetRpc]
+    private void RpcResetVelocity()
+    {
+        if (isLocalPlayer)
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
     }
 }

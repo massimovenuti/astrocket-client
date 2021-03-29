@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using UnityEngine;
 using System.Collections;
+using Mirror;
 
-public class GunController : MonoBehaviour
+public class GunController : NetworkBehaviour
 {
     public GameObject bullet;
     public float shootRate = 0.2f;
@@ -102,17 +103,31 @@ public class GunController : MonoBehaviour
     /// Fonction de tir de base (instancie un tir)
     /// </summary>
     private void Shoot( )
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        if (Time.time > _lastShootingTimeRef && _inp.IsShooting())
+        {
+            CmdShoot();
+            _lastShootingTimeRef = Time.time + shootRate;
+        }
+    }
+
+    [Command]
+    private void CmdShoot( )
     {
         if (Time.time > _lastShootingTimeRef)
         {
-            Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
-            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, rot);
+            GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
 
             go.GetComponent<MeshRenderer>().material = bulletMaterial;
             go.GetComponent<TrailRenderer>().material = bulletMaterial;
+            go.GetComponent<Bullet>().ownerId = netId;
 
-            go.transform.parent = _bulletSpawn.transform;
-            go.GetComponent<Rigidbody>().AddForce(_barrel.transform.forward * shootForce);
+            //go.transform.parent = _bulletSpawn.transform;
+            NetworkServer.Spawn(go);
 
             _lastShootingTimeRef = Time.time + shootRate;
         }
