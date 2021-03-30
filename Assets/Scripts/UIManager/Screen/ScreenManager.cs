@@ -20,7 +20,7 @@ public class ScreenManager : MonoBehaviour
             }
         } catch (Exception e)
         {
-            Debug.LogError("No Back button found in the footer"); // can happen if we don't want to go back
+            // ¯\_(ツ)_/¯
         }
 
         try
@@ -33,7 +33,7 @@ public class ScreenManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("No Exit button found in the footer"); // can happen if we don't want to exit
+            // ¯\_(ツ)_/¯
         }
     }
 
