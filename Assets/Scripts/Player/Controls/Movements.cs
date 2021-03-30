@@ -10,6 +10,10 @@ public class Movements : MonoBehaviour
     private Rigidbody _rgbody;
     private InputManager _inp;
     private Plane _groundPlane;
+    private ParticleSystem _flameShip1;
+    private ParticleSystem _flameShip2;
+
+    private bool _animated;
 
     /// <summary>
     /// Trouver le rigidbody du vaisseau
@@ -20,13 +24,31 @@ public class Movements : MonoBehaviour
         _mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
+        _flameShip1 = GameObject.Find("flametrail_left").GetComponent<ParticleSystem>();
+        _flameShip2 = GameObject.Find("flametrail_right").GetComponent<ParticleSystem>();
+        _animated = false;
     }
 
     private void Update()
     {
         LookAt();
         if (_inp.IsBoosting())
+        {
             _rgbody.AddForce(transform.forward * _forwardSpeed);
+            if (!_animated)
+            {
+                _animated = true;
+                _flameShip1.Play();
+                _flameShip2.Play();
+            }
+        }
+
+        else if (_animated)
+        {
+            _animated = false;
+            _flameShip1.Stop();
+            _flameShip2.Stop();
+        }
     }
 
 #if UNITY_ANDROID
