@@ -91,7 +91,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
         }
     }
 
-    [Client]
+    [ClientCallback]
     private void OnEnable( )
     {
         if (isLocalPlayer)

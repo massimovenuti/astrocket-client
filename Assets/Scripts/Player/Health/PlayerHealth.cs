@@ -176,9 +176,7 @@ public class PlayerHealth : NetworkBehaviour
     [Server]
     public void Revive( )
     {
-        // le joueur est mort, un script va le
-        // désactiver pendant 2 secondes
-        GetComponent<PlayerRespawn>().Respawn();
+        GetComponent<BoxCollider>().enabled = false;
 
         // réinitialise l'inertie
         RpcResetVelocity();
@@ -191,7 +189,7 @@ public class PlayerHealth : NetworkBehaviour
         // réinitialise les power-ups
         this.GetComponent<Movements>().ResetPowerUps();
         this.GetComponent<GunController>().ResetPowerUps();
-        this.GetComponent<PlayerDrone>().DesactivateDrone();
+        //this.GetComponent<PlayerDrone>().DesactivateDrone();
         DesactivateShield();
 
         if (_isFantome)
@@ -205,6 +203,10 @@ public class PlayerHealth : NetworkBehaviour
             ui.SetActive(false);
             _isHacked = false;
         }
+
+        // le joueur est mort, un script va le
+        // désactiver pendant 2 secondes
+        GetComponent<PlayerRespawn>().Respawn();
     }
 
     [ClientCallback]
@@ -295,12 +297,9 @@ public class PlayerHealth : NetworkBehaviour
     [Server]
     public void DesactivateShield( )
     {
-        if (shieldDurability > 0)
-        {
-            hasShield = false;
-            shieldDurability = 0;
-            RpcActiveShield(false);
-        }
+        hasShield = false;
+        shieldDurability = 0;
+        RpcActiveShield(false);
     }
 
     [ClientRpc]
