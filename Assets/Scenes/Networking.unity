@@ -10038,7 +10038,7 @@ MonoBehaviour:
   transport: {fileID: 886936860}
   networkAddress: aw.alexandre-vogel.fr
   maxConnections: 4
-  disconnectInactiveConnections: 0
+  disconnectInactiveConnections: 1
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2958615548390935055, guid: 59aebfaacadfe6b498f0010a344f43c8,

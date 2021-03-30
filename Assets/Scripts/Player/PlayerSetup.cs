@@ -22,7 +22,7 @@ public class PlayerSetup : NetworkBehaviour
             }
         } else
         {
-            Button disconnectButton = GameObject.Find("DisconnectButton").GetComponent<Button>();
+            Button disconnectButton = transform.Find("Canvas/DisconnectButton").GetComponent<Button>();
             disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
         }
     }
