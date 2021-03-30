@@ -22,19 +22,23 @@ public class DestroyAsteroid : NetworkBehaviour
     {
         if (other.CompareTag("Asteroid"))
         {
-            _asteroidToDestroy = other.gameObject;
-
-            if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
-            {
-                DropRemains();
-            }
-            else
-            {
-                DropPowerUp();
-            }
-
-            NetworkServer.Destroy(this.gameObject);
+            AsteroidDestruction(other.gameObject);
         }
+    }
+
+    [Server]
+    public void AsteroidDestruction(GameObject asteroidToDestroy)
+    {
+        _asteroidToDestroy = asteroidToDestroy;
+        if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
+        {
+            DropRemains();
+        }
+        else
+        {
+            DropPowerUp();
+        }
+        NetworkServer.Destroy(this.gameObject);
     }
 
     [Server]
@@ -88,7 +92,6 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void DropPowerUp()
     {
-        
         // 1 chance sur 2 de faire apparaitre
         // un power-up
         if (Random.value >= 0.5)
@@ -115,7 +118,6 @@ public class DestroyAsteroid : NetworkBehaviour
 
             else if (drop > 93 && drop <= 99)
                 InstantiatePowerUp(bazooka);
-
             else
                 //InstantiatePowerUp(jammer);
                 Debug.Log("Le chef est pas sur");

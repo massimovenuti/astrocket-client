@@ -124,37 +124,35 @@ public class PlayerHealth : NetworkBehaviour
     {
         GameObject go = other.gameObject;
 
+        // touché par une bullet
         if (other.CompareTag("Bullet") && go.GetComponent<Ammo>().ownerId != netId)
         {
             _damageValue = _damageBullet;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
         }
-
-        if (other.CompareTag("Asteroid"))
-        {
-            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
-            NetworkServer.Destroy(go);
-            RpcResetVelocity();
-        }
-
         // touché par une roquette
-        if (other.CompareTag("Rocket"))
+        else if (other.CompareTag("Rocket") && go.GetComponent<Ammo>().ownerId != netId)
         {
+            Debug.LogWarning("(PlayerHealth) Touched by rocket " + go.GetComponent<Ammo>().ownerId);
             _damageValue = _damageRocket;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
         }
-
         // touché par un heavy laser (power-up)
-        if(other.CompareTag("HeavyLaser"))
+        else if (other.CompareTag("HeavyLaser") && go.GetComponent<Ammo>().ownerId != netId)
         {
             _damageValue = _damageHeavyLaser;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
         }
-
-        if (other.CompareTag("Mine"))
+        else if (other.CompareTag("Asteroid"))
+        {
+            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            NetworkServer.Destroy(go);
+            RpcResetVelocity();
+        }
+        else if (other.CompareTag("Mine"))
         {
             _damageValue = _damageMine;
             Damage(_damageValue);
@@ -235,10 +233,15 @@ public class PlayerHealth : NetworkBehaviour
     /// Fonction appelant Damage quand le
     /// joueur est affecté par une explosion
     /// </summary>
+    [Server]
     public void ExplosionDamage()
     {
         _damageValue = _damageExplosion;
         Damage(_damageValue);
+        if (isDead)
+        {
+            Revive();
+        }
     }
 
     /// <summary>

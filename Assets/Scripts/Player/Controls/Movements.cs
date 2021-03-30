@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Mirror;
 
-public class Movements : MonoBehaviour
+public class Movements : NetworkBehaviour
 {
     private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
@@ -46,10 +47,13 @@ public class Movements : MonoBehaviour
 
     private void Update()
     {
-        LookAt();
-        if (_inp.IsBoosting())
+        if (isLocalPlayer)
         {
-            _rgbody.AddForce(transform.forward * _forwardSpeed);
+            LookAt();
+            if (_inp.IsBoosting())
+            {
+                _rgbody.AddForce(transform.forward * _forwardSpeed);
+            }
         }
     }
 
