@@ -14,8 +14,6 @@ public class PlayerHealth : NetworkBehaviour
     [SerializeField] Gradient gradient;
     [SerializeField] Image fill;
 
-    public int shieldDurability;
-
     public GameObject shield;
     public PlayerDrone accessDrone;
     public GameObject ui;
@@ -23,15 +21,12 @@ public class PlayerHealth : NetworkBehaviour
     private int _healValue = 40;
 
     private int _shieldDurabilityMax = 2;
-    private int _shieldDurability;
+    public int shieldDurability;
 
-    [SerializeField] int bulletDmg = 20;
     [SerializeField] int asteroidDmgRate = 10;
     private int _damageBullet = 20;
     private int _damageRocket = 40;
     private int _damageHeavyLaser = 40;
-    private int _damageCollisionAsteroid = 25;
-    private int _damageCollisionPlayer = 25;
     private int _damageExplosion = 30;
     private int _damageMine = 50;
     private int _damageValue;
