@@ -9,6 +9,8 @@ public class Movements : NetworkBehaviour
     private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
 
+    private float _multiplierSpeed = 2.4f; //< 60 FixedUpdate/s * 2.4 => 144Hz speed
+
     private Camera _mainCamera;
     private Rigidbody _rgbody;
     private InputManager _inp;
@@ -44,15 +46,15 @@ public class Movements : NetworkBehaviour
         // GET IN CHILDREN
         _mainCamera = gameObject.GetComponentInChildren<Camera>();
     }
-
-    private void Update()
+    
+    private void FixedUpdate()
     {
         if (isLocalPlayer)
         {
             LookAt();
             if (_inp.IsBoosting())
             {
-                _rgbody.AddForce(transform.forward * _forwardSpeed);
+                _rgbody.AddForce(transform.forward * _forwardSpeed * _multiplierSpeed);
             }
         }
     }
