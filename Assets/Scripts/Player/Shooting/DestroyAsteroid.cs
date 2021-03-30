@@ -23,6 +23,10 @@ public class DestroyAsteroid : NetworkBehaviour
         if (other.CompareTag("Asteroid"))
         {
             AsteroidDestruction(other.gameObject);
+            if (!this.CompareTag("Rocket"))
+            {
+                NetworkServer.Destroy(this.gameObject);
+            }
         }
     }
 
@@ -38,7 +42,6 @@ public class DestroyAsteroid : NetworkBehaviour
         {
             DropPowerUp();
         }
-        NetworkServer.Destroy(this.gameObject);
     }
 
     [Server]

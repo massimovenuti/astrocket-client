@@ -134,7 +134,6 @@ public class PlayerHealth : NetworkBehaviour
         // touché par une roquette
         else if (other.CompareTag("Rocket") && go.GetComponent<Ammo>().ownerId != netId)
         {
-            Debug.LogWarning("(PlayerHealth) Touched by rocket " + go.GetComponent<Ammo>().ownerId);
             _damageValue = _damageRocket;
             Damage(_damageValue);
             NetworkServer.Destroy(go);

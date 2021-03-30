@@ -42,7 +42,7 @@ public class Rocket : NetworkBehaviour
         }
 
         explosionPosition = gameObject.transform.position;
-        
+
         RpcExplosion(explosionPosition);
 
         // on récupère tous les objets dans le rayon de l'explosion
@@ -62,6 +62,8 @@ public class Rocket : NetworkBehaviour
                 hit.gameObject.GetComponent<PlayerHealth>().ExplosionDamage();
             }
         }
+
+        NetworkServer.Destroy(this.gameObject);
     }
 
     [ClientRpc]
@@ -69,7 +71,6 @@ public class Rocket : NetworkBehaviour
     {
         // on active l'effet de particule pour l'explosion
         // et on le désactive une fois fini
-        Debug.LogWarning("Rpc");
         GameObject explosion = Instantiate(ExplosionVFX, explosionPosition, Quaternion.identity);
         ParticleSystem explosionParticles = explosion.transform.GetChild(0).GetComponent<ParticleSystem>();
         explosionParticles.Play();
