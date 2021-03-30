@@ -17,11 +17,16 @@ public class PlayerReturnToBattle : NetworkBehaviour
     private Color _tmpAlpha;
     private Color _initialAlpha;
 
+    [SyncVar]
     private float _timer;
+
+    [SyncVar]
+    private bool _trigger = false;
+
+
     private readonly float _alphaFactor = 15f;
     private readonly float _initialTimer = 10f;
 
-    private bool _trigger = false;
 
     private void Awake( )
     {
@@ -40,7 +45,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
         _UI.SetActive(false);
     }
 
-    private void Start( )
+    public override void OnStartServer( )
     {
         Reset();
     }
@@ -70,7 +75,10 @@ public class PlayerReturnToBattle : NetworkBehaviour
             }
             else
             {
-                _timer = (_timer == 0) ? _timer : _timer - Time.deltaTime;
+                if (isServer)
+                {
+                    _timer = (_timer == 0) ? _timer : _timer - Time.deltaTime;
+                }
                 if (isLocalPlayer)
                 {
                     _tmpAlpha.a = _initialAlpha.a + (_initialTimer - _timer) / _alphaFactor;
@@ -86,22 +94,26 @@ public class PlayerReturnToBattle : NetworkBehaviour
         {
             if (_timer <= 10f)
             {
-                _timer += Time.deltaTime;
+                if (isServer)
+                {
+                    _timer += Time.deltaTime;
+                    _timer = (_timer > 10f) ? 10f : _timer;
+                }
             }
         }
     }
 
-    [ClientCallback]
+    [Client]
     private void OnEnable( )
     {
         if (isLocalPlayer)
         {
             _UI.SetActive(false);
             _background.color = _initialAlpha;
-            Reset();
         }
     }
 
+    [Server]
     private void Reset( )
     {
         _trigger = false;

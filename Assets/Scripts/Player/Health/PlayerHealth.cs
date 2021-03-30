@@ -31,7 +31,9 @@ public class PlayerHealth : NetworkBehaviour
     private int _damageMine = 50;
     private int _damageValue;
 
+    [SyncVar(hook="OnShieldChange")]
     public bool hasShield;
+
     private bool _isFantome;
     private bool _isHacked;
 
@@ -42,29 +44,28 @@ public class PlayerHealth : NetworkBehaviour
 
     private void Awake( )
     {
+        // récupère le bouclier du joueur
+        shield = GameObject.Find("Shield");
+
         slider.maxValue = maxPlayerHealth;
         slider.value = maxPlayerHealth;
     }
+
 
     public void Start( )
     {
         if (isServer)
         {
             this.health = this.maxPlayerHealth;
-            hasShield = false;
             // initialise les booléens des power-ups 
             // (fantome et jammer) à faux
             _isFantome = false;
             _isHacked = false;
-            shieldDurability = 0;
+            DesactivateShield();
         }
- 
-        // récupère le bouclier du joueur et l'initialise
-        shield = GameObject.Find("Shield");
-        shield.SetActive(false);
 
         // pour accéder plus tard au drone du joueur
-        accessDrone = this.GetComponent<PlayerDrone>();
+        //accessDrone = this.GetComponent<PlayerDrone>();
 
         /*
         if (isLocalPlayer)
@@ -74,6 +75,18 @@ public class PlayerHealth : NetworkBehaviour
             ui.SetActive(false);
         }
         */
+    }
+
+    [ClientCallback]
+    private void OnShieldChange(bool oldValue, bool newValue)
+    {
+        shield.SetActive(newValue);
+    }
+
+    [Client]
+    private void OnEnable( )
+    {
+        shield.SetActive(false);
     }
 
     /// <summary>
@@ -93,8 +106,7 @@ public class PlayerHealth : NetworkBehaviour
             shieldDurability--;
             if (shieldDurability <= 0)
             {
-                RpcActiveShield(false);
-                hasShield = false;
+                DesactivateShield();
             }
         }
         if (health <= 0)
@@ -110,7 +122,9 @@ public class PlayerHealth : NetworkBehaviour
     {
         health += healValue;
         if (health > maxPlayerHealth)
+        {
             health = maxPlayerHealth;
+        }
     }
 
     // Fonction diminuant la vie du joueur lorsqu'il est touché par quelque chose
@@ -180,24 +194,26 @@ public class PlayerHealth : NetworkBehaviour
         // le joueur est à nouveau vivant
         this.health = this.maxPlayerHealth;
         this.isDead = false;
-
-        // réinitialise les power-ups
-        this.GetComponent<Movements>().ResetPowerUps();
-        this.GetComponent<GunController>().ResetPowerUps();
-        //this.GetComponent<PlayerDrone>().DesactivateDrone();
         DesactivateShield();
 
-        if (_isFantome)
-        {
-            this.GetComponent<BoxCollider>().enabled = true;
-            _isFantome = false;
-        }
+        // réinitialise les power-ups
+        this.GetComponent<GunController>().ResetPowerUps();
 
-        if (_isHacked)
-        {
-            ui.SetActive(false);
-            _isHacked = false;
-        }
+        //this.GetComponent<Movements>().ResetPowerUps();
+        //this.GetComponent<PlayerDrone>().DesactivateDrone();
+        //DesactivateShield();
+
+        //if (_isFantome)
+        //{
+        //    this.GetComponent<BoxCollider>().enabled = true;
+        //    _isFantome = false;
+        //}
+
+        //if (_isHacked)
+        //{
+        //    ui.SetActive(false);
+        //    _isHacked = false;
+        //}
 
         // le joueur est mort, un script va le
         // désactiver pendant 2 secondes
@@ -254,14 +270,12 @@ public class PlayerHealth : NetworkBehaviour
     /// </summary>
     public void PowerUpShield()
     {
-        /*if (accessDrone.hasDrone)
-        {
-            accessDrone.DesactivateDrone();
-        }*/
-
+        //if (accessDrone.hasDrone)
+        //{
+        //    accessDrone.DesactivateDrone();
+        //}
         hasShield = true;
         shieldDurability = _shieldDurabilityMax;
-        RpcActiveShield(true);
     }
 
     /// <summary>
@@ -281,7 +295,6 @@ public class PlayerHealth : NetworkBehaviour
     {
         _isHacked = true;
         ui.SetActive(true);
-
         StartCoroutine(TimerJammer());
     }
 
@@ -294,13 +307,6 @@ public class PlayerHealth : NetworkBehaviour
     {
         hasShield = false;
         shieldDurability = 0;
-        RpcActiveShield(false);
-    }
-
-    [ClientRpc]
-    private void RpcActiveShield(bool active)
-    {
-        shield.SetActive(active);
     }
 
     /// <summary>

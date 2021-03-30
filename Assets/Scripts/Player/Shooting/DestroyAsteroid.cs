@@ -95,6 +95,9 @@ public class DestroyAsteroid : NetworkBehaviour
     [Server]
     private void DropPowerUp()
     {
+        InstantiatePowerUp(shield);
+
+        /*
         // 1 chance sur 2 de faire apparaitre
         // un power-up
         if (Random.value >= 0.5)
@@ -125,6 +128,7 @@ public class DestroyAsteroid : NetworkBehaviour
                 //InstantiatePowerUp(jammer);
                 Debug.Log("Le chef est pas sur");
         }
+        */
 
         NetworkServer.Destroy(_asteroidToDestroy);
     }

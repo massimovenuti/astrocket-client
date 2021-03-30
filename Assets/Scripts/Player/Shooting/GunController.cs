@@ -6,7 +6,11 @@ using Mirror;
 public class GunController : NetworkBehaviour
 {
     public GameObject bullet;
+
+    [SyncVar]
     public float shootRate = 0.2f;
+    
+    
     public Material bulletMaterial;
     public float shootForce = 3000f;
     public string ShootingFrom = "Barrel";
@@ -22,7 +26,6 @@ public class GunController : NetworkBehaviour
     private float _mitrailletteShootRate;
     private float _bazookaShootRate;
     private float _heavyLaserShootRate;
-    private float _shootForceRocket;
     private float _shootForceHeavyLaser;
     private float _homingShootRate;
 
@@ -82,7 +85,6 @@ public class GunController : NetworkBehaviour
         _refShootRate = shootRate;
         _mitrailletteShootRate = shootRate / 2;
         _bazookaShootRate = shootRate * 2;
-        _shootForceRocket = (shootForce * 3) / 2;
         _homingShootRate = shootRate * 3;
         _heavyLaserShootRate = shootRate * 4;
         _shootForceHeavyLaser = shootForce * 2;
@@ -224,7 +226,6 @@ public class GunController : NetworkBehaviour
         
         mitraillette = true;
         shootRate = _mitrailletteShootRate;
-        RpcSetShootRate(_mitrailletteShootRate);
         StartCoroutine(TimerMitraillette());
     }
 
@@ -246,7 +247,6 @@ public class GunController : NetworkBehaviour
 
         akimbo = true;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
         StartCoroutine(TimerAkimbo());
     }
 
@@ -268,7 +268,6 @@ public class GunController : NetworkBehaviour
 
         bazooka = true;
         shootRate = _bazookaShootRate;
-        RpcSetShootRate(_bazookaShootRate);
         StartCoroutine(TimerBazooka());
     }
 
@@ -290,7 +289,6 @@ public class GunController : NetworkBehaviour
 
         homing = true;
         shootRate = _homingShootRate;
-        RpcSetShootRate(_homingShootRate);
         StartCoroutine(TimerHomingMissile());
     }
 
@@ -312,7 +310,6 @@ public class GunController : NetworkBehaviour
 
         heavy = true;
         shootRate = _heavyLaserShootRate;
-        RpcSetShootRate(_heavyLaserShootRate);
         StartCoroutine(TimerHeavyLaser());
     }
 
@@ -328,13 +325,6 @@ public class GunController : NetworkBehaviour
 
         akimbo = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
-    }
-
-    [TargetRpc]
-    private void RpcSetShootRate(float shootrate)
-    {
-        this.shootRate = shootrate;
     }
 
     /// <summary>
@@ -349,7 +339,6 @@ public class GunController : NetworkBehaviour
 
         mitraillette = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
     }
 
     /// <summary>
@@ -364,7 +353,6 @@ public class GunController : NetworkBehaviour
 
         bazooka = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
     }
 
     /// <summary>
@@ -379,7 +367,6 @@ public class GunController : NetworkBehaviour
         
         homing = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
     }
 
     /// <summary>
@@ -394,7 +381,6 @@ public class GunController : NetworkBehaviour
 
         heavy = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
     }
 
     /// <summary>
@@ -405,6 +391,5 @@ public class GunController : NetworkBehaviour
     {
         akimbo = bazooka = mitraillette = homing = heavy = false;
         shootRate = _refShootRate;
-        RpcSetShootRate(_refShootRate);
     }
 }
