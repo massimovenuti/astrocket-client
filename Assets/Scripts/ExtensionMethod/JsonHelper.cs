@@ -30,6 +30,12 @@ public static class JsonHelper
         return JsonUtility.ToJson(wrapper, prettyPrint);
     }
 
+    public static string fixJson(string value)
+    {
+        value = "{\"Items\":" + value + "}";
+        return value;
+    }
+
     [Serializable]
     private class Wrapper<T>
     {

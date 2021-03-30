@@ -30,8 +30,8 @@ namespace API
             if (_status.Equals(HttpStatusCode.OK))
                 return "API call successfuly terminated.";
             if (_errorType.Equals(APICallFunction.None))
-                return $"An error happened. Returned with code {_status}.";
-            return $"API call ended with error code {_status} : \n{Errors[_errorType]}";
+                return $"An error happened. Returned with code {(int)_status}.";
+            return $"API call ended with error code {(int)_status} : \n{Errors[_errorType]}";
         }
     }
 }

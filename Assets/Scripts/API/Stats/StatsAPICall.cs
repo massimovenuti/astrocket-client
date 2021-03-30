@@ -36,11 +36,13 @@ namespace API.Stats
             responseMessage = _httpClient.GetAsync("stats/").Result;
             ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
 
+            Debug.Log(responseMessage.Content.ReadAsStringAsync().Result);
+
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
             {
-                PlayerStats[] ps = JsonHelper.FromJson<PlayerStats>(responseMessage.Content.ReadAsStringAsync().Result);
+                PlayerStats[] ps = JsonHelper.FromJson<PlayerStats>(JsonHelper.fixJson(responseMessage.Content.ReadAsStringAsync().Result));
                 return ps.ToList();
             }
         }
@@ -51,6 +53,7 @@ namespace API.Stats
         {
             HttpResponseMessage responseMessage = _httpClient.GetAsync($"stats/{name}").Result;
             ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
+            Debug.Log(responseMessage.Content.ReadAsStringAsync().Result);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
                 return null;
             else
@@ -100,7 +103,7 @@ namespace API.Stats
                 return null;
             else
             {
-                PlayerStats[] ps = JsonHelper.FromJson<PlayerStats>(responseMessage.Content.ReadAsStringAsync().Result);
+                PlayerStats[] ps = JsonHelper.FromJson<PlayerStats>(JsonHelper.fixJson(responseMessage.Content.ReadAsStringAsync().Result));
                 return ps.ToList();
             }
         }

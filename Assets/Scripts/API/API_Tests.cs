@@ -15,7 +15,9 @@ namespace API
         private void Awake( )
         {
             AuthApiPostLoginUserTest();
-
+            AuthApiPostAddUserTest();
+            StatsApiGetAllStatsTest();
+            StatsApiGetUserStatsTest();
         }
 
         public bool AuthApiTests( )
@@ -45,7 +47,7 @@ namespace API
 
         private bool StatsApiGetRannkingByScoreTest( )
         {
-            List<PlayerStats> player_stats1, player_stats2;
+            List<PlayerStats> player_stats1;
             player_stats1 = _stats.GetRannkingByScore();
             Debug.Assert(_stats.ErrorMessage.Status == System.Net.HttpStatusCode.OK);
             return false;
@@ -67,7 +69,7 @@ namespace API
         private bool StatsApiGetUserStatsTest( )
         {
             PlayerStats pstats;
-            pstats = _stats.GetUserStats(name: "");
+            pstats = _stats.GetUserStats(name: "TestUser");
             Debug.Assert(pstats != null);
             return false;
         }
@@ -76,21 +78,21 @@ namespace API
         {
             List<PlayerStats> lps;
             lps = _stats.GetAllStats();
-            Debug.Assert(lps != null);
+            //Debug.Assert(lps != null);
             return true;
         }
 
         private bool AuthApiPostLoginUserTest( )
         {
             UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "test", Password = "testpassword" });
-            Debug.Log(_auth.ErrorMessage.Status);
+            Debug.Log(_auth.ErrorMessage);
             Debug.Assert(t != null);
             return true;
         }
 
         private bool AuthApiPostAddUserTest( )
         {
-            UserToken t = _auth.PostAddUser(new UserRegister() { Name = "TestUser", Password = "testpassword", Email = "test@example.fr" });
+            UserToken t = _auth.PostAddUser(new UserRegister() { Name = "TestUser", Password = "testpassword", Email = "TEST@EXAMPLE.FR" });
             Debug.Log(_auth.ErrorMessage);
             if (t == null)
                 return false;
