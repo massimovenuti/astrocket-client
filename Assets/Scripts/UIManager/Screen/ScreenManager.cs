@@ -18,10 +18,8 @@ public class ScreenManager : MonoBehaviour
             {
                 goBackButton.onClick.AddListener(goToPreviousPage);
             }
-        } catch (Exception e)
-        {
-            Debug.LogError("No Back button found in the footer"); // can happen if we don't want to go back
         }
+        catch (Exception) { }
 
         try
         {
@@ -31,10 +29,7 @@ public class ScreenManager : MonoBehaviour
                 exitButton.onClick.AddListener(exitGame);
             }
         }
-        catch (Exception e)
-        {
-            Debug.LogError("No Exit button found in the footer"); // can happen if we don't want to exit
-        }
+        catch (Exception) { }
     }
 
     protected void goToPage(GameObject page)
