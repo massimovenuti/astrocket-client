@@ -94,12 +94,15 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public string SaveInputs()
+    public Keys SaveInputs( )
     {
-        string json = $"\"controls\" : {{";
-        foreach (var kp in _keys)
-            json += $"\"{kp.Key}\" : \"{kp.Value}\",";
-        json += $"\" }}";
-        return json;
+        InputKey[] ks = {
+            new InputKey("Shoot", _keys["Shoot"]),
+            new InputKey("Boost", _keys["Boost"])
+        };
+
+        Keys k = new Keys(ks);
+
+        return k;
     }
 }

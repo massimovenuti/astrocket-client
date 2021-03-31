@@ -14,10 +14,12 @@ namespace API
 
         private void Awake( )
         {
-            AuthApiPostLoginUserTest();
+            SaveManager.Save();
+            Debug.Log(SaveManager.Load().toSaveItem());
+/*          AuthApiPostLoginUserTest();
             AuthApiPostAddUserTest();
             StatsApiGetAllStatsTest();
-            StatsApiGetUserStatsTest();
+            StatsApiGetUserStatsTest();*/
         }
 
         public bool AuthApiTests( )
