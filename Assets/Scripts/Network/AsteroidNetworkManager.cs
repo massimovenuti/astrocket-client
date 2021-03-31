@@ -22,7 +22,16 @@ public class AsteroidNetworkManager : NetworkManager
 
     private float precision = 20; // variation de la précision en degré
 
-    private Tuple<bool, Color>[] playersColor = { new Tuple<bool, Color>(true, Color.red), new Tuple<bool, Color>(true, Color.blue), new Tuple<bool, Color>(true, Color.green), new Tuple<bool, Color>(true, Color.yellow) };
+    private Tuple<bool, Color>[] playersColor = { 
+        new Tuple<bool, Color>(true, Color.red), 
+        new Tuple<bool, Color>(true, Color.blue), 
+        new Tuple<bool, Color>(true, Color.green), 
+        new Tuple<bool, Color>(true, Color.yellow),
+        new Tuple<bool, Color>(true, Color.cyan),
+        new Tuple<bool, Color>(true, Color.magenta),
+        new Tuple<bool, Color>(true, Color.white),
+        new Tuple<bool, Color>(true, Color.grey),
+    };
 
     [Server]
     public override void OnStartServer( )
