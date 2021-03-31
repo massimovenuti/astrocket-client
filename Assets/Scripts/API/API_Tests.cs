@@ -14,7 +14,7 @@ namespace API
 
         private void Awake( )
         {
-            SaveManager.Save(new GeneralSettings());
+            SaveManager.Save();
             Debug.Log(SaveManager.Load().toSaveItem());
 /*          AuthApiPostLoginUserTest();
             AuthApiPostAddUserTest();

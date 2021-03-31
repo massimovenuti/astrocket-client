@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine;
 
 [Serializable]
 class GeneralSettings
@@ -10,11 +11,7 @@ class GeneralSettings
 
     public GeneralSettings( )
     {
-        keys = new Keys(
-            new InputKey("test", UnityEngine.KeyCode.None),
-            new InputKey("test2", UnityEngine.KeyCode.Mouse0)
-            );
-
+        keys = GameObject.FindObjectOfType<InputManager>().SaveInputs();
         sound = new Sound();
     }
 

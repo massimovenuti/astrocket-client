@@ -6,16 +6,15 @@ class SaveManager
 
     private static string _filename = @"/settings.json";
 
-    public static void Save(GeneralSettings generalSettings)
+    public static void Save()
     {
-        string s = generalSettings.toSaveItem();
+        string s = (new GeneralSettings()).toSaveItem();
         string path = Application.persistentDataPath + _filename;
 
         if (File.Exists(path))
             File.WriteAllText(path, string.Empty);
         else
             File.Create(path).Dispose();
-
         File.WriteAllText(path, s);
     }
 
