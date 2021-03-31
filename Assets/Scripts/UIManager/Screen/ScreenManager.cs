@@ -18,10 +18,8 @@ public class ScreenManager : MonoBehaviour
             {
                 goBackButton.onClick.AddListener(goToPreviousPage);
             }
-        } catch (Exception e)
-        {
-            // ¯\_(ツ)_/¯
         }
+        catch (Exception) { }
 
         try
         {
@@ -31,10 +29,7 @@ public class ScreenManager : MonoBehaviour
                 exitButton.onClick.AddListener(exitGame);
             }
         }
-        catch (Exception e)
-        {
-            // ¯\_(ツ)_/¯
-        }
+        catch (Exception) { }
     }
 
     protected void goToPage(GameObject page)

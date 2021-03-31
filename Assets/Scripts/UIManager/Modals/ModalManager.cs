@@ -5,16 +5,13 @@ using UnityEngine.UI;
 
 public class ModalManager : MonoBehaviour
 {
-    public string title;
-    public string content;
+    public Button[] modalButtons;
 
     void Start()
     {
         Button closeButton;
         closeButton = transform.Find("CloseButton").GetComponent<Button>();
         closeButton.onClick.AddListener(hide);
-        setTitleValue(title);
-        setContentValue(content);
     }
 
     protected void setTitleValue(string newTitle)
@@ -35,10 +32,8 @@ public class ModalManager : MonoBehaviour
         {
             textElement = transform.Find(elementName).GetComponent<TMP_Text>();
             textElement.text = newValue;
-        } catch(Exception e)
-        {
-            // ¯\_(ツ)_/¯
         }
+        catch (Exception) { }
     }
 
     protected void hide()
