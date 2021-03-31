@@ -18,6 +18,7 @@ TagManager:
   - Mine
   - Enemy
   - HeavyLaser
+  - HomingMissile
   layers:
   - Default
   - TransparentFX

@@ -17,12 +17,11 @@ public class PlayerReturnToBattle : NetworkBehaviour
     private Color _tmpAlpha;
     private Color _initialAlpha;
 
-    [SyncVar]
+    [SyncVar(hook = "OnTimerChange")]
     private float _timer;
 
-    [SyncVar]
+    [SyncVar(hook = "OnTriggerChange")]
     private bool _trigger = false;
-
 
     private readonly float _alphaFactor = 15f;
     private readonly float _initialTimer = 10f;
@@ -30,8 +29,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
 
     private void Awake( )
     {
-        //_player = GameObject.FindGameObjectsWithTag("Player").First();
-
         //_UI = GameObject.Find(RTBManagerName);
         Debug.Assert(_UI != null);
         // We can use public strings here if necessary (I find it overkill though)
@@ -50,66 +47,69 @@ public class PlayerReturnToBattle : NetworkBehaviour
         Reset();
     }
 
-    private void Update( )
-    {
-        if (!isServer && !isLocalPlayer)
-        {
-            return;
-        }
-
-        if (_trigger)
-        {
-            if (isLocalPlayer)
-            {
-                _timerText.text = _timer.ToString("F1");
-            }
-
-            if (_timer <= 0 && _trigger)
-            {
-                if (isServer)
-                {
-                    Reset();
-                    PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
-                    ph.Revive();
-                }
-            }
-            else
-            {
-                if (isServer)
-                {
-                    _timer = (_timer == 0) ? _timer : _timer - Time.deltaTime;
-                }
-                if (isLocalPlayer)
-                {
-                    _tmpAlpha.a = _initialAlpha.a + (_initialTimer - _timer) / _alphaFactor;
-                    _background.color = _tmpAlpha;
-                }
-            }
-            if (isLocalPlayer)
-            {
-                CalcIndicator();
-            }
-        }
-        else
-        {
-            if (_timer <= 10f)
-            {
-                if (isServer)
-                {
-                    _timer += Time.deltaTime;
-                    _timer = (_timer > 10f) ? 10f : _timer;
-                }
-            }
-        }
-    }
-
-    [Client]
+    [ClientCallback]
     private void OnEnable( )
     {
         if (isLocalPlayer)
         {
             _UI.SetActive(false);
             _background.color = _initialAlpha;
+        }
+    }
+
+    [ClientCallback]
+    private void OnTriggerChange(bool oldValue, bool newValue)
+    {
+        if (isLocalPlayer)
+        {
+            _UI.SetActive(newValue);
+            if (newValue == false)
+            {
+                _background.color = _initialAlpha;
+            }
+        }
+    }
+
+    [ClientCallback]
+    private void OnTimerChange(float oldValue, float newValue)
+    {
+        if (isLocalPlayer)
+        {
+            _timerText.text = newValue.ToString("F1");
+            _tmpAlpha.a = _initialAlpha.a + (_initialTimer - newValue) / _alphaFactor;
+            _background.color = _tmpAlpha;
+        }
+    }
+
+    private void Update( )
+    {
+        if (_trigger)
+        {
+            if (isServer)
+            {
+                if (_timer <= 0 && _trigger)
+                {
+                    Reset();
+                    PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
+                    ph.Revive();
+                }
+                else
+                {
+                    _timer = (_timer == 0) ? _timer : _timer - Time.deltaTime;
+                }
+            }
+            else
+            {
+                CalcIndicator();
+            }
+        }
+        else
+        {
+            if (isServer && _timer <= 10f)
+            {
+                _timer += Time.deltaTime;
+                _timer = (_timer > 10f) ? 10f : _timer;
+            }
         }
     }
 
@@ -126,7 +126,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
         if (intruder.CompareTag("WarningBorder"))
         {
             _trigger = false;
-            RpcEnterMap();
         }
     }
 
@@ -136,28 +135,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
         if (intruder.CompareTag("WarningBorder"))
         {
             _trigger = true;
-            RpcExitMap();
-        }
-    }
-
-    [TargetRpc]
-    private void RpcEnterMap()
-    {
-        if (isLocalPlayer)
-        {
-            _trigger = false;
-            _UI.SetActive(false);
-            _background.color = _initialAlpha;
-        }
-    }
-
-    [TargetRpc]
-    private void RpcExitMap( )
-    {
-        if (isLocalPlayer)
-        {
-            _trigger = true;
-            _UI.SetActive(true);
         }
     }
 

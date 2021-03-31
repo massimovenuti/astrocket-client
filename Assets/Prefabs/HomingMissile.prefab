@@ -14,12 +14,14 @@ GameObject:
   - component: {fileID: 5350368709918465846}
   - component: {fileID: 5381171238540122467}
   - component: {fileID: 173638609402284761}
-  - component: {fileID: -7361269946305285233}
   - component: {fileID: 6430314983246353889}
   - component: {fileID: 8524971660866423217}
+  - component: {fileID: -7361269946305285233}
+  - component: {fileID: 7947201341934980998}
+  - component: {fileID: 3461167854935056661}
   m_Layer: 0
   m_Name: HomingMissile
-  m_TagString: Bullet
+  m_TagString: HomingMissile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,13 +33,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6397604834857263136}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.11623, y: 0.37344, z: 0.1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.7}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4802536341857236911
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -93,7 +95,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6397604834857263136}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -220,22 +222,6 @@ TrailRenderer:
   m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &-7361269946305285233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6397604834857263136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d763baf25de88b140afa3a5d3120841e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BulletStorage: {fileID: 0}
-  PlayerParent: {fileID: 0}
-  RealPlayer: {fileID: 0}
-  targetTransform: {fileID: 0}
 --- !u!114 &6430314983246353889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,3 +256,58 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-7361269946305285233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397604834857263136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763baf25de88b140afa3a5d3120841e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  RealPlayer: {fileID: 0}
+  targetTransform: {fileID: 0}
+--- !u!114 &7947201341934980998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397604834857263136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b5e57456cd8af4a8afc85fc7bb7422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  destroyAfter: 5
+  _speed: 0
+  ownerId: 0
+--- !u!114 &3461167854935056661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397604834857263136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 850105e2ee4d9a64c8c6bd4291343f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
+    type: 3}
+  medikit: {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
+  akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
+  shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
+  bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
+  heavy: {fileID: 3806403625804872244, guid: 7ccb66cd4b5d56d449efa95a16798a47, type: 3}
+  homing: {fileID: 9058780976217022324, guid: 6d5f06eb3240f2346846def4c190f747, type: 3}

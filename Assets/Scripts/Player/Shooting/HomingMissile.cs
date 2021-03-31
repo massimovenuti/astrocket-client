@@ -1,19 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class HomingMissileLifeTime : MonoBehaviour
+public class HomingMissile : NetworkBehaviour
 {
-
-    public GameObject BulletStorage;
-    public GameObject PlayerParent;
     public GameObject RealPlayer;
 
     private GameObject target;
     public Transform targetTransform;
     private Rigidbody _rb;
     private float _rotateMissileSpeed = 5f;
-    private float _force = 20f;
+    private float _speed = 20f;
     Vector3 direction;
 
     GameObject[] tblTargets;
@@ -21,15 +19,11 @@ public class HomingMissileLifeTime : MonoBehaviour
     // TODO: change value
     float threshold = 15f;
 
-    /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
-    void Start( )
+    private uint _ownerId;
+
+    public override void OnStartServer( )
     {
-        // on récupère le joueur ayant tiré le missile
-        BulletStorage = this.transform.parent.gameObject;
-        PlayerParent = BulletStorage.gameObject.transform.parent.gameObject;
-        RealPlayer = PlayerParent.gameObject.transform.Find("Player").gameObject;
+        _ownerId = GetComponent<Ammo>().ownerId;
 
         _rb = GetComponent<Rigidbody>();
 
@@ -37,11 +31,12 @@ public class HomingMissileLifeTime : MonoBehaviour
         target = ClosestEnenmy();
 
         if (target != null)
+        {
             targetTransform = target.GetComponent<Transform>();
-
-        Destroy(gameObject, 5);
+        }
     }
 
+    [ServerCallback]
     void FixedUpdate( )
     {
         // si on a une cible proche du joueur, on modifie
@@ -50,38 +45,54 @@ public class HomingMissileLifeTime : MonoBehaviour
         {
             direction = targetTransform.position - _rb.position;
             direction.Normalize();
-            Vector3 rotationAmount = Vector3.Cross(transform.up, direction);
+            Vector3 rotationAmount = Vector3.Cross(transform.forward, direction);
             _rb.angularVelocity = rotationAmount * _rotateMissileSpeed;
-            _rb.velocity = transform.up * _force;
+            _rb.velocity = transform.forward * _speed;
         }
-        // sinon il va tout droit
         else
         {
-            _rb.velocity = transform.up * _force;
+            _rb.velocity = transform.forward * _speed;
         }
-
-        
     }
 
     /// <summary>
     /// Trouve l'ennemi le plus proche et devient la cible du homing missile
     /// </summary>
+    [Server]
     private GameObject ClosestEnenmy( )
     {
         tblTargets = GameObject.FindGameObjectsWithTag("Player");
 
-        if ((tblTargets.Length == 0) || (tblTargets.Length == 1 && tblTargets[0] == RealPlayer))
+        //Debug.Log("tblTargets.Length : " + tblTargets.Length);
+
+        if (tblTargets.Length <= 1)
+        {
             return null;
+        }
 
         GameObject Truetarget = null;
 
         Vector3 targetDistance;
 
+        //Debug.Log("tblTargets[0].GetComponent<NetworkIdentity>().netId == _ownerId : " + (tblTargets[0].GetComponent<NetworkIdentity>().netId == _ownerId));
         // pour éviter que le joueur ne se cible lui-même
-        if (tblTargets[0] == RealPlayer)
+        if (tblTargets[0].GetComponent<NetworkIdentity>().netId == _ownerId)
+        {
             targetDistance = tblTargets[1].transform.position;
+        }
         else
+        {
             targetDistance = tblTargets[0].transform.position;
+        }
+
+        foreach (GameObject targets in tblTargets)
+        {
+            if (targets.GetComponent<NetworkIdentity>().netId == _ownerId)
+            {
+                RealPlayer = targets;
+                //Debug.Log("RealPlayer : " + RealPlayer);
+            }
+        }
 
         foreach (GameObject targets in tblTargets)
         {
@@ -97,6 +108,7 @@ public class HomingMissileLifeTime : MonoBehaviour
             }
         }
 
+        //Debug.Log("TrueTarget : " + Truetarget);
         return Truetarget;
     }
 
@@ -104,10 +116,13 @@ public class HomingMissileLifeTime : MonoBehaviour
     /// Test s'il y a des ennemis proches.
     /// Si la distance entre un ennemi et le vaiseau est supérieur au seuil, alors il n'est pas proche
     /// </summary>
+    [Server]
     private bool IsCloseEnemy(GameObject Closest)
     {
         if (Vector3.Distance(Closest.transform.position, RealPlayer.transform.position) <= threshold)
+        {
             return true;
+        }
 
         return false;
     }

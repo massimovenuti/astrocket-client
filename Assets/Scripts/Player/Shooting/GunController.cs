@@ -66,11 +66,7 @@ public class GunController : NetworkBehaviour
 
         if (isServer)
         {
-            _akimbo = false;
-            _mitraillette = false;
-            _bazooka = false;
-            _homing = false;
-            _heavy = false;
+            _akimbo = _mitraillette = _bazooka = _homing = _heavy = false;
         }
 
         _refShootRate = shootRate;
@@ -167,12 +163,12 @@ public class GunController : NetworkBehaviour
     [Server]
     private void ShootHomingMissile()
     {
-        Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
-        GameObject go = (GameObject)Instantiate(homingMissile, _barrel.transform.position, rot);
+        GameObject go = (GameObject)Instantiate(homingMissile, _barrel.transform.position, _barrel.transform.rotation);
 
+        go.GetComponent<Ammo>().ownerId = netId;
         go.transform.parent = _bulletSpawn.transform;
 
-        _lastShootingTimeRef = Time.time + shootRate;
+        NetworkServer.Spawn(go);
     }
 
     /// <summary>
@@ -181,12 +177,11 @@ public class GunController : NetworkBehaviour
     [Server]
     private void ShootHeavyLaser( )
     {
-        //Quaternion rot = _barrel.transform.rotation * Quaternion.Euler(90, 0, 0);
         GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
 
         Vector3 bulletScale = bullet.transform.localScale;
 
-        go.transform.localScale = new Vector3(bulletScale.x * 3f, bulletScale.y * 3f, bulletScale.z * 3f);
+        go.transform.localScale = new Vector3(bulletScale.x * 3f, bulletScale.y * 3f, bulletScale.z);
 
         go.GetComponent<MeshRenderer>().material = bulletMaterial;
         go.GetComponent<TrailRenderer>().material = bulletMaterial;

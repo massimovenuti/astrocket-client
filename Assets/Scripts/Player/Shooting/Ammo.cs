@@ -14,7 +14,6 @@ public class Ammo : NetworkBehaviour
     [SyncVar]
     public uint ownerId;
 
-    [ServerCallback]
     public override void OnStartServer( )
     {
         Invoke(nameof(DestroySelf), destroyAfter);

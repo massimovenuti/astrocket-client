@@ -27,6 +27,7 @@ public class PlayerHealth : NetworkBehaviour
     private int _damageBullet = 20;
     private int _damageRocket = 40;
     private int _damageHeavyLaser = 40;
+    private int _damageHomingMissile = 20;
     private int _damageExplosion = 30;
     private int _damageMine = 50;
     private int _damageValue;
@@ -67,14 +68,12 @@ public class PlayerHealth : NetworkBehaviour
         // pour accéder plus tard au drone du joueur
         //accessDrone = this.GetComponent<PlayerDrone>();
 
-        /*
-        if (isLocalPlayer)
-        {
-            // récupère l'UI du power-up jammer et la désactive
-            ui = GameObject.Find("PowerUpUI");
-            ui.SetActive(false);
-        }
-        */
+        //if (isLocalPlayer)
+        //{
+        //    // récupère l'UI du power-up jammer et la désactive
+        //    ui = GameObject.Find("PowerUpUI");
+        //    ui.SetActive(false);
+        //}
     }
 
     [ClientCallback]
@@ -83,7 +82,7 @@ public class PlayerHealth : NetworkBehaviour
         shield.SetActive(newValue);
     }
 
-    [Client]
+    [ClientCallback]
     private void OnEnable( )
     {
         shield.SetActive(false);
@@ -150,6 +149,13 @@ public class PlayerHealth : NetworkBehaviour
         else if (other.CompareTag("HeavyLaser") && go.GetComponent<Ammo>().ownerId != netId)
         {
             _damageValue = _damageHeavyLaser;
+            Damage(_damageValue);
+            NetworkServer.Destroy(go);
+        }
+        // touché par un homing missile (power-up)
+        else if (other.CompareTag("HomingMissile") && go.GetComponent<Ammo>().ownerId != netId)
+        {
+            _damageValue = _damageHomingMissile;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
         }

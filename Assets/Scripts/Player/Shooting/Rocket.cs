@@ -16,9 +16,6 @@ public class Rocket : NetworkBehaviour
 
     private uint _ownerId;
 
-    /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
     public override void OnStartServer()
     {
         this._ownerId = GetComponent<Ammo>().ownerId;

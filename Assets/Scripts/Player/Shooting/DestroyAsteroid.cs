@@ -8,15 +8,15 @@ public class DestroyAsteroid : NetworkBehaviour
 {
     [SerializeField] GameObject _asteroidPrefab;
 
-    private GameObject _asteroidToDestroy;
 
-    public GameObject medikit;
-    public GameObject akimbo;
-    public GameObject shield;
-    public GameObject bazooka;
-    public GameObject jammer;
-    public GameObject heavy;
-    public GameObject drone;
+    [SerializeField] GameObject medikit;
+    [SerializeField] GameObject akimbo;
+    [SerializeField] GameObject shield;
+    [SerializeField] GameObject bazooka;
+    [SerializeField] GameObject heavy;
+    [SerializeField] GameObject homing;
+
+    private GameObject _asteroidToDestroy;
 
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
@@ -111,15 +111,14 @@ public class DestroyAsteroid : NetworkBehaviour
             else if (drop > 56 && drop <= 75)
                 InstantiatePowerUp(heavy);
             else if (drop > 76 && drop <= 85)
-                //InstantiatePowerUp(drone);
-                Debug.Log("Not Net implemented yet...");
+                InstantiatePowerUp(homing);
             else if (drop > 86 && drop <= 92)
                 InstantiatePowerUp(akimbo);
             else if (drop > 93 && drop <= 99)
                 InstantiatePowerUp(bazooka);
             else
                 //InstantiatePowerUp(jammer);
-                Debug.Log("Le chef est pas sur");
+                Debug.Log("Jammer");
         }
 
         NetworkServer.Destroy(_asteroidToDestroy);
