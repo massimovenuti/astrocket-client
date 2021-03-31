@@ -145,7 +145,6 @@ public class PlayerHealth : NetworkBehaviour
         {
             _damageValue = _damageRocket;
             Damage(_damageValue);
-            NetworkServer.Destroy(go);
         }
         // touché par un heavy laser (power-up)
         else if (other.CompareTag("HeavyLaser") && go.GetComponent<Ammo>().ownerId != netId)

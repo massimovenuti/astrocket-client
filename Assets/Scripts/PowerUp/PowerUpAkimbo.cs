@@ -29,7 +29,6 @@ public class PowerUpAkimbo : NetworkBehaviour
     [Server]
     private void DestroySelf( )
     {
-        Debug.Log("Destroy");
         NetworkServer.Destroy(this.gameObject);
     }
 }

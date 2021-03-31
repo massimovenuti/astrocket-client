@@ -257,6 +257,7 @@ MonoBehaviour:
   shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}
   bazooka: {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
   jammer: {fileID: 6697394780005706805, guid: 24f5ac1c191bdca499b6a89e601e09d3, type: 3}
+  heavy: {fileID: 3806403625804872244, guid: 7ccb66cd4b5d56d449efa95a16798a47, type: 3}
   drone: {fileID: 3371782148132494092, guid: 16b35f60fe4bfc145a2efd6f36b4bab2, type: 3}
 --- !u!114 &4408489740172959938
 MonoBehaviour:
