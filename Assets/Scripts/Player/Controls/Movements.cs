@@ -28,8 +28,8 @@ public class Movements : NetworkBehaviour
     // Start is called before the first frame update
     private void Start( )
     {
-        Vector2 hotSpot = new Vector2(crosshair.width / 2f, crosshair.height / 2f);
-        Cursor.SetCursor(crosshair, hotSpot, CursorMode.Auto);
+        //Vector2 hotSpot = new Vector2(crosshair.width / 2f, crosshair.height / 2f);
+        //Cursor.SetCursor(crosshair, hotSpot, CursorMode.Auto);
 
         flash = false;
         slow = false;
