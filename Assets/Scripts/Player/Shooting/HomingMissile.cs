@@ -11,7 +11,7 @@ public class HomingMissile : NetworkBehaviour
     public Transform targetTransform;
     private Rigidbody _rb;
     private float _rotateMissileSpeed = 5f;
-    private float _speed = 20f;
+    private float _speed = 60f;
     Vector3 direction;
 
     GameObject[] tblTargets;
@@ -47,7 +47,7 @@ public class HomingMissile : NetworkBehaviour
             direction.Normalize();
             Vector3 rotationAmount = Vector3.Cross(transform.forward, direction);
             _rb.angularVelocity = rotationAmount * _rotateMissileSpeed;
-            _rb.velocity = transform.forward * _speed;
+            _rb.velocity = transform.forward * _speed / 3;
         }
         else
         {

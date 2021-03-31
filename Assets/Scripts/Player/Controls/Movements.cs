@@ -99,6 +99,15 @@ public class Movements : NetworkBehaviour
     }
 #endif
 
+    [TargetRpc]
+    public void RpcResetVelocity( )
+    {
+        if (isLocalPlayer)
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
+
     /// <summary>
     /// Augmente la vitesse du vaiseau
     /// </summary>

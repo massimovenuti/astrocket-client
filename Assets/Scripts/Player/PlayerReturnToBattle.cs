@@ -90,8 +90,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
                 if (_timer <= 0 && _trigger)
                 {
                     Reset();
-                    PlayerHealth ph = gameObject.GetComponent<PlayerHealth>();
-                    ph.Revive();
+                    GetComponent<PlayerSpawn>().Respawn();
                 }
                 else
                 {
@@ -135,6 +134,11 @@ public class PlayerReturnToBattle : NetworkBehaviour
         if (intruder.CompareTag("WarningBorder"))
         {
             _trigger = true;
+        }
+        if (intruder.CompareTag("AbsoluteBorder"))
+        {
+            Reset();
+            GetComponent<PlayerSpawn>().Respawn();
         }
     }
 

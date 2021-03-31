@@ -35,18 +35,18 @@ public class PlayerHealth : NetworkBehaviour
     [SyncVar(hook="OnShieldChange")]
     public bool hasShield;
 
+    [SyncVar(hook = "OnHealthChange")]
+    public int health;
+
     private bool _isFantome;
     private bool _isHacked;
-
-    [SyncVar(hook="OnHealthChange")]
-    public int health;
 
     private bool isDead = false;
 
     private void Awake( )
     {
         // récupère le bouclier du joueur
-        shield = GameObject.Find("Shield");
+        shield = transform.Find("Shield").gameObject;
 
         slider.maxValue = maxPlayerHealth;
         slider.value = maxPlayerHealth;
@@ -174,55 +174,16 @@ public class PlayerHealth : NetworkBehaviour
 
         if (isDead)
         {
-            Revive();
-        }
-    }
-
-    [ServerCallback]
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("AbsoluteBorder"))
-        {
-            Revive();
+            GetComponent<PlayerSpawn>().Respawn();
         }
     }
 
     [Server]
     public void Revive( )
     {
-        GetComponent<BoxCollider>().enabled = false;
-
-        // réinitialise l'inertie
-        RpcResetVelocity();
-
-        // réinitialise la vie, et indique que
-        // le joueur est à nouveau vivant
+        // réinitialise la vie, et indique que le joueur est à nouveau vivant
         this.health = this.maxPlayerHealth;
         this.isDead = false;
-        DesactivateShield();
-
-        // réinitialise les power-ups
-        this.GetComponent<GunController>().ResetPowerUps();
-
-        //this.GetComponent<Movements>().ResetPowerUps();
-        //this.GetComponent<PlayerDrone>().DesactivateDrone();
-        //DesactivateShield();
-
-        //if (_isFantome)
-        //{
-        //    this.GetComponent<BoxCollider>().enabled = true;
-        //    _isFantome = false;
-        //}
-
-        //if (_isHacked)
-        //{
-        //    ui.SetActive(false);
-        //    _isHacked = false;
-        //}
-
-        // le joueur est mort, un script va le
-        // désactiver pendant 2 secondes
-        GetComponent<PlayerRespawn>().Respawn();
     }
 
     [ClientCallback]
@@ -233,18 +194,6 @@ public class PlayerHealth : NetworkBehaviour
             slider.value = newValue;
         }
     }
-
-    /*
-    private void OnCollisionEnter(Collider collision)
-    {
-        // collision avec un joueur
-        if (collision.gameObject.tag == "Player")
-        {
-            _damageValue = _damageCollisionPlayer;
-            Damage(_damageValue);
-        }
-    }
-    */
 
     /// <summary>
     /// Fonction appelant Damage quand le
@@ -257,7 +206,7 @@ public class PlayerHealth : NetworkBehaviour
         Damage(_damageValue);
         if (isDead)
         {
-            Revive();
+            GetComponent<PlayerSpawn>().Respawn();
         }
     }
 
@@ -334,14 +283,14 @@ public class PlayerHealth : NetworkBehaviour
     private IEnumerator TimerJammer( )
     {
         // TODO: change value
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(2f);
 
         ui.SetActive(false);
         _isHacked = false;
     }
-    
+
     [TargetRpc]
-    private void RpcResetVelocity()
+    private void RpcResetVelocity( )
     {
         if (isLocalPlayer)
         {

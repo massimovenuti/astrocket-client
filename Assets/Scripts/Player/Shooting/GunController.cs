@@ -33,6 +33,8 @@ public class GunController : NetworkBehaviour
 
     private float _lastShootingTimeRef;
 
+    public bool canShoot;
+
     private void Start( )
     {
         _barrel = transform.gameObject.FindObjectByName(ShootingFrom);
@@ -91,6 +93,11 @@ public class GunController : NetworkBehaviour
     [Command]
     private void CmdShoot()
     {
+        if (!canShoot)
+        {
+            return;
+        }
+
         if (_akimbo)
             ShootAkimbo();
         else if (_bazooka)
