@@ -19,7 +19,7 @@ public class ScreenManager : MonoBehaviour
                 goBackButton.onClick.AddListener(goToPreviousPage);
             }
         }
-        catch (Exception) { }
+        catch { }
 
         try
         {
@@ -29,7 +29,7 @@ public class ScreenManager : MonoBehaviour
                 exitButton.onClick.AddListener(exitGame);
             }
         }
-        catch (Exception) { }
+        catch { }
     }
 
     protected void goToPage(GameObject page)

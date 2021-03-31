@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using API.Auth;
 
 public class AuthScreenManager : ScreenManager
 {
@@ -8,6 +9,8 @@ public class AuthScreenManager : ScreenManager
     private GameObject _signupForm;
     private Button _loginToggleButton;
     private Button _signupToggleButton;
+
+    private AuthAPICall _auth = new AuthAPICall();
 
     new void Start()
     {
@@ -59,7 +62,9 @@ public class AuthScreenManager : ScreenManager
 
         if (user != null && mdp != null)
         {
-            if (true) // TODO : Login API call -> if login succeeded
+            UserToken tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
+            Debug.Log($"{_auth.ErrorMessage}");
+            if (user.text == "admin" || _auth.ErrorMessage.IsOk) // TODO : Delete the security breach when done testing
             {
                 goToNextPage();
             }
@@ -79,7 +84,9 @@ public class AuthScreenManager : ScreenManager
         { 
             if (mdp.text == mdpConf.text)
             {
-                if (true) // TODO : Signup API call -> if signup succeeded & auth token received
+                UserToken tok = _auth.PostAddUser(new UserRegister() { Name = user.text, Email = email.text, Password = mdp.text });
+                Debug.Log($"{_auth.ErrorMessage}");
+                if (_auth.ErrorMessage.IsOk) // TODO : Signup API call -> if signup succeeded & auth token received
                 {
                     goToNextPage();
                 }

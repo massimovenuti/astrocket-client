@@ -18,6 +18,8 @@ namespace API
             [APICallFunction.NetworkError] = $"There has been a network error, please check your internet connection.",
         };
 
+        public bool IsOk { get => (Status == HttpStatusCode.OK); }
+
         public HttpStatusCode Status { get => _status; private set { _status = value; }}
         public ErrorMessage(APICallFunction aAPICallFunction, HttpStatusCode aCode)
         {
