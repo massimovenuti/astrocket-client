@@ -35,6 +35,8 @@ public class DestroyAsteroid : NetworkBehaviour
     public void AsteroidDestruction(GameObject asteroidToDestroy)
     {
         _asteroidToDestroy = asteroidToDestroy;
+        _asteroidToDestroy.GetComponent<Collider>().enabled = false;
+
         if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
         {
             DropRemains();
@@ -56,27 +58,27 @@ public class DestroyAsteroid : NetworkBehaviour
         float angle;
         Vector3 angleAxis;
         (Quaternion.identity * Quaternion.Inverse(_asteroidToDestroy.transform.rotation)).ToAngleAxis(out angle, out angleAxis);
-        if (Vector3.Angle(Vector3.up, angleAxis) > 90f)
+        if (Vector3.Angle(Vector3.up, angleAxis) < 90f)
         {
             angle = -angle;
         }
         angle = Mathf.DeltaAngle(0f, angle);
-        angle *= -1;
 
+        /*
         Vector3 spawnPoint1 = new Vector3(-newScale.x / 16, 0, 0);
         Vector3 spawnPoint2 = new Vector3( newScale.x / 16, 0, 0);
+        */
 
-        spawnPoint1 = Quaternion.Euler(0, angle, 0) * spawnPoint1 + origin;
-        spawnPoint2 = Quaternion.Euler(0, angle, 0) * spawnPoint2 + origin;
+        Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x / 16, 0, 0) + origin;
+        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3( newScale.x / 16, 0, 0) + origin;
 
         Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
         Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
 
-        int r1 = Random.Range(-10, -50);
-        int r2 = Random.Range(10, 50);
+        NetworkServer.Destroy(_asteroidToDestroy);
 
-        parLa *= Quaternion.Euler(Vector3.up * r1);
-        nonMaisParLa *= Quaternion.Euler(Vector3.up * r2);
+        parLa *= Quaternion.Euler(Vector3.up * Random.Range(-10, -50));
+        nonMaisParLa *= Quaternion.Euler(Vector3.up * Random.Range(10, 50));
 
         GameObject remain1 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint1, parLa);
         GameObject remain2 = (GameObject)Instantiate(_asteroidPrefab, spawnPoint2, nonMaisParLa);
@@ -86,8 +88,6 @@ public class DestroyAsteroid : NetworkBehaviour
 
         remain2.transform.localScale = newScale;
         remain2.GetComponent<Asteroid>().SetSize(newSize);
-
-        NetworkServer.Destroy(_asteroidToDestroy);
 
         NetworkServer.Spawn(remain1);
         NetworkServer.Spawn(remain2);
