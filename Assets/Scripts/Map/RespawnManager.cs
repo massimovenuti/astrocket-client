@@ -133,25 +133,6 @@ public class RespawnManager : MonoBehaviour
         return go.transform.position;
     }
 
-    // Fonction désactivant le joueur et lançant
-    // le compte à rebours avant la réactivation
-    public void SwitchPlayerActivation(GameObject Player)
-    {
-        Player.SetActive(false);
-        StartCoroutine(WaitForReactivation(Player));
-    }
-
-    // Fonction attendant 2 secondes avant de réactiver le joueur
-    private IEnumerator WaitForReactivation(GameObject Player)
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(2);
-
-        // le joueur est téléporté à son point de réapparition
-        Player.transform.position = GetSafeRespawnPoint();
-        Player.SetActive(true);
-    }
-
     private void OnDrawGizmos( )
     {
         if (!Application.isPlaying) return;

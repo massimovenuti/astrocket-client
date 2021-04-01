@@ -5,6 +5,7 @@ using Mirror;
 
 public class PlayerSpawn : NetworkBehaviour
 {
+    // Protection au premier spawn
     public override void OnStartServer( )
     {
         Protect(true);
@@ -21,24 +22,13 @@ public class PlayerSpawn : NetworkBehaviour
         GetComponent<PlayerHealth>().Revive();
         GetComponent<PlayerHealth>().DesactivateShield();
         GetComponent<GunController>().ResetPowerUps();
-
-        //this.GetComponent<Movements>().ResetPowerUps();
-        //this.GetComponent<PlayerDrone>().DesactivateDrone();
+        //GetComponent<Movements>().ResetPowerUps();
+        //GetComponent<PlayerDrone>().DesactivateDrone();
 
         // Désactive le joueur chez tous les clients
         RpcActive(false);
 
-        // Indique au joueur de respawn
-        RpcRespawn();
-    }
-
-    [ClientRpc]
-    private void RpcActive(bool active)
-    {
-        if (!isLocalPlayer && !isServer)
-        {
-            gameObject.SetActive(active);
-        }
+        StartCoroutine(WaitForReactivation());
     }
 
     [ClientCallback]
@@ -46,14 +36,21 @@ public class PlayerSpawn : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            CmdRespawn();
+            // Indique au joueur de se TP à un point de spawn
+            GameObject handler = GameObject.Find("Map");
+            transform.position = handler.GetComponent<RespawnManager>().GetSafeRespawnPoint();
         }
     }
 
-    [Command]
-    private void CmdRespawn()
+    // Fonction attendant 2 secondes avant de réactiver le joueur
+    [Server]
+    private IEnumerator WaitForReactivation()
     {
+        // TODO: change value
+        yield return new WaitForSeconds(2f);
+        // Active le joueur chez tous les clients
         RpcActive(true);
+        // Protection au spawn
         StartCoroutine(ProtectedOnSpawn());
     }
 
@@ -64,26 +61,19 @@ public class PlayerSpawn : NetworkBehaviour
         Protect(false);
     }
 
+    [ClientRpc]
+    private void RpcActive(bool active)
+    {
+        if (!isServer)
+        {
+            gameObject.SetActive(active);
+        }
+    }
+
+    [Server]
     private void Protect(bool protection)
     {
         GetComponent<BoxCollider>().enabled = !protection;
         GetComponent<GunController>().canShoot = !protection;
-    }
-
-    [Server]
-    private IEnumerator WaitForProtection( )
-    {
-        yield return new WaitForSeconds(2f);
-        Protect(false);
-    }
-
-    [TargetRpc]
-    private void RpcRespawn()
-    {
-        if (isLocalPlayer)
-        {
-            GameObject handler = GameObject.Find("Map");
-            handler.SendMessage("SwitchPlayerActivation", gameObject);
-        }
     }
 }
