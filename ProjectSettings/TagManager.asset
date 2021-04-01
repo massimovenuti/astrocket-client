@@ -14,6 +14,7 @@ TagManager:
   - WarningBorder
   - AbsoluteBorder
   - SmoothBorder
+  - PlayerAnimation
   layers:
   - Default
   - TransparentFX

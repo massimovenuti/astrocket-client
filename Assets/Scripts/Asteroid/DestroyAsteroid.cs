@@ -5,6 +5,8 @@ using System.Linq;
 
 public class DestroyAsteroid : MonoBehaviour, IScoreable
 {
+    private Animator PlayerController;
+
     public string AsteroidStorageTagName = "AsteroidStorage";
     public Transform spawningRemains;
 
@@ -14,7 +16,8 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     public long Score { get; set; }
 
     private GameObject _asteroidStorage;
-    private Rigidbody _rb;
+    private Rigidbody _rb;    
+
     private void Awake( )
     {
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
@@ -150,6 +153,13 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         Destroy(this.gameObject);
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
         ph.playerHealth.Damage(25);
+
+        PlayerController = player.FindObjectByName("SpaceFighter").GetComponent<Animator>();
+
+        PlayerController.SetTrigger("TriggerHitAsteroid");
+
+        PlayerController.SetTrigger("TriggerIdle");
+
         Debug.Log("Meow've been hit :'(");
     }
     public void addScore(string token, long score, ScoreManager scm)
