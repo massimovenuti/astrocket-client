@@ -13,7 +13,7 @@ public class Movements : MonoBehaviour
     private Plane _groundPlane;
 
     private Queue<float> _interpolation;
-    private int _frameNum = 4;
+    private int _frameNum = 6;
 
     private Animator PlayerController;
     GameObject _player;
@@ -49,6 +49,9 @@ public class Movements : MonoBehaviour
         
         _lastRotate.x = 1;
         _currRotate.x = 1;
+
+        _lastRotate.y = (int)_lastRotate.y;
+        _currRotate.y = (int)_currRotate.y;
 
         Vector3 crossP = Vector3.Cross(_lastRotate, _currRotate).normalized;
 
@@ -89,25 +92,6 @@ public class Movements : MonoBehaviour
                 }
             }
         }
-
-        /*
-        if (crossP.z < 0) //turns left _lastRotate.y - _currRotate.y >= 0.2
-        {
-            PlayerController.SetBool("BoolLeft", true);
-            PlayerController.SetBool("BoolRight", false);
-        }
-        else if (crossP.z > 0) //turn right _currRotate.y - _lastRotate.y >= 0.2
-        {
-            PlayerController.SetBool("BoolRight", true);
-            PlayerController.SetBool("BoolLeft", false);
-        }
-
-        else //idle
-        {
-            PlayerController.SetBool("BoolRight", false);
-            PlayerController.SetBool("BoolLeft", false);
-        }
-        */
 
         Debug.Log(_interpolation.ElementAt(0) + " " + _interpolation.ElementAt(1) + " " + _interpolation.ElementAt(2) + " " + _interpolation.ElementAt(3));
 
