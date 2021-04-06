@@ -32,7 +32,7 @@ public class PlayerHealth : NetworkBehaviour
     private int _damageMine = 50;
     private int _damageValue;
 
-    [SyncVar(hook="OnShieldChange")]
+    [SyncVar(hook = "OnShieldChange")]
     public bool hasShield;
 
     [SyncVar(hook = "OnHealthChange")]
@@ -101,7 +101,7 @@ public class PlayerHealth : NetworkBehaviour
         }
         else
         {
-            health -= damageValue/2;
+            health -= damageValue / 2;
             shieldDurability--;
             if (shieldDurability <= 0)
             {
@@ -174,6 +174,20 @@ public class PlayerHealth : NetworkBehaviour
 
         if (isDead)
         {
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject p in players)
+            {
+                if (p.GetComponent<NetworkIdentity>().netId == go.GetComponent<Ammo>().ownerId)
+                {
+                    p.GetComponent<PlayerScore>().addKill();
+                    break;
+                }
+            }
+
+            GetComponent<PlayerScore>().addDeath();
+
             GetComponent<PlayerSpawn>().Respawn();
         }
     }
@@ -189,7 +203,7 @@ public class PlayerHealth : NetworkBehaviour
     [ClientCallback]
     void OnHealthChange(int oldValue, int newValue)
     {
-        if(isLocalPlayer)
+        if (isLocalPlayer)
         {
             slider.value = newValue;
         }
@@ -200,7 +214,7 @@ public class PlayerHealth : NetworkBehaviour
     /// joueur est affecté par une explosion
     /// </summary>
     [Server]
-    public void ExplosionDamage()
+    public void ExplosionDamage( )
     {
         _damageValue = _damageExplosion;
         Damage(_damageValue);
@@ -214,7 +228,7 @@ public class PlayerHealth : NetworkBehaviour
     /// Fonction augmantant la vie du joueur
     /// </summary>
     [Server]
-    public void PowerUpMedikit()
+    public void PowerUpMedikit( )
     {
         Heal(_healValue);
     }
@@ -222,7 +236,7 @@ public class PlayerHealth : NetworkBehaviour
     /// <summary>
     /// Fonction activant le bouclier du joueur
     /// </summary>
-    public void PowerUpShield()
+    public void PowerUpShield( )
     {
         //if (accessDrone.hasDrone)
         //{

@@ -21,6 +21,7 @@ public class PowerUpMedikit : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<PlayerHealth>().PowerUpMedikit();
             NetworkServer.Destroy(this.gameObject);
         }

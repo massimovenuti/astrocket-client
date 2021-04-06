@@ -16,6 +16,8 @@ public class PowerUpJammer : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
+
             players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject player in players)
                 if (player != collider.gameObject)

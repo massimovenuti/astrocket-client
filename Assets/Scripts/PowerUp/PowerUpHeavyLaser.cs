@@ -21,6 +21,7 @@ public class PowerUpHeavyLaser : NetworkBehaviour
     {
         if (collider.CompareTag("Player"))
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<GunController>().PowerUpHeavyLaser();
             NetworkServer.Destroy(this.gameObject);
         }

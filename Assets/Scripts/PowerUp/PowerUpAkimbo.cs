@@ -21,6 +21,7 @@ public class PowerUpAkimbo : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<GunController>().PowerUpAkimbo();
             NetworkServer.Destroy(this.gameObject);
         }

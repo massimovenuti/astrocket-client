@@ -20,6 +20,7 @@ public class PowerUpHomingMissile : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<GunController>().PowerUpHomingMissile();
             NetworkServer.Destroy(this.gameObject);
         }

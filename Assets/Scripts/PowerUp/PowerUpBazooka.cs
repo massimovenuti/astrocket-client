@@ -21,6 +21,7 @@ public class PowerUpBazooka : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<GunController>().PowerUpBazooka();
             NetworkServer.Destroy(this.gameObject);
         }

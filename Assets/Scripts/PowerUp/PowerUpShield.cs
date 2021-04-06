@@ -21,6 +21,7 @@ public class PowerUpShield : NetworkBehaviour
     {
         if (collider.tag == "Player")
         {
+            collider.GetComponent<PlayerScore>().addPowerUP();
             collider.GetComponent<PlayerHealth>().PowerUpShield();
             NetworkServer.Destroy(this.gameObject);
         }

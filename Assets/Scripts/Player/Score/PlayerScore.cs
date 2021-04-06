@@ -2,36 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-/// <author>
-/// Joséphine Largent
-/// </author>
-
-/// <summary>
-/// Affichage du score sur l'écran
-/// </summary>
-
-public class PlayerScore : MonoBehaviour
+public class PlayerScore : NetworkBehaviour
 {
-    private Text textScore;
-    private ScoreManager observer;
-    private string _mockPlayerId = "id";
+    [SerializeField]
+    private int pointsKill;
+    [SerializeField]
+    private int pointsAsteroids;
+    [SerializeField]
+    private int pointsDeaths;
+    [SerializeField]
+    private int pointsPowerUps;
 
-    /// <summary>
-    /// Initialisation des objets
-    /// </summary>
-    void Start()
+    [SyncVar]
+    private int nbPoints;
+    [SyncVar]
+    private int nbKills;
+    [SyncVar]
+    private int nbAsteroids;
+    [SyncVar]
+    private int nbDeaths;
+    [SyncVar]
+    private int nbPowerUps;
+
+    [Server]
+    public void addKill( )
     {
-        observer = ScoreManager.Instance;
-        observer.AddPlayer(_mockPlayerId);
-        textScore = GetComponent<Text>();
+        nbKills++;
+        nbPoints += pointsKill;
     }
 
-    /// <summary>
-    /// Màj de l'UI score
-    /// </summary>
-    void Update()
+    [Server]
+    public void addAsteroid( )
     {
-        textScore.text = "Score: " + observer.Scores[_mockPlayerId];
+        nbAsteroids++;
+        nbPoints += pointsAsteroids;
+    }
+
+    [Server]
+    public void addDeath( )
+    {
+        nbDeaths++;
+        nbPoints += pointsDeaths;
+        nbPoints = (nbPoints < 0) ? 0 : nbPoints;
+    }
+
+    [Server]
+    public void addPowerUP()
+    {
+        nbPowerUps++;
+        nbPoints += pointsPowerUps;
     }
 }

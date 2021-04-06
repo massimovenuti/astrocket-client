@@ -23,6 +23,18 @@ public class DestroyAsteroid : NetworkBehaviour
     {
         if (other.CompareTag("Asteroid"))
         {
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject p in players)
+            {
+                if (p.GetComponent<NetworkIdentity>().netId == GetComponent<Ammo>().ownerId)
+                {
+                    p.GetComponent<PlayerScore>().addAsteroid();
+                    break;
+                }
+            }
+
             AsteroidDestruction(other.gameObject);
             if (!this.CompareTag("Rocket"))
             {
@@ -48,7 +60,7 @@ public class DestroyAsteroid : NetworkBehaviour
     }
 
     [Server]
-    private void DropRemains()
+    private void DropRemains( )
     {
         Vector3 origin = _asteroidToDestroy.transform.position;
 
@@ -70,7 +82,7 @@ public class DestroyAsteroid : NetworkBehaviour
         */
 
         Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x / 16, 0, 0) + origin;
-        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3( newScale.x / 16, 0, 0) + origin;
+        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3(newScale.x / 16, 0, 0) + origin;
 
         Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
         Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
@@ -94,7 +106,7 @@ public class DestroyAsteroid : NetworkBehaviour
     }
 
     [Server]
-    private void DropPowerUp()
+    private void DropPowerUp( )
     {
         // 1 chance sur 2 de faire apparaitre
         // un power-up
