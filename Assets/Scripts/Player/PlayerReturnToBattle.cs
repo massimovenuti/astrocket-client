@@ -10,7 +10,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
 
     [SerializeField] GameObject _UI;
 
-    private Image _indicator;
+    private Image _centerIndicator;
     private Image _background;
     private TextMeshProUGUI _timerText;
 
@@ -33,7 +33,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
         Debug.Assert(_UI != null);
         // We can use public strings here if necessary (I find it overkill though)
         _background = _UI.FindObjectByName("Background").GetComponent<Image>();
-        _indicator = _UI.FindObjectByName("CenterIndicator").GetComponent<Image>();
+        _centerIndicator = _UI.FindObjectByName("CenterIndicator").GetComponent<Image>();
         _timerText = _UI.FindObjectByName("TimerText").GetComponent<TextMeshProUGUI>();
 
         _initialAlpha = _background.color;
@@ -99,7 +99,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
             }
             else
             {
-                CalcIndicator();
+                CalcIndicator(_UI, gameObject.transform.position, Vector3.zero, _centerIndicator); // target the center of the map
             }
         }
         else
@@ -143,20 +143,19 @@ public class PlayerReturnToBattle : NetworkBehaviour
     }
 
     [Client]
-    private void CalcIndicator( )
+    public static void CalcIndicator(GameObject UI, Vector3 player, Vector3 target, Image indicator)
     {
-        float rotRadian = Mathf.Atan2(gameObject.transform.position.z, gameObject.transform.position.x);
-        float rot = Mathf.Rad2Deg * rotRadian;
-        _indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
+        Vector3 dir = target - player;
+        float rotRadian = Mathf.Atan2(dir.z, dir.x);
+        rotRadian += (rotRadian > 0f) ? -Mathf.PI : Mathf.PI;
+        float rot = rotRadian * Mathf.Rad2Deg;
+        indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
 
         Vector2 screenPos = Vector2.zero;
-        float a = _UI.GetComponent<RectTransform>().rect.width;
-        float b = _UI.GetComponent<RectTransform>().rect.height;
+        float a = UI.GetComponent<RectTransform>().rect.width;
+        float b = UI.GetComponent<RectTransform>().rect.height;
         a -= a / 8;
         b -= b / 8;
-
-        rot += (rot > 0f) ? 0f : 360f;
-        rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI;
 
         float rectAtan = Mathf.Atan2(b, a);
         float tanTheta = Mathf.Tan(rotRadian);
@@ -191,6 +190,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
             screenPos.y += yFactor * (b / 2);
         }
 
-        _indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
+        indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
     }
 }
