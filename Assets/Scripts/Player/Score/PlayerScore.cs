@@ -15,16 +15,16 @@ public class PlayerScore : NetworkBehaviour
     [SerializeField]
     private int pointsPowerUps;
 
-    [SyncVar]
-    private int nbPoints;
-    [SyncVar]
-    private int nbKills;
-    [SyncVar]
-    private int nbAsteroids;
-    [SyncVar]
-    private int nbDeaths;
-    [SyncVar]
-    private int nbPowerUps;
+    [SyncVar(hook = "updatePointsUi")]
+    public int nbPoints;
+    [SyncVar(hook = "updateKillsUi")]
+    public int nbKills;
+    [SyncVar(hook = "updateAsteroidsUi")]
+    public int nbAsteroids;
+    [SyncVar(hook = "updateDeathsUi")]
+    public int nbDeaths;
+    [SyncVar(hook = "updatePuUi")]
+    public int nbPowerUps;
 
     [Server]
     public void addKill( )
@@ -53,5 +53,40 @@ public class PlayerScore : NetworkBehaviour
     {
         nbPowerUps++;
         nbPoints += pointsPowerUps;
+    }
+
+    [Client]
+    void updatePointsUi(int oldValue, int newValue)
+    {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+        canvas.GetComponent<ScoreTabManager>().updateValue("Score", $"player_{netId}", newValue);
+    }
+
+    [Client]
+    void updateKillsUi(int oldValue, int newValue)
+    {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+        canvas.GetComponent<ScoreTabManager>().updateValue("Kills", $"player_{netId}", newValue);
+    }
+
+    [Client]
+    void updateDeathsUi(int oldValue, int newValue)
+    {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+        canvas.GetComponent<ScoreTabManager>().updateValue("Deaths", $"player_{netId}", newValue);
+    }
+
+    [Client]
+    void updateAsteroidsUi(int oldValue, int newValue)
+    {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+        canvas.GetComponent<ScoreTabManager>().updateValue("Asteroids", $"player_{netId}", newValue);
+    }
+
+    [Client]
+    void updatePuUi(int oldValue, int newValue)
+    {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+        canvas.GetComponent<ScoreTabManager>().updateValue("Power-ups", $"player_{netId}", newValue);
     }
 }

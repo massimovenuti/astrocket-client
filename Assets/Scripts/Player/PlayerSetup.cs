@@ -12,7 +12,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] Behaviour[] toDisable;
 
     // Start is called before the first frame update
-    void Start()
+    void Start( )
     {
         if (!isLocalPlayer)
         {
@@ -20,10 +20,29 @@ public class PlayerSetup : NetworkBehaviour
             {
                 obj.enabled = false;
             }
-        } else
+
+            foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
+                {
+                    p.GetComponentInChildren<ScoreTabManager>().addLigne(gameObject);
+                }
+            }
+        }
+        else
         {
             Button disconnectButton = transform.Find("Canvas/DisconnectButton").GetComponent<Button>();
             disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
+
+            GameObject canvas = transform.Find("ScoreCanvas").gameObject;
+
+            foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
+                {
+                    canvas.GetComponent<ScoreTabManager>().addLigne(p);
+                }
+            }
         }
     }
 

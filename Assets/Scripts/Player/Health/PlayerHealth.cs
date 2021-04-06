@@ -175,7 +175,7 @@ public class PlayerHealth : NetworkBehaviour
         if (isDead)
         {
 
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            /*GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
             foreach (GameObject p in players)
             {
@@ -184,7 +184,7 @@ public class PlayerHealth : NetworkBehaviour
                     p.GetComponent<PlayerScore>().addKill();
                     break;
                 }
-            }
+            }*/
 
             GetComponent<PlayerScore>().addDeath();
 
