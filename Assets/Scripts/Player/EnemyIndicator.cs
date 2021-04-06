@@ -12,6 +12,7 @@ public class EnemyIndicator : NetworkBehaviour
     private Camera _playerCamera;
 
     private List<GameObject> _enemies = new List<GameObject>();
+    private GameObject _lastPlayer = null;
 
     private void Awake()
     {
@@ -27,6 +28,13 @@ public class EnemyIndicator : NetworkBehaviour
             GameObject closest = getClosestEnemy();
             if (closest != null)
             {
+                if(closest != _lastPlayer)
+                {
+                    Color c = closest.GetComponent<PlayerSetup>().playerColor;
+                    _enemyIndicator.color = c;
+                    _lastPlayer = closest;
+                }
+
                 Vector3 viewPos = _playerCamera.WorldToViewportPoint(closest.transform.position);
                 if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && viewPos.z > 0)
                 {
@@ -34,8 +42,6 @@ public class EnemyIndicator : NetworkBehaviour
                 }
                 else
                 {
-                    Color c = closest.GetComponent<PlayerSetup>().playerColor;
-                    _enemyIndicator.color = c;
                     _enemyIndicator.enabled = true;
                     PlayerReturnToBattle.CalcIndicator(_UI, gameObject.transform.position, closest.transform.position, _enemyIndicator);
                 }
@@ -57,7 +63,7 @@ public class EnemyIndicator : NetworkBehaviour
             if (player != gameObject) // removing own player
                 _enemies.Add(player);
         }
-        Debug.Log(_enemies.Count);
+
         GameObject closest = null;
         float minDistance = Mathf.Infinity;
         Vector3 pos = gameObject.transform.position;
