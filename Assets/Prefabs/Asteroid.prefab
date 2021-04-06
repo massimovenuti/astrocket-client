@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7975735016790354323}
   - component: {fileID: 7975735016790354322}
   - component: {fileID: 7975735016790354321}
+  - component: {fileID: 7574499511517011921}
+  - component: {fileID: 2466103658463246711}
   m_Layer: 8
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -134,3 +136,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 4
   m_CollisionDetection: 0
+--- !u!95 &7574499511517011921
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7975735016790354320}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 54046e481dc72484ba5071556a462f3a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2466103658463246711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7975735016790354320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74aa101f7037c144297320c1adc535d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -13,7 +13,7 @@ public class Movements : MonoBehaviour
     private Plane _groundPlane;
 
     private Queue<float> _interpolation;
-    private int _frameNum = 6;
+    private int _frameNum = 4;
 
     private Animator PlayerController;
     GameObject _player;
@@ -93,7 +93,7 @@ public class Movements : MonoBehaviour
             }
         }
 
-        Debug.Log(_interpolation.ElementAt(0) + " " + _interpolation.ElementAt(1) + " " + _interpolation.ElementAt(2) + " " + _interpolation.ElementAt(3));
+        //Debug.Log(_interpolation.ElementAt(0) + " " + _interpolation.ElementAt(1) + " " + _interpolation.ElementAt(2) + " " + _interpolation.ElementAt(3));
 
     }
 
