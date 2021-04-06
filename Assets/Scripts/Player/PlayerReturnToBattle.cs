@@ -99,7 +99,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
             }
             else
             {
-                CalcIndicator();
+                CalcIndicator(Vector3.zero, _indicator); // target the center of the map
             }
         }
         else
@@ -143,11 +143,14 @@ public class PlayerReturnToBattle : NetworkBehaviour
     }
 
     [Client]
-    private void CalcIndicator( )
+    private void CalcIndicator(Vector3 target, Image arrow)
     {
-        float rotRadian = Mathf.Atan2(gameObject.transform.position.z, gameObject.transform.position.x);
-        float rot = Mathf.Rad2Deg * rotRadian;
-        _indicator.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
+        Vector3 dir = target - gameObject.transform.position;
+        float rotRadian = Mathf.Atan2(dir.z, dir.x);
+        rotRadian += (rotRadian > 0f) ? -Mathf.PI : Mathf.PI;
+        float rot = rotRadian * Mathf.Rad2Deg;
+        //rot += (rot > 0f) ? -180f : 180f; // get opposite angle
+        arrow.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, rot + 90f);
 
         Vector2 screenPos = Vector2.zero;
         float a = _UI.GetComponent<RectTransform>().rect.width;
@@ -155,8 +158,7 @@ public class PlayerReturnToBattle : NetworkBehaviour
         a -= a / 8;
         b -= b / 8;
 
-        rot += (rot > 0f) ? 0f : 360f;
-        rotRadian += (rot > 0f) ? 0f : 2f * Mathf.PI;
+        Debug.Log("rot: "+rot+"   RotRadian:"+rotRadian);
 
         float rectAtan = Mathf.Atan2(b, a);
         float tanTheta = Mathf.Tan(rotRadian);
@@ -191,6 +193,6 @@ public class PlayerReturnToBattle : NetworkBehaviour
             screenPos.y += yFactor * (b / 2);
         }
 
-        _indicator.GetComponent<RectTransform>().anchoredPosition = screenPos;
+        arrow.GetComponent<RectTransform>().anchoredPosition = screenPos;
     }
 }
