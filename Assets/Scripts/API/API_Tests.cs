@@ -14,10 +14,11 @@ namespace API
 
         private void Awake( )
         {
-            AuthApiPostLoginUserTest();
-            AuthApiPostAddUserTest();
-            StatsApiGetAllStatsTest();
-            StatsApiGetUserStatsTest();
+            //AuthApiPostLoginUserTest();
+            AuthApiPostCheckUserTokenTest();
+            //AuthApiPostAddUserTest();
+            //StatsApiGetAllStatsTest();
+            //StatsApiGetUserStatsTest();
         }
 
         public bool AuthApiTests( )
@@ -53,16 +54,16 @@ namespace API
             return false;
         }
 
-        private bool StatsApiDeleteUserStatsTest()
+        private bool StatsApiDeleteUserStatsTest( )
         {
             _stats.PostModifyPlayerStats(name: "", token: "");
-            _stats.DeleteUserStats(name:"", token:"");
+            _stats.DeleteUserStats(name: "", token: "");
             return true;
         }
 
         private bool StatsApiPostModifyPlayerStatsTest( )
         {
-            Debug.Assert(_stats.PostModifyPlayerStats(name:"",token:""));
+            Debug.Assert(_stats.PostModifyPlayerStats(name: "", token: ""));
             return true;
         }
 
@@ -84,31 +85,33 @@ namespace API
 
         private bool AuthApiPostLoginUserTest( )
         {
-            UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "test", Password = "testpassword" });
+            UserToken t = _auth.PostLoginUser(new UserLogin() { Name = "NewUser", Password = "newuserpwd" });
+
             Debug.Log(_auth.ErrorMessage);
             Debug.Assert(t != null);
+            Debug.Log($"{t.Token}");
             return true;
         }
 
         private bool AuthApiPostAddUserTest( )
         {
-            UserToken t = _auth.PostAddUser(new UserRegister() { Name = "TestUser", Password = "testpassword", Email = "TEST@EXAMPLE.FR" });
+            UserToken t = _auth.PostAddUser(new UserRegister() { Name = "NewUser", Password = "newuserpwd", Email = "new.user@test.com" });
             Debug.Log(_auth.ErrorMessage);
-            if (t == null)
-                return false;
+            Debug.Log($"{t.Token}");
             return true;
         }
 
         private bool AuthApiPostCheckUserTokenTest( )
         {
-            UserRole ur = _auth.PostCheckUserToken(new UserToken { Token = "" });
-            Debug.Assert(ur != null);
+            UserRole ur = _auth.PostCheckUserToken(new UserToken { Token = "55848c031c900d182355aa59fade0030416b8450123a19d2cb9647276d8bdfbbc1daa588883fcdae" });
+            Debug.Log(_auth.ErrorMessage);
+            Debug.Log($"{ur.Name} : {ur.Role}");
             return false;
         }
 
         private bool AuthApiPostCheckServerTokenTest( )
         {
-            ServerName sn = _auth.PostCheckServerToken(token:"");
+            ServerName sn = _auth.PostCheckServerToken(token: "");
             Debug.Assert(sn != null);
             return false;
         }
@@ -133,13 +136,13 @@ namespace API
 
         private bool AuthApiPostRemoveServerTest( )
         {
-            Debug.Assert(_auth.PostRemoveServer(token:""));
+            Debug.Assert(_auth.PostRemoveServer(token: ""));
             return false;
         }
 
         private bool AuthApiPostAddAdminTest( )
         {
-            Debug.Assert(_auth.PostAddAdmin(username: "", token:""));
+            Debug.Assert(_auth.PostAddAdmin(username: "", token: ""));
             return false;
         }
 
@@ -151,7 +154,7 @@ namespace API
 
         private bool AuthApiPostUnbanUserTest( )
         {
-            Debug.Assert(_auth.PostUnbanUser(username: "", adminToken:""));
+            Debug.Assert(_auth.PostUnbanUser(username: "", adminToken: ""));
             return false;
         }
     }
