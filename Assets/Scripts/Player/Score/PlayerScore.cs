@@ -7,24 +7,39 @@ using Mirror;
 public class PlayerScore : NetworkBehaviour
 {
     [SerializeField]
-    private int pointsKill;
+    private short pointsKill = 0;
     [SerializeField]
-    private int pointsAsteroids;
+    private short pointsAsteroids = 0;
     [SerializeField]
-    private int pointsDeaths;
+    private short pointsDeaths = 0;
     [SerializeField]
-    private int pointsPowerUps;
+    private short pointsPowerUps = 0;
 
     [SyncVar(hook = "updatePointsUi")]
-    public int nbPoints;
+    public short nbPoints = 0;
     [SyncVar(hook = "updateKillsUi")]
-    public int nbKills;
+    public ushort nbKills = 0;
     [SyncVar(hook = "updateAsteroidsUi")]
-    public int nbAsteroids;
+    public ushort nbAsteroids = 0;
     [SyncVar(hook = "updateDeathsUi")]
-    public int nbDeaths;
+    public ushort nbDeaths = 0;
     [SyncVar(hook = "updatePuUi")]
-    public int nbPowerUps;
+    public ushort nbPowerUps = 0;
+
+    private ScoreTabManager scoreTabManager;
+
+    [Client]
+    private void Start( )
+    {
+        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
+            {
+                scoreTabManager = p.transform.Find("ScoreCanvas").GetComponent<ScoreTabManager>();
+                break;
+            }
+        }
+    }
 
     [Server]
     public void addKill( )
@@ -45,7 +60,7 @@ public class PlayerScore : NetworkBehaviour
     {
         nbDeaths++;
         nbPoints += pointsDeaths;
-        nbPoints = (nbPoints < 0) ? 0 : nbPoints;
+        nbPoints = (nbPoints < (short)0) ? (short)0 : nbPoints;
     }
 
     [Server]
@@ -56,37 +71,37 @@ public class PlayerScore : NetworkBehaviour
     }
 
     [Client]
-    void updatePointsUi(int oldValue, int newValue)
+    void updatePointsUi(short oldValue, short newValue)
     {
-        GameObject canvas = GameObject.Find("ScoreCanvas");
-        canvas.GetComponent<ScoreTabManager>().updateValue("Score", $"player_{netId}", newValue);
+        scoreTabManager.updateValue("Score", $"player_{netId}", newValue);
     }
 
     [Client]
-    void updateKillsUi(int oldValue, int newValue)
+    void updateKillsUi(ushort oldValue, ushort newValue)
     {
-        GameObject canvas = GameObject.Find("ScoreCanvas");
-        canvas.GetComponent<ScoreTabManager>().updateValue("Kills", $"player_{netId}", newValue);
+        scoreTabManager.updateValue("Kills", $"player_{netId}", newValue);
     }
 
     [Client]
-    void updateDeathsUi(int oldValue, int newValue)
+    void updateDeathsUi(ushort oldValue, ushort newValue)
     {
-        GameObject canvas = GameObject.Find("ScoreCanvas");
-        canvas.GetComponent<ScoreTabManager>().updateValue("Deaths", $"player_{netId}", newValue);
+        scoreTabManager.updateValue("Deaths", $"player_{netId}", newValue);
     }
 
     [Client]
-    void updateAsteroidsUi(int oldValue, int newValue)
+    void updateAsteroidsUi(ushort oldValue, ushort newValue)
     {
-        GameObject canvas = GameObject.Find("ScoreCanvas");
-        canvas.GetComponent<ScoreTabManager>().updateValue("Asteroids", $"player_{netId}", newValue);
+        scoreTabManager.updateValue("Asteroids", $"player_{netId}", newValue);
     }
 
     [Client]
-    void updatePuUi(int oldValue, int newValue)
+    void updatePuUi(ushort oldValue, ushort newValue)
     {
-        GameObject canvas = GameObject.Find("ScoreCanvas");
-        canvas.GetComponent<ScoreTabManager>().updateValue("Power-ups", $"player_{netId}", newValue);
+        scoreTabManager.updateValue("Power-ups", $"player_{netId}", newValue);
+    }
+
+    private void OnDestroy( )
+    {
+        scoreTabManager.rmLigne($"player_{netId}");
     }
 }

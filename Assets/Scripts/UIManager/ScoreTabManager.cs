@@ -46,6 +46,11 @@ public class ScoreTabManager : MonoBehaviour
 
     public void rmLigne(string name)
     {
-
+        Destroy(transform.Find($"Board/Players/{name}").gameObject);
+        Destroy(transform.Find($"Board/Score/{name}").gameObject);
+        Destroy(transform.Find($"Board/Kills/{name}").gameObject);
+        Destroy(transform.Find($"Board/Deaths/{name}").gameObject);
+        Destroy(transform.Find($"Board/Asteroids/{name}").gameObject);
+        Destroy(transform.Find($"Board/Power-ups/{name}").gameObject);
     }
 }
