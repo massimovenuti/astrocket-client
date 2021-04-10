@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &162091929848929075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 6184541090147167214}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5829816649431596851}
+  m_Layer: 0
+  m_Name: MobileControls (Missing Prefab)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5829816649431596851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 6184541090147167214}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162091929848929075}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3968138481165410422}
+  m_Father: {fileID: 8993632159623004151}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &198205137730585057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1200,7 @@ GameObject:
   - component: {fileID: 8083685826243095638}
   - component: {fileID: 7255273185379637066}
   - component: {fileID: 3716093755628897239}
+  - component: {fileID: 5129739777316765268}
   m_Layer: 5
   m_Name: ScoreCanvas
   m_TagString: Untagged
@@ -1270,6 +1302,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pCell: {fileID: 7948646225284060290, guid: 7f8d4cf311372be46811b66dfc012e38, type: 3}
   dCell: {fileID: 310646804558815045, guid: bbe80d3940c6b9d499adb86d8a10c937, type: 3}
+--- !u!225 &5129739777316765268
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992934198357789449}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2113805983580291345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,6 +1594,42 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &2569911403307646027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 6184541090147167214}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3968138481165410422}
+  m_Layer: 0
+  m_Name: Missing Prefab (Dummy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3968138481165410422
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 7116338004644023192, guid: a34dee98df2cbe1459f0c9cf395ad140,
+    type: 3}
+  m_PrefabInstance: {fileID: 6184541090147167214}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2569911403307646027}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5829816649431596851}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2597136521058547212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,7 +1665,7 @@ RectTransform:
   - {fileID: 5253597359175984957}
   - {fileID: 252748224861169901}
   - {fileID: 6230756833742779919}
-  - {fileID: 3968138481165410422}
+  - {fileID: 5829816649431596851}
   m_Father: {fileID: 3899680161118579887}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2040,6 +2120,7 @@ MonoBehaviour:
   nbAsteroids: 0
   nbDeaths: 0
   nbPowerUps: 0
+  scoreCanvas: {fileID: 4101413872471302776}
 --- !u!114 &8077729675791451200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5351,9 +5432,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a34dee98df2cbe1459f0c9cf395ad140, type: 3}
---- !u!224 &3968138481165410422 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7116338004644023192, guid: a34dee98df2cbe1459f0c9cf395ad140,
-    type: 3}
-  m_PrefabInstance: {fileID: 6184541090147167214}
-  m_PrefabAsset: {fileID: 0}
