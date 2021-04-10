@@ -35,6 +35,7 @@ public class PlayerScore : NetworkBehaviour
     private void Awake( )
     {
         scoreCanvasGroup = scoreCanvas.GetComponent<CanvasGroup>();
+        scoreCanvasGroup.alpha = 0f;
     }
 
     [Client]

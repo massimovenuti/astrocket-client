@@ -40,7 +40,6 @@ public class RespawnManager : MonoBehaviour
     private void Start( )
     {
         InstantiateRespawnPoints();
-        //GenerateEnemiesToSpot();
     }
 
     private void Update( )
@@ -139,6 +138,5 @@ public class RespawnManager : MonoBehaviour
 
         foreach (GameObject rsp in _respawnPointsList)
             Gizmos.DrawWireSphere(rsp.transform.position, checkRadius);
-
     }
 }
