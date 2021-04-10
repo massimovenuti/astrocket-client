@@ -43,6 +43,10 @@ public class PlayerSetup : NetworkBehaviour
                     canvas.GetComponent<ScoreTabManager>().addLigne(p);
                 }
             }
+
+#if UNITY_ANDROID
+            InputManager.InputManagerInst.RegisterMobileUser(this.gameObject);
+#endif
         }
     }
 

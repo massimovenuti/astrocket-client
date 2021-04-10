@@ -5,34 +5,30 @@ using System.Linq;
 class InputManager : MonoBehaviour
 {
 
+    private static InputManager _instance = null;
+    
     private bool _isUsingController;
-    private InputManager _instance = null;
     private Dictionary<string, KeyCode> _keys;
     private Joystick _joystick;
     private UIButtonPressHandler _shoot;
     private UIButtonPressHandler _boost;
 
-    public InputManager InputManagerInst
+    public static InputManager InputManagerInst
     {
         get => _instance;
     }
 
-    private void OnEnable( )
+    private void Awake( )
     {
         if (_instance == null)
         {
             _instance = this;
             _isUsingController = false;
-#if UNITY_ANDROID
-            GameObject.Find("Canvas").transform.Find("MobileControls").gameObject.SetActive(true);
-            _joystick = FindObjectOfType<Joystick>();
-            _shoot = FindObjectsOfType<UIButtonPressHandler>().Where(o => o.name.Equals("Shoot")).First();
-            _boost = FindObjectsOfType<UIButtonPressHandler>().Where(o => o.name.Equals("Boost")).First();
-#endif
             _keys = new Dictionary<string, KeyCode>(2)
             {
                 ["Boost"] = KeyCode.Space,
-                ["Shoot"] = KeyCode.Mouse0
+                ["Shoot"] = KeyCode.Mouse0,
+                ["Score"] = KeyCode.Tab
             };
         }
         else
@@ -41,6 +37,13 @@ class InputManager : MonoBehaviour
             Debug.LogError($"Only one InputManager may be present in the scene at a given time");
         }
         Debug.Log($"OnEnable ran {_instance == null}");
+    }
+
+    public void RegisterMobileUser(GameObject canvas)
+    {
+        _joystick = canvas.GetComponent<Joystick>();
+        _boost = canvas.transform.GetChild(1).GetComponent<UIButtonPressHandler>();
+        _shoot = canvas.transform.GetChild(2).GetComponent<UIButtonPressHandler>();
     }
 
     public bool SetKeyForAxis(string axis, KeyCode key)
@@ -91,6 +94,15 @@ class InputManager : MonoBehaviour
         return _shoot.IsPressed;
 #else
         return Input.GetKey(_keys["Shoot"]);
+#endif
+    }
+
+    public bool ShowScoreboard()
+    {
+#if UNITY_ANDROID
+        return false;
+#else
+        return Input.GetKey(_keys["Score"]);
 #endif
     }
 
