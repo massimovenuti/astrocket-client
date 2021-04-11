@@ -10,12 +10,17 @@ public class MenuManager : NetworkBehaviour
     private GameObject menuCanvas;
 
     private Button resumeButton;
+    private Button disconnectButton;
 
     private void Awake( )
     {
         menuCanvas.SetActive(false);
+
         resumeButton = menuCanvas.FindObjectByName("ResumeButton").GetComponent<Button>();
         resumeButton.onClick.AddListener(SetMenuState);
+
+        disconnectButton = menuCanvas.FindObjectByName("DisconnectButton").GetComponent<Button>();
+        disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
     }
 
     private void Update()
