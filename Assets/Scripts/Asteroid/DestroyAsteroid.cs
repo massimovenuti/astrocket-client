@@ -8,14 +8,17 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     public string AsteroidStorageTagName = "AsteroidStorage";
     public Transform spawningRemains;
 
+    public GameObject DustVFX;
+    public Vector3 dustPosition;
+
     // la taille sera attribué au spawn de l'astéroide (entre 1 et 3)
-    public int size; 
+    public int size;
     public bool inMapBounds = false;
     public long Score { get; set; }
 
     private GameObject _asteroidStorage;
     private Rigidbody _rb;
-    private void Awake( )
+    private void Awake()
     {
         GameObject go = GameObject.FindGameObjectsWithTag(AsteroidStorageTagName).First();
         if (go == null)
@@ -31,19 +34,21 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         _rb = GetComponent<Rigidbody>();
         _rb.mass = 15;
         spawningRemains = this.transform;
+
+
     }
 
     /// <summary>
     /// Se déclenche lorsque l'astéroide entre en collision avec un élément
     /// </summary>
     private void OnCollisionEnter(Collision collision)
-    {     
+    {
         if (collision.gameObject.tag == "Bullet")
         {
             Destroy(collision.gameObject);
             DestructionAsteroid();
             addScore("id", Score, ScoreManager.Instance);
-        }       
+        }
 
         if (collision.gameObject.tag == "Player")
         {
@@ -59,12 +64,29 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         Vector3 vector = this.GetComponent<Rigidbody>().velocity;
         Vector3 origin = this.transform.localPosition;
 
+        dustPosition = gameObject.transform.position;
+
+        ParticuleDust();
+
         Destroy(this.gameObject);
 
         if (--size >= 1)
             DropRemains(vector, origin);
         else
             DropPowerUP();
+    }
+
+    //NEW
+    /// <summary>
+    /// Instanciation de l'animation des particules de poussières quand un astéroide est dértuit
+    /// </summary>
+    private void ParticuleDust()
+    {
+        GameObject dust = Instantiate(DustVFX, dustPosition, Quaternion.identity);
+        ParticleSystem dustParticles = dust.transform.GetChild(0).GetComponent<ParticleSystem>();
+        dustParticles.Play();
+        float dustDuration = dustParticles.main.duration + dustParticles.main.startLifetimeMultiplier;
+        Destroy(dust, dustDuration);
     }
 
     /// <summary>
@@ -89,16 +111,19 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
         remain1.transform.parent = _asteroidStorage.transform;
         remain2.transform.parent = _asteroidStorage.transform;
 
+
+
         float spawnPoint1_X = Mathf.Cos(Mathf.PI / 2) * vec.x - Mathf.Sin(Mathf.PI / 2) * vec.z;
         float spawnPoint1_Z = Mathf.Sin(Mathf.PI / 2) * vec.x + Mathf.Cos(Mathf.PI / 2) * vec.z;
         float spawnPoint2_X = Mathf.Cos(-Mathf.PI / 2) * vec.x - Mathf.Sin(-Mathf.PI / 2) * vec.z;
         float spawnPoint2_Z = Mathf.Sin(-Mathf.PI / 2) * vec.x + Mathf.Cos(-Mathf.PI / 2) * vec.z;
 
-        Vector3 spawnPoint1 = new Vector3 (spawnPoint1_X, 0, spawnPoint1_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
+        Vector3 spawnPoint1 = new Vector3(spawnPoint1_X, 0, spawnPoint1_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
         Vector3 spawnPoint2 = new Vector3(spawnPoint2_X, 0, spawnPoint2_Z).normalized * (remain1.transform.localScale.x / 20) + origin;
 
         remain1.transform.position = spawnPoint1;
         remain2.transform.position = spawnPoint2;
+
 
         remain1.transform.localScale = new Vector3(remain1.transform.localScale.x / 2, remain1.transform.localScale.y / 2, remain1.transform.localScale.z / 2);
         remain2.transform.localScale = new Vector3(remain2.transform.localScale.x / 2, remain2.transform.localScale.y / 2, remain2.transform.localScale.z / 2);
@@ -118,6 +143,9 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
 
         rb1.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
         rb2.AddTorque(transform.up * rotForce_tmp * ((Random.value < 0.5f) ? 1 : -1));
+
+
+        Destroy(this.gameObject);
     }
 
     //Amené à être modifié selon les choix sur les power up
@@ -126,7 +154,7 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     /// </summary>
     private void DropPowerUP()
     {
-       int dropRate = Random.Range(1,100);
+        int dropRate = Random.Range(1, 100);
 
         if (dropRate <= 20)
         {
@@ -147,10 +175,15 @@ public class DestroyAsteroid : MonoBehaviour, IScoreable
     /// </summary>
     private void HitByAsteroid(GameObject player)
     {
+        dustPosition = gameObject.transform.position;
+        ParticuleDust();
+
         Destroy(this.gameObject);
         PlayerHealth ph = player.GetComponent<PlayerHealth>();
         ph.playerHealth.Damage(25);
         Debug.Log("Meow've been hit :'(");
+
+
     }
     public void addScore(string token, long score, ScoreManager scm)
     {
