@@ -64,11 +64,17 @@ public class AuthScreenManager : ScreenManager
         {
             UserToken tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
             Debug.Log($"{_auth.ErrorMessage}");
-            if (user.text == "admin" || _auth.ErrorMessage.IsOk) // TODO : Delete the security breach when done testing
+            if (_auth.ErrorMessage.IsOk) // TODO : Delete the security breach when done testing
             {
+                tok.Name = user.text;
+                SharedInfo.userToken = tok;
                 goToNextPage();
             }
-            // else { showError(...); }
+            else 
+            {
+                Debug.Log($"{_auth.ErrorMessage}");
+                //showError(...); 
+            }
         }
     }
 
@@ -88,6 +94,8 @@ public class AuthScreenManager : ScreenManager
                 Debug.Log($"{_auth.ErrorMessage}");
                 if (_auth.ErrorMessage.IsOk) // TODO : Signup API call -> if signup succeeded & auth token received
                 {
+                    tok.Name = user.text;
+                    SharedInfo.userToken = tok;
                     goToNextPage();
                 }
                 // else { showError(...); } 
