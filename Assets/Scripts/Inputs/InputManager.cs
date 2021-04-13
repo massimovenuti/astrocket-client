@@ -41,9 +41,14 @@ class InputManager : MonoBehaviour
 
     public void RegisterMobileUser(GameObject canvas)
     {
-        _joystick = canvas.GetComponent<Joystick>();
-        _boost = canvas.transform.GetChild(1).GetComponent<UIButtonPressHandler>();
-        _shoot = canvas.transform.GetChild(2).GetComponent<UIButtonPressHandler>();
+        Debug.Log($"{canvas is null} {canvas.activeInHierarchy}");
+        _joystick = canvas.GetComponentInChildren<Joystick>();
+        Debug.Log($"Joystick {_joystick is null}");
+        _boost = canvas.transform.Find("Boost").GetComponent<UIButtonPressHandler>();
+        Debug.Log($"boost {_boost is null}");
+        _shoot = canvas.transform.Find("Shoot").GetComponent<UIButtonPressHandler>();
+        Debug.Log($"shoot {_boost is null}");
+
     }
 
     public bool SetKeyForAxis(string axis, KeyCode key)
