@@ -33,38 +33,19 @@ public class AsteroidNetworkManager : NetworkRoomManager
         new Tuple<bool, Color>(true, Color.grey),
     };
 
-    /*
-    [Server]
-    public override void OnStartServer( )
-    {
-        GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
-        if (go == null)
-            Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
-        else
-            _asteroidSpawner = go;
-
-        _asteroidSpawnerList = new List<GameObject>();
-
-        InstantiateAsteroidSpawners();
-        StartCoroutine(SpawnAsteroid());
-    }
-    */
+    [SerializeField]
+    private GameObject _timeManagerPrefab;
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
-        //spawn asteroids
+        //start game
         if (sceneName == GameplayScene)
         {
-            GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
-            if (go == null)
-                Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
-            else
-                _asteroidSpawner = go;
-
-            _asteroidSpawnerList = new List<GameObject>();
-
-            InstantiateAsteroidSpawners();
-            StartCoroutine(SpawnAsteroid());
+            StartGame();
+        }
+        else if (sceneName == RoomScene)
+        {
+            FreeAllColors();
         }
     }
 
@@ -73,10 +54,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
     {
         StopAllCoroutines();
 
-        //foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
-        //{
-        //    NetworkServer.Destroy(go);
-        //}
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
+        {
+            NetworkServer.Destroy(go);
+        }
 
         base.OnStopServer();
     }
@@ -104,6 +85,14 @@ public class AsteroidNetworkManager : NetworkRoomManager
                 playersColor[i] = new Tuple<bool, Color>(true, playersColor[i].Item2);
                 break;
             }
+        }
+    }
+
+    private void FreeAllColors()
+    {
+        for (int i = 0; i < playersColor.Length; i++)
+        {
+            playersColor[i] = new Tuple<bool, Color>(true, playersColor[i].Item2);
         }
     }
 
@@ -142,13 +131,34 @@ public class AsteroidNetworkManager : NetworkRoomManager
             }
         }
 
+        base.OnServerDisconnect(conn);
+
         if (numPlayers < minPlayers)
         {
-            StopAllCoroutines();
-            ServerChangeScene(RoomScene);
+            StopGame();
         }
+    }
 
-        base.OnServerDisconnect(conn);
+    public void StopGame()
+    {
+        StopAllCoroutines();
+        ServerChangeScene(RoomScene);
+    }
+
+    public void StartGame()
+    {
+        GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
+        if (go == null)
+            Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
+        else
+            _asteroidSpawner = go;
+
+        _asteroidSpawnerList = new List<GameObject>();
+
+        InstantiateAsteroidSpawners();
+        StartCoroutine(SpawnAsteroid());
+
+        NetworkServer.Spawn(Instantiate(_timeManagerPrefab));
     }
 
     [Server]

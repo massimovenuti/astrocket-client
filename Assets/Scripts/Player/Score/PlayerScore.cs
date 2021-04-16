@@ -130,6 +130,9 @@ public class PlayerScore : NetworkBehaviour
     [ClientCallback]
     private void OnDestroy( )
     {
-        scoreTabManager.rmLigne($"player_{netId}");
+        if (scoreTabManager != null)
+        {
+            scoreTabManager.rmLigne($"player_{netId}");
+        }
     }
 }
