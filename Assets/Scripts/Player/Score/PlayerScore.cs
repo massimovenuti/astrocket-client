@@ -38,7 +38,7 @@ public class PlayerScore : NetworkBehaviour
         scoreCanvasGroup.alpha = 0f;
     }
 
-    [Client]
+    [ClientCallback]
     private void Start( )
     {
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
@@ -127,6 +127,7 @@ public class PlayerScore : NetworkBehaviour
         scoreTabManager.updateValue("Power-ups", $"player_{netId}", newValue);
     }
 
+    [ClientCallback]
     private void OnDestroy( )
     {
         scoreTabManager.rmLigne($"player_{netId}");

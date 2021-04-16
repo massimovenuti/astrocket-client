@@ -353,6 +353,8 @@ namespace Mirror
         /// <param name="newSceneName"></param>
         public override void ServerChangeScene(string newSceneName)
         {
+            Debug.Log("Change Scene : " + newSceneName);
+
             if (newSceneName == RoomScene)
             {
                 foreach (NetworkRoomPlayer roomPlayer in roomSlots)

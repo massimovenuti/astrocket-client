@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
-public class AsteroidNetworkManager : NetworkManager
+public class AsteroidNetworkManager : NetworkRoomManager
 {
     [SerializeField] string _asteroidSpawnerStorageTagName = "AsteroidSpawnerStorage";
 
@@ -33,6 +33,7 @@ public class AsteroidNetworkManager : NetworkManager
         new Tuple<bool, Color>(true, Color.grey),
     };
 
+    /*
     [Server]
     public override void OnStartServer( )
     {
@@ -47,16 +48,35 @@ public class AsteroidNetworkManager : NetworkManager
         InstantiateAsteroidSpawners();
         StartCoroutine(SpawnAsteroid());
     }
+    */
+
+    public override void OnRoomServerSceneChanged(string sceneName)
+    {
+        //spawn asteroids
+        if (sceneName == GameplayScene)
+        {
+            GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
+            if (go == null)
+                Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
+            else
+                _asteroidSpawner = go;
+
+            _asteroidSpawnerList = new List<GameObject>();
+
+            InstantiateAsteroidSpawners();
+            StartCoroutine(SpawnAsteroid());
+        }
+    }
 
     [Server]
     public override void OnStopServer( )
     {
         StopAllCoroutines();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
-        {
-            NetworkServer.Destroy(go);
-        }
+        //foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
+        //{
+        //    NetworkServer.Destroy(go);
+        //}
 
         base.OnStopServer();
     }
@@ -87,6 +107,13 @@ public class AsteroidNetworkManager : NetworkManager
         }
     }
 
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
+    {
+        gamePlayer.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
+        return true;
+    }
+    
+    /*
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         Transform startPos = GetStartPosition();
@@ -98,6 +125,7 @@ public class AsteroidNetworkManager : NetworkManager
 
         NetworkServer.AddPlayerForConnection(conn, player);
     }
+    */
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
@@ -114,15 +142,14 @@ public class AsteroidNetworkManager : NetworkManager
             }
         }
 
+        if (numPlayers < minPlayers)
+        {
+            StopAllCoroutines();
+            ServerChangeScene(RoomScene);
+        }
+
         base.OnServerDisconnect(conn);
     }
-
-    public override void OnStopClient( )
-    {
-        base.OnStopClient();
-        SceneManager.LoadScene("MainMenu");
-    }
-
 
     [Server]
     private void InstantiateAsteroidSpawners( )
