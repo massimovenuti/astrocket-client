@@ -56,8 +56,6 @@ public class AuthScreenManager : ScreenManager
 
     void OnClickLogin()
     {
-        goToNextPage();
-        /*
         TMP_InputField mdp, user;
         user = GameObject.Find("UsernameField").GetComponent<TMP_InputField>();
         mdp = GameObject.Find("PasswordField").GetComponent<TMP_InputField>();
@@ -78,7 +76,6 @@ public class AuthScreenManager : ScreenManager
                 //showError(...); 
             }
         }
-        */
     }
 
     void OnClickSignUp()
