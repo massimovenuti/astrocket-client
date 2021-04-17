@@ -22,6 +22,6 @@ public class PlayScreenManager : ScreenManager
 
     void runGame()
     {
-        SceneManager.LoadScene("Networking");
+        GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StartClient();
     }
 }

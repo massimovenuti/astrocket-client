@@ -20,7 +20,7 @@ public class MenuManager : NetworkBehaviour
         resumeButton.onClick.AddListener(SetMenuState);
 
         disconnectButton = menuCanvas.FindObjectByName("DisconnectButton").GetComponent<Button>();
-        disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
+        disconnectButton.onClick.AddListener(GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StopClient);
     }
 
     private void Update()
