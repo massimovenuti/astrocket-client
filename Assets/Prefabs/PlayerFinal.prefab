@@ -2049,7 +2049,6 @@ MonoBehaviour:
   hasShield: 0
   health: 0
   DustVFX: {fileID: 6446469086128567493, guid: d12cef2d582a1fc43b153cb76a290c50, type: 3}
-  dustPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &474922655522296668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10042,6 +10041,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7543684227481235832}
+  - component: {fileID: 5605407732585780769}
   m_Layer: 0
   m_Name: SpaceFighter
   m_TagString: Untagged
@@ -10076,6 +10076,25 @@ Transform:
   m_Father: {fileID: 3899680161118579887}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!95 &5605407732585780769
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204453710885039042}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d608b70774a431d4d95736dd1ba11ab9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7257611873187415293
 GameObject:
   m_ObjectHideFlags: 0
