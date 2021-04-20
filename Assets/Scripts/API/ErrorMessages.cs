@@ -25,7 +25,10 @@ namespace API
         {
             _errorType = aAPICallFunction;
             _status = aCode;
-            UnityEngine.Debug.LogError($"{this}");
+            if(_status == HttpStatusCode.OK)
+                UnityEngine.Debug.Log($"{this}");
+            else
+                UnityEngine.Debug.LogError($"{this}");
         }
         public override string ToString( )
         {
