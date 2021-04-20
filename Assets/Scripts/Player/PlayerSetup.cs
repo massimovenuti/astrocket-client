@@ -11,6 +11,8 @@ public class PlayerSetup : NetworkBehaviour
 
     [SerializeField] Behaviour[] toDisable;
 
+    public API.Auth.UserToken userToken;
+
     private void Start( )
     {
         if (!isLocalPlayer)

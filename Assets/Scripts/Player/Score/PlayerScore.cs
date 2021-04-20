@@ -32,6 +32,22 @@ public class PlayerScore : NetworkBehaviour
     private CanvasGroup scoreCanvasGroup;
     private ScoreTabManager scoreTabManager;
 
+    public API.Stats.PlayerStats Stats
+    {
+        get
+        {
+            API.Stats.PlayerStats s = new API.Stats.PlayerStats();
+            s.nbDeaths = nbDeaths;
+            s.nbGames = 1;
+            s.maxPowerUps = nbPowerUps;
+            s.nbPowerUps = nbPowerUps;
+            s.nbAsteroids = nbAsteroids;
+            s.nbPoints = nbPoints;
+            s.maxPoints = nbPoints;
+            return s;
+        }
+    }
+
     private void Awake( )
     {
         scoreCanvasGroup = scoreCanvas.GetComponent<CanvasGroup>();

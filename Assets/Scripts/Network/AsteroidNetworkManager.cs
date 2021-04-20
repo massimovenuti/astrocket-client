@@ -120,12 +120,14 @@ public class AsteroidNetworkManager : NetworkRoomManager
     {
         NetworkIdentity[] clientObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];
         conn.clientOwnedObjects.CopyTo(clientObjects);
-        
+
         foreach (NetworkIdentity co in clientObjects)
         {
             GameObject go = NetworkIdentity.spawned[co.netId].gameObject;
             if (go.tag == "Player")
             {
+                //API.Stats.StatsAPICall stats = new API.Stats.StatsAPICall();
+                //stats.PostModifyPlayerStats(name:"userToken.name", token:"ServerToken.token", go.GetComponent<PlayerScore>().Stats);
                 freePlayerColor(go.GetComponent<PlayerSetup>().playerColor);
                 break;
             }
