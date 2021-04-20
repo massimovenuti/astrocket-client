@@ -25,15 +25,15 @@ namespace API
         {
             _errorType = aAPICallFunction;
             _status = aCode;
-
+            UnityEngine.Debug.LogError($"{this}");
         }
         public override string ToString( )
         {
             if (_status.Equals(HttpStatusCode.OK))
-                return "API call successfuly terminated.";
+                return $"API call ({_errorType}) successfuly terminated.";
             if (_errorType.Equals(APICallFunction.None))
                 return $"An error happened. Returned with code {(int)_status}.";
             return $"API call ended with error code {(int)_status} : \n{Errors[_errorType]}";
-        }
+        }   
     }
 }

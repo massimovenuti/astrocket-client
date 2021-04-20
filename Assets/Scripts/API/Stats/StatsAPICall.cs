@@ -60,13 +60,14 @@ namespace API.Stats
                 return JsonUtility.FromJson<PlayerStats>(responseMessage.Content.ReadAsStringAsync().Result);
         }
 
-        public bool PostModifyPlayerStats(IName name, IToken token)
-            => PostModifyPlayerStats(name.Name, token.Token);
-        public bool PostModifyPlayerStats(string name, string token)
+        public bool PostModifyPlayerStats(IName name, IToken token, PlayerStats stats)
+            => PostModifyPlayerStats(name.Name, token.Token, stats);
+        public bool PostModifyPlayerStats(string name, string token, PlayerStats stats)
         {
             using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"stats/{name}"))
             {
                 message.Headers.Add("serverToken", token);
+                message.Content = new StringContent(JsonUtility.ToJson(stats), System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
                 ErrorMessage = new ErrorMessage(APICallFunction.UpdateStats, responseMessage.StatusCode);
                 if (responseMessage.IsSuccessStatusCode)
