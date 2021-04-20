@@ -43,6 +43,9 @@ public class PlayerHealth : NetworkBehaviour
 
     private bool isDead = false;
 
+    public GameObject DustVFX;
+
+
     private void Awake( )
     {
         // récupère le bouclier du joueur
@@ -161,6 +164,7 @@ public class PlayerHealth : NetworkBehaviour
         }
         else if (other.CompareTag("Asteroid"))
         {
+            RpcParticuleDust(gameObject.transform.position);
             Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
             NetworkServer.Destroy(go);
             RpcResetVelocity();
@@ -310,5 +314,18 @@ public class PlayerHealth : NetworkBehaviour
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
+    }
+
+    /// <summary>
+    /// Instanciation de l'animation des particules de poussières quand un astéroide est dértuit
+    /// </summary>
+    [ClientRpc]
+    private void RpcParticuleDust(Vector3 dustPosition)
+    {
+        GameObject dust = Instantiate(DustVFX, dustPosition, Quaternion.identity);
+        ParticleSystem dustParticles = dust.transform.GetChild(0).GetComponent<ParticleSystem>();
+        dustParticles.Play();
+        float dustDuration = dustParticles.main.duration + dustParticles.main.startLifetimeMultiplier;
+        Destroy(dust, dustDuration);
     }
 }

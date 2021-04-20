@@ -305,6 +305,8 @@ MonoBehaviour:
   syncInterval: 0.1
   _asteroidPrefab: {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b,
     type: 3}
+  DustVFX: {fileID: 6446469086128567493, guid: d12cef2d582a1fc43b153cb76a290c50, type: 3}
+  dustPosition: {x: 0, y: 0, z: 0}
   medikit: {fileID: 5786239221560644419, guid: 6d072b093e0092d42970559fa4b7f0e2, type: 3}
   akimbo: {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   shield: {fileID: 9222915020107921477, guid: 68df4bbf56d6336428aa8d96079e1461, type: 3}

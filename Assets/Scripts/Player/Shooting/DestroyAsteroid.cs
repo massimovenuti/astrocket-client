@@ -8,6 +8,7 @@ public class DestroyAsteroid : NetworkBehaviour
 {
     [SerializeField] GameObject _asteroidPrefab;
 
+    public GameObject DustVFX;
 
     [SerializeField] GameObject medikit;
     [SerializeField] GameObject akimbo;
@@ -48,6 +49,8 @@ public class DestroyAsteroid : NetworkBehaviour
     {
         _asteroidToDestroy = asteroidToDestroy;
         _asteroidToDestroy.GetComponent<Collider>().enabled = false;
+
+        RpcParticuleDust(_asteroidToDestroy.transform.position);
 
         if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
         {
@@ -103,6 +106,19 @@ public class DestroyAsteroid : NetworkBehaviour
 
         NetworkServer.Spawn(remain1);
         NetworkServer.Spawn(remain2);
+    }
+
+    /// <summary>
+    /// Instanciation de l'animation des particules de poussières quand un astéroide est dértuit
+    /// </summary>
+    [ClientRpc]
+    private void RpcParticuleDust(Vector3 dustPosition)
+    {
+        GameObject dust = Instantiate(DustVFX, dustPosition, Quaternion.identity);
+        ParticleSystem dustParticles = dust.transform.GetChild(0).GetComponent<ParticleSystem>();
+        dustParticles.Play();
+        float dustDuration = dustParticles.main.duration + dustParticles.main.startLifetimeMultiplier;
+        Destroy(dust, dustDuration);
     }
 
     [Server]

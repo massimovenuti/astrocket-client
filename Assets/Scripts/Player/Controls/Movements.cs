@@ -24,6 +24,11 @@ public class Movements : NetworkBehaviour
     private float _powerUpSpeed;
     private float _powerUpSlowSpeed;
 
+    private ParticleSystem _flameShip1;
+    private ParticleSystem _flameShip2;
+
+    private bool _animated;
+
 
     // Start is called before the first frame update
     private void Start( )
@@ -50,6 +55,10 @@ public class Movements : NetworkBehaviour
 
         // GET IN CHILDREN
         _mainCamera = gameObject.GetComponentInChildren<Camera>();
+        
+        _flameShip1 = GameObject.Find("flametrail_left").GetComponent<ParticleSystem>();
+        _flameShip2 = GameObject.Find("flametrail_right").GetComponent<ParticleSystem>();
+        _animated = false;
     }
 
     private void FixedUpdate()
@@ -60,7 +69,38 @@ public class Movements : NetworkBehaviour
             if (_inp.IsBoosting())
             {
                 _rgbody.AddForce(transform.forward * _forwardSpeed * _multiplierSpeed);
+                if (!_animated)
+                {
+                    _animated = true;
+                    CmdBoost(true);
+                }
             }
+            else if (_animated)
+            {
+                _animated = false;
+                CmdBoost(false);
+            }
+        }
+    }
+
+    [Command]
+    private void CmdBoost(bool boost)
+    {
+        RpcBoost(boost);
+    }
+
+    [ClientRpc]
+    private void RpcBoost(bool boost)
+    {
+        if (boost)
+        {
+            _flameShip1.Play();
+            _flameShip2.Play();
+        }
+        else
+        {
+            _flameShip1.Stop();
+            _flameShip2.Stop();
         }
     }
 
