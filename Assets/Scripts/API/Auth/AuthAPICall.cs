@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
@@ -15,7 +15,7 @@ namespace API.Auth
         private readonly HttpClient _httpClient;
         private ErrorMessage _message;
 
-        public ErrorMessage ErrorMessage { get => _message;  private set { _message = value; }}
+        public ErrorMessage ErrorMessage { get => _message; private set { _message = value; } }
 
         public AuthAPICall( )
         {

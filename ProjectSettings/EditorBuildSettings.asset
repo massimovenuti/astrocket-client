@@ -6,9 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3ec0aa4a42bf3da4f8ad1f60e6a2b6bb
+  - enabled: 0
+    path: Assets/Scenes/Networking.unity
+    guid: 68a250c6994fd0d4c95987a6e446eacb
+  - enabled: 0
+    path: Assets/Scenes/Server.unity
+    guid: 9eae0683c8baeb946a54e94945f5bc54
   - enabled: 1
-    path: Assets/Scenes/AlphaTestAsteroids.unity
-    guid: eb42e1398872e8e46a97172e05d19f15
+    path: Assets/Scenes/OfflineScene.unity
+    guid: a9e4032f9404fe847bc61320b63571d4
+  - enabled: 1
+    path: Assets/Scenes/RoomScene.unity
+    guid: 45af6b18e61402245b130473a6c1fe05
+  - enabled: 1
+    path: Assets/Scenes/OnlineScene.unity
+    guid: eb12b9be77dd16645a352b7e084386cd
   m_configObjects: {}

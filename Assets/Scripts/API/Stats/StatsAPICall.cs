@@ -30,7 +30,7 @@ namespace API.Stats
                 | SecurityProtocolType.Tls;
         }
 
-        public List<PlayerStats> GetAllStats()
+        public List<PlayerStats> GetAllStats( )
         {
             HttpResponseMessage responseMessage;
             responseMessage = _httpClient.GetAsync("stats/").Result;
@@ -81,7 +81,7 @@ namespace API.Stats
         {
             using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, $"stats/{name}"))
             {
-                message.Headers.Add("serverToken", token);  
+                message.Headers.Add("serverToken", token);
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
                 ErrorMessage = new ErrorMessage(APICallFunction.None, responseMessage.StatusCode);
                 if (responseMessage.IsSuccessStatusCode)
