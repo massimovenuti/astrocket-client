@@ -56,14 +56,14 @@ namespace API
 
         private bool StatsApiDeleteUserStatsTest( )
         {
-            _stats.PostModifyPlayerStats(name: "", token: "");
+            _stats.PostModifyPlayerStats(name: "", token: "", new PlayerStats());
             _stats.DeleteUserStats(name: "", token: "");
             return true;
         }
 
         private bool StatsApiPostModifyPlayerStatsTest( )
         {
-            Debug.Assert(_stats.PostModifyPlayerStats(name: "", token: ""));
+            Debug.Assert(_stats.PostModifyPlayerStats(name: "", token: "", new PlayerStats()));
             return true;
         }
 
