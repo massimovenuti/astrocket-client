@@ -98,6 +98,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
+        Debug.Log("Loaded for player");
         gamePlayer.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
         return true;
     }
@@ -105,6 +106,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     /*
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
+        Debug.Log("Add player");
         Transform startPos = GetStartPosition();
         GameObject player = startPos != null
             ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
@@ -118,6 +120,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
+        Debug.Log("Player disconnect");
+
         NetworkIdentity[] clientObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];
         conn.clientOwnedObjects.CopyTo(clientObjects);
         
@@ -139,10 +143,28 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
     }
 
+    public override void OnServerConnect(NetworkConnection conn)
+    {
+        Debug.Log("Player connect");
+        if (numPlayers >= maxConnections)
+        {
+            conn.Disconnect();
+            return;
+        }
+
+        OnRoomServerConnect(conn);
+    }
+
     public void StopGame()
     {
         StopAllCoroutines();
         ServerChangeScene(RoomScene);
+    }
+
+    public override void OnRoomClientAddPlayerFailed( ) 
+    {
+        Debug.Log("Fail");
+        base.OnRoomClientAddPlayerFailed();
     }
 
     public void StartGame()

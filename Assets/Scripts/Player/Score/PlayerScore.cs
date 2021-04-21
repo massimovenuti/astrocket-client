@@ -6,14 +6,10 @@ using Mirror;
 
 public class PlayerScore : NetworkBehaviour
 {
-    [SerializeField]
-    private short pointsKill = 0;
-    [SerializeField]
-    private short pointsAsteroids = 0;
-    [SerializeField]
-    private short pointsDeaths = 0;
-    [SerializeField]
-    private short pointsPowerUps = 0;
+    public short pointsKill = 0;
+    public short pointsAsteroids = 0;
+    public short pointsDeaths = 0;
+    public short pointsPowerUps = 0;
 
     [SyncVar(hook = "updatePointsUi")]
     public short nbPoints = 0;
