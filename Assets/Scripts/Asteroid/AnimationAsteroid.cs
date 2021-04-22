@@ -1,21 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class AnimationAsteroid : MonoBehaviour
+public class AnimationAsteroid : NetworkBehaviour
 {
-    private Animator _asteroidController;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private float speed = 50f;
+
+    private int clockwise;
+
+    private void Start( )
     {
-        float ran = Random.value;
-        _asteroidController.SetFloat("FloatClock", ran);
-        //Debug.Log(ran);
+        clockwise = (Random.value < 0.5f) ? 1 : -1;
+        speed += Random.Range(0.0f, 50.0f);
     }
 
-    private void Awake( )
+    private void Update( )
     {
-        _asteroidController = this.GetComponent<Animator>();
-        Random.InitState(Time.frameCount);        
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, speed * Time.deltaTime * clockwise));
     }
 }

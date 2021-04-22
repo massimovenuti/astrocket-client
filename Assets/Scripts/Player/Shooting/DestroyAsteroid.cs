@@ -84,8 +84,8 @@ public class DestroyAsteroid : NetworkBehaviour
         Vector3 spawnPoint2 = new Vector3( newScale.x / 16, 0, 0);
         */
 
-        Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x / 16, 0, 0) + origin;
-        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3(newScale.x / 16, 0, 0) + origin;
+        Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x * 2, 0, 0) + origin;
+        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3( newScale.x * 2, 0, 0) + origin;
 
         Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
         Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
