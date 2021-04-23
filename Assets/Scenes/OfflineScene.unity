@@ -11014,7 +11014,7 @@ MonoBehaviour:
   offlineScene: Assets/Scenes/OfflineScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
   transport: {fileID: 976059971}
-  networkAddress: localhost
+  networkAddress: aw.alexandre-vogel.fr
   maxConnections: 8
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -11036,7 +11036,7 @@ MonoBehaviour:
   - {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   - {fileID: 9058780976217022324, guid: 6d5f06eb3240f2346846def4c190f747, type: 3}
   showRoomGUI: 1
-  minPlayers: 1
+  minPlayers: 2
   roomPlayerPrefab: {fileID: 5837678946760945291, guid: a0422cc7d9e6077468246374f788d1c0,
     type: 3}
   RoomScene: Assets/Scenes/RoomScene.unity
