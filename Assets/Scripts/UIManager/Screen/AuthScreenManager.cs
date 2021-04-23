@@ -15,7 +15,7 @@ public class AuthScreenManager : ScreenManager
     new void Start()
     {
 #if UNITY_ANDROID
-        Screen.orientation = ScreenOrientation.Portrait;
+            Screen.orientation = ScreenOrientation.Portrait;
 #endif
         base.Start();
 

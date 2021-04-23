@@ -5,8 +5,8 @@ public class FirstScreenManager : ScreenManager
     new void Start()
     {
 #if UNITY_ANDROID
-        Screen.orientation = ScreenOrientation.Portrait;
 #endif
+        Screen.orientation = ScreenOrientation.Portrait;
 
         base.Start();
     }

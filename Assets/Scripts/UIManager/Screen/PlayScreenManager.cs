@@ -7,7 +7,7 @@ public class PlayScreenManager : ScreenManager
     new void Start()
     {
 #if UNITY_ANDROID
-        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.orientation = ScreenOrientation.Landscape;
 #endif
         base.Start();
 

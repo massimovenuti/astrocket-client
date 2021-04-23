@@ -37,6 +37,9 @@ class InputManager : MonoBehaviour
             Debug.LogError($"Only one InputManager may be present in the scene at a given time");
         }
         Debug.Log($"OnEnable ran {_instance == null}");
+#if UNITY_ANDROID
+        Screen.orientation = ScreenOrientation.Landscape;
+#endif 
     }
 
     public void RegisterMobileUser(GameObject canvas)
