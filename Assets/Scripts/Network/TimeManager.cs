@@ -39,7 +39,9 @@ public class TimeManager : NetworkBehaviour
         }
         else
         {
-            _timerText.text = _timer.ToString("F1");
+            int min = (int)(_timer / 60);
+            int sec = (int)(_timer % 60);
+            _timerText.text = min.ToString()+":"+sec.ToString();
         }
     }
 }
