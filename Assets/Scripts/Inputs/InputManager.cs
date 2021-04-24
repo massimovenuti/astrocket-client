@@ -9,7 +9,9 @@ class InputManager : MonoBehaviour
     
     private bool _isUsingController;
     private Dictionary<string, KeyCode> _keys;
+
     private Joystick _joystick;
+    private UIButtonPressHandler _menu;
     private UIButtonPressHandler _shoot;
     private UIButtonPressHandler _boost;
 
@@ -41,13 +43,10 @@ class InputManager : MonoBehaviour
 
     public void RegisterMobileUser(GameObject canvas)
     {
-        Debug.Log($"{canvas is null} {canvas.activeInHierarchy}");
         _joystick = canvas.GetComponentInChildren<Joystick>();
-        Debug.Log($"Joystick {_joystick is null}");
         _boost = canvas.transform.Find("Boost").GetComponent<UIButtonPressHandler>();
-        Debug.Log($"boost {_boost is null}");
         _shoot = canvas.transform.Find("Shoot").GetComponent<UIButtonPressHandler>();
-        Debug.Log($"shoot {_boost is null}");
+        _menu = canvas.transform.Find("Menu").GetComponent<UIButtonPressHandler>();
 
     }
 
@@ -108,6 +107,20 @@ class InputManager : MonoBehaviour
         return false;
 #else
         return Input.GetKey(_keys["Score"]);
+#endif
+    }
+
+    public bool ShowMenu()
+    {
+#if UNITY_ANDROID
+        if(_menu.IsClicked)
+        {
+            _menu.gameObject.SetActive(false);
+            return true;
+        } else
+            return false;
+#else
+        return Input.GetKey(KeyCode.Escape);
 #endif
     }
 
