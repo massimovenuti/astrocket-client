@@ -186,8 +186,6 @@ MonoBehaviour:
   checkLayers:
     serializedVersion: 2
     m_Bits: 256
-  enemyMockPrefab: {fileID: 9159548931375944267, guid: 11badff6d6927b44784116c63a590503,
-    type: 3}
 --- !u!4 &217060920
 Transform:
   m_ObjectHideFlags: 0
