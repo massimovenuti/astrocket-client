@@ -22,6 +22,9 @@ public class Ammo : NetworkBehaviour
     private void Start( )
     {
         GetComponent<Rigidbody>().velocity = transform.forward * _speed;
+        Color c = NetworkIdentity.spawned[ownerId].GetComponent<PlayerSetup>().playerColor;
+        GetComponent<Renderer>().material.SetColor("_Color", c);
+        GetComponent<Renderer>().material.SetColor("_EmissionColor", c);
     }
 
     [Server]

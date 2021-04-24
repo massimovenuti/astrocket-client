@@ -118,8 +118,6 @@ public class GunController : NetworkBehaviour
     {
         GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
 
-        go.GetComponent<MeshRenderer>().material = bulletMaterial;
-        go.GetComponent<TrailRenderer>().material = bulletMaterial;
         go.GetComponent<Ammo>().ownerId = netId;
 
         go.transform.parent = _bulletSpawn.transform;
@@ -136,11 +134,7 @@ public class GunController : NetworkBehaviour
         GameObject go1 = (GameObject)Instantiate(bullet, _barrelAkimbo1.transform.position, _barrelAkimbo1.transform.rotation);
         GameObject go2 = (GameObject)Instantiate(bullet, _barrelAkimbo2.transform.position, _barrelAkimbo2.transform.rotation);
 
-        go1.GetComponent<MeshRenderer>().material = bulletMaterial;
-        go1.GetComponent<TrailRenderer>().material = bulletMaterial;
         go1.GetComponent<Ammo>().ownerId = netId;
-        go2.GetComponent<MeshRenderer>().material = bulletMaterial;
-        go2.GetComponent<TrailRenderer>().material = bulletMaterial;
         go2.GetComponent<Ammo>().ownerId = netId;
 
         go1.transform.parent = _bulletSpawn.transform;
@@ -190,8 +184,6 @@ public class GunController : NetworkBehaviour
 
         go.transform.localScale = new Vector3(bulletScale.x * 3f, bulletScale.y * 3f, bulletScale.z);
 
-        go.GetComponent<MeshRenderer>().material = bulletMaterial;
-        go.GetComponent<TrailRenderer>().material = bulletMaterial;
         go.GetComponent<Ammo>().ownerId = netId;
         
         go.transform.parent = _bulletSpawn.transform;
