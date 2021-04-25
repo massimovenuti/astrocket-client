@@ -31,7 +31,6 @@ public class Ammo : NetworkBehaviour
             GetComponent<Renderer>().material.SetColor("_EmissionColor", c);
         } else if (this.name.Contains("Rocket")) {
             Renderer[] renders = GetComponentsInChildren<Renderer>();
-            Debug.LogWarning("r color");
             foreach (Renderer r in renders)
             {
                 foreach (Material m in r.materials)
