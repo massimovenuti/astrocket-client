@@ -3,12 +3,11 @@ using UnityEngine;
 
 class SaveManager
 {
-
     private static string _filename = @"/settings.json";
 
     public static void Save()
     {
-        string s = (new GeneralSettings()).toSaveItem();
+        string s = GeneralSettings.toSaveItem();
         string path = Application.persistentDataPath + _filename;
 
         if (File.Exists(path))
@@ -18,29 +17,30 @@ class SaveManager
         File.WriteAllText(path, s);
     }
 
-    public static GeneralSettings Load( )
+    public static void Load( )
     {
         string path = Application.persistentDataPath + _filename;
 
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            GeneralSettings setting;
+            GeneralSettingsProxy settings;
             try
             {
-                setting = JsonUtility.FromJson<GeneralSettings>(json);
+                settings = JsonUtility.FromJson<GeneralSettingsProxy>(json);
+                GeneralSettings.SetSettings(settings);
             }
             catch
             {
-                setting = new GeneralSettings();
+                GeneralSettings.keys = new Keys();
+                GeneralSettings.sound = new Sound();
                 Debug.LogError("Invalid JSON provided, getting new settings");
             }
-
-            return setting;
         }
         else
         {
-            return new GeneralSettings();
+            GeneralSettings.SetSettings(new Keys());
+            GeneralSettings.SetSettings(new Sound());
         }
     }
 }
