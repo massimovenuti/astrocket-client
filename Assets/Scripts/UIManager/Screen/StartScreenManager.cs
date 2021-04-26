@@ -10,9 +10,6 @@ public class StartScreenManager : ScreenManager
 
     new void Start()
     {
-#if UNITY_ANDROID
-        Screen.orientation = ScreenOrientation.Portrait;
-#endif
         base.Start();
 
         Button playButton, statsButton, settingsButton;

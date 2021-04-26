@@ -47,6 +47,7 @@ class InputManager : MonoBehaviour
         _boost = canvas.transform.Find("Boost").GetComponent<UIButtonPressHandler>();
         _shoot = canvas.transform.Find("Shoot").GetComponent<UIButtonPressHandler>();
         _menu = canvas.transform.Find("Menu").GetComponent<UIButtonPressHandler>();
+        Screen.orientation = ScreenOrientation.LandscapeRight;
 
     }
 
