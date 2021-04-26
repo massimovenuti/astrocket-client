@@ -12,6 +12,13 @@ public class PlayerSpawn : NetworkBehaviour
         StartCoroutine(ProtectedOnSpawn());
     }
 
+    [ClientCallback]
+    private void Start( )
+    {
+        OnEnable();
+    }
+
+
     [Server]
     public void Respawn( )
     {

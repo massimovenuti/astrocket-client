@@ -43,6 +43,9 @@ public class PlayerHealth : NetworkBehaviour
 
     private bool isDead = false;
 
+    public GameObject DustVFX;
+
+
     private void Awake( )
     {
         // récupère le bouclier du joueur
@@ -131,10 +134,14 @@ public class PlayerHealth : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         GameObject go = other.gameObject;
+        bool playerShoot = false;
+        uint otherNetId = 0;
 
         // touché par une bullet
         if (other.CompareTag("Bullet") && go.GetComponent<Ammo>().ownerId != netId)
         {
+            playerShoot = true;
+            otherNetId = go.GetComponent<Ammo>().ownerId;
             _damageValue = _damageBullet;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
@@ -142,12 +149,16 @@ public class PlayerHealth : NetworkBehaviour
         // touché par une roquette
         else if (other.CompareTag("Rocket") && go.GetComponent<Ammo>().ownerId != netId)
         {
+            playerShoot = true;
+            otherNetId = go.GetComponent<Ammo>().ownerId;
             _damageValue = _damageRocket;
             Damage(_damageValue);
         }
         // touché par un heavy laser (power-up)
         else if (other.CompareTag("HeavyLaser") && go.GetComponent<Ammo>().ownerId != netId)
         {
+            playerShoot = true;
+            otherNetId = go.GetComponent<Ammo>().ownerId;
             _damageValue = _damageHeavyLaser;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
@@ -155,12 +166,15 @@ public class PlayerHealth : NetworkBehaviour
         // touché par un homing missile (power-up)
         else if (other.CompareTag("HomingMissile") && go.GetComponent<Ammo>().ownerId != netId)
         {
+            playerShoot = true;
+            otherNetId = go.GetComponent<Ammo>().ownerId;
             _damageValue = _damageHomingMissile;
             Damage(_damageValue);
             NetworkServer.Destroy(go);
         }
         else if (other.CompareTag("Asteroid"))
         {
+            RpcParticuleDust(gameObject.transform.position);
             Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
             NetworkServer.Destroy(go);
             RpcResetVelocity();
@@ -174,17 +188,10 @@ public class PlayerHealth : NetworkBehaviour
 
         if (isDead)
         {
-
-            /*GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-            foreach (GameObject p in players)
+            if (playerShoot)
             {
-                if (p.GetComponent<NetworkIdentity>().netId == go.GetComponent<Ammo>().ownerId)
-                {
-                    p.GetComponent<PlayerScore>().addKill();
-                    break;
-                }
-            }*/
+                NetworkIdentity.spawned[otherNetId].GetComponent<PlayerScore>().addKill();
+            }
 
             GetComponent<PlayerScore>().addDeath();
 
@@ -310,5 +317,18 @@ public class PlayerHealth : NetworkBehaviour
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
+    }
+
+    /// <summary>
+    /// Instanciation de l'animation des particules de poussières quand un astéroide est dértuit
+    /// </summary>
+    [ClientRpc]
+    private void RpcParticuleDust(Vector3 dustPosition)
+    {
+        GameObject dust = Instantiate(DustVFX, dustPosition, Quaternion.identity);
+        ParticleSystem dustParticles = dust.transform.GetChild(0).GetComponent<ParticleSystem>();
+        dustParticles.Play();
+        float dustDuration = dustParticles.main.duration + dustParticles.main.startLifetimeMultiplier;
+        Destroy(dust, dustDuration);
     }
 }

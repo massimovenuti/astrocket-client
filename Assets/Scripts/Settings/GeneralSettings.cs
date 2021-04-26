@@ -4,28 +4,29 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-class GeneralSettings
+static class GeneralSettings
 {
-    public Keys keys;
-    public Sound sound;
+    public static Keys keys;
+    public static Sound sound;
 
-    public GeneralSettings( )
+    private static List<ISaveItem> settings;
+
+    public static void SetSettings(GeneralSettingsProxy gsp)
     {
-        keys = GameObject.FindObjectOfType<InputManager>().SaveInputs();
-        sound = new Sound();
+        SetSettings(gsp.sound);
+        SetSettings(gsp.keys);
     }
-
-    private List<ISaveItem> settings;
-
+    public static void SetSettings(Sound s) => sound = s; 
+    public static void SetSettings(Keys ks) => keys = ks; 
     /// <summary>
     /// Get the JSON representation for every member of the class
     /// </summary>
     /// <returns>Json string (not prettified) representing the settings</returns>
-    public string toSaveItem( )
+    public static string toSaveItem( )
     {
         string json = "{\"settings\":{";
 
-        IEnumerable<ISaveItem> s = GetType().GetFields().Where(field => typeof(ISaveItem).IsAssignableFrom(field.FieldType)).Select(f => (ISaveItem)f.GetValue(this));
+        IEnumerable<ISaveItem> s = typeof(GeneralSettings).GetFields().Where(field => typeof(ISaveItem).IsAssignableFrom(field.FieldType)).Select(f => (ISaveItem)f.GetValue(null));
         foreach (ISaveItem item in s)
         {
             json += $"\"{item.GetType().Name}\":";

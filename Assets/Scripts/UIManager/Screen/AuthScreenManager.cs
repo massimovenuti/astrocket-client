@@ -39,7 +39,7 @@ public class AuthScreenManager : ScreenManager
     }
 
     void OnClickToggleLogIn()
-    {
+    { 
         _loginForm.SetActive(true);
         _signupForm.SetActive(false);
         _loginToggleButton.interactable = false;

@@ -8,6 +8,7 @@ public class DestroyAsteroid : NetworkBehaviour
 {
     [SerializeField] GameObject _asteroidPrefab;
 
+    public GameObject DustVFX;
 
     [SerializeField] GameObject medikit;
     [SerializeField] GameObject akimbo;
@@ -49,6 +50,8 @@ public class DestroyAsteroid : NetworkBehaviour
         _asteroidToDestroy = asteroidToDestroy;
         _asteroidToDestroy.GetComponent<Collider>().enabled = false;
 
+        RpcParticuleDust(_asteroidToDestroy.transform.position);
+
         if (_asteroidToDestroy.GetComponent<Asteroid>().GetSize() > 1)
         {
             DropRemains();
@@ -76,13 +79,8 @@ public class DestroyAsteroid : NetworkBehaviour
         }
         angle = Mathf.DeltaAngle(0f, angle);
 
-        /*
-        Vector3 spawnPoint1 = new Vector3(-newScale.x / 16, 0, 0);
-        Vector3 spawnPoint2 = new Vector3( newScale.x / 16, 0, 0);
-        */
-
-        Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x / 16, 0, 0) + origin;
-        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3(newScale.x / 16, 0, 0) + origin;
+        Vector3 spawnPoint1 = Quaternion.Euler(0, angle, 0) * new Vector3(-newScale.x * 2, 0, 0) + origin;
+        Vector3 spawnPoint2 = Quaternion.Euler(0, angle, 0) * new Vector3( newScale.x * 2, 0, 0) + origin;
 
         Quaternion parLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
         Quaternion nonMaisParLa = new Quaternion(_asteroidToDestroy.transform.rotation.x, _asteroidToDestroy.transform.rotation.y, _asteroidToDestroy.transform.rotation.z, _asteroidToDestroy.transform.rotation.w);
@@ -105,6 +103,19 @@ public class DestroyAsteroid : NetworkBehaviour
         NetworkServer.Spawn(remain2);
     }
 
+    /// <summary>
+    /// Instanciation de l'animation des particules de poussières quand un astéroide est dértuit
+    /// </summary>
+    [ClientRpc]
+    private void RpcParticuleDust(Vector3 dustPosition)
+    {
+        GameObject dust = Instantiate(DustVFX, dustPosition, Quaternion.identity);
+        ParticleSystem dustParticles = dust.transform.GetChild(0).GetComponent<ParticleSystem>();
+        dustParticles.Play();
+        float dustDuration = dustParticles.main.duration + dustParticles.main.startLifetimeMultiplier;
+        Destroy(dust, dustDuration);
+    }
+
     [Server]
     private void DropPowerUp( )
     {
@@ -116,21 +127,14 @@ public class DestroyAsteroid : NetworkBehaviour
             int drop = Random.Range(1, 100);
 
             // TODO: change values
-            if (drop > 0 && drop <= 35)
+            if (drop <= 20)
                 InstantiatePowerUp(medikit);
-            else if (drop > 36 && drop <= 55)
+            else if (drop <= 40)
                 InstantiatePowerUp(shield);
-            else if (drop > 56 && drop <= 75)
-                InstantiatePowerUp(heavy);
-            else if (drop > 76 && drop <= 85)
-                InstantiatePowerUp(homing);
-            else if (drop > 86 && drop <= 92)
+            else if (drop <= 60)
                 InstantiatePowerUp(akimbo);
-            else if (drop > 93 && drop <= 99)
-                InstantiatePowerUp(bazooka);
             else
-                //InstantiatePowerUp(jammer);
-                Debug.Log("Jammer");
+                InstantiatePowerUp(bazooka);
         }
 
         NetworkServer.Destroy(_asteroidToDestroy);

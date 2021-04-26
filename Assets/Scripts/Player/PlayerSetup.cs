@@ -41,7 +41,9 @@ public class PlayerSetup : NetworkBehaviour
             }
 
 #if UNITY_ANDROID
-            InputManager.InputManagerInst.RegisterMobileUser(this.gameObject);
+            Transform t = this.transform.Find("Canvas/MobileControls");
+            t.gameObject.SetActive(true);
+            InputManager.InputManagerInst.RegisterMobileUser(t.gameObject);
 #endif
         }
     }

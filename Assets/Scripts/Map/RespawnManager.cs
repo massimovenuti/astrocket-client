@@ -13,8 +13,6 @@ public class RespawnManager : MonoBehaviour
 
     [SerializeField] LayerMask checkLayers;
 
-    [SerializeField] GameObject enemyMockPrefab;
-
     private float _yAxis = 0f;
 
     private GameObject _respawnManager;

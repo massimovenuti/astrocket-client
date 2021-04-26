@@ -6,14 +6,10 @@ using Mirror;
 
 public class PlayerScore : NetworkBehaviour
 {
-    [SerializeField]
-    private short pointsKill = 0;
-    [SerializeField]
-    private short pointsAsteroids = 0;
-    [SerializeField]
-    private short pointsDeaths = 0;
-    [SerializeField]
-    private short pointsPowerUps = 0;
+    public short pointsKill = 0;
+    public short pointsAsteroids = 0;
+    public short pointsDeaths = 0;
+    public short pointsPowerUps = 0;
 
     [SyncVar(hook = "updatePointsUi")]
     public short nbPoints = 0;
@@ -38,7 +34,7 @@ public class PlayerScore : NetworkBehaviour
         scoreCanvasGroup.alpha = 0f;
     }
 
-    [Client]
+    [ClientCallback]
     private void Start( )
     {
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
@@ -127,8 +123,12 @@ public class PlayerScore : NetworkBehaviour
         scoreTabManager.updateValue("Power-ups", $"player_{netId}", newValue);
     }
 
+    [ClientCallback]
     private void OnDestroy( )
     {
-        scoreTabManager.rmLigne($"player_{netId}");
+        if (scoreTabManager != null)
+        {
+            scoreTabManager.rmLigne($"player_{netId}");
+        }
     }
 }

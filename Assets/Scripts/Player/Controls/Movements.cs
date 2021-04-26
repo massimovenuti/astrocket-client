@@ -24,6 +24,16 @@ public class Movements : NetworkBehaviour
     private float _powerUpSpeed;
     private float _powerUpSlowSpeed;
 
+    private ParticleSystem _flameShip1;
+    private ParticleSystem _flameShip2;
+
+    private Queue<float> _interpolation;
+    private int _frameNum = 4;
+
+    private Animator PlayerController;
+
+    private bool _animated;
+
 
     // Start is called before the first frame update
     private void Start( )
@@ -50,17 +60,128 @@ public class Movements : NetworkBehaviour
 
         // GET IN CHILDREN
         _mainCamera = gameObject.GetComponentInChildren<Camera>();
+        
+        _flameShip1 = GameObject.Find("flametrail_left").GetComponent<ParticleSystem>();
+        _flameShip2 = GameObject.Find("flametrail_right").GetComponent<ParticleSystem>();
+        _animated = false;
+
+        _interpolation = new Queue<float>(_frameNum);
     }
 
     private void FixedUpdate()
     {
+        Vector3 _lastRotate = _rgbody.transform.eulerAngles;
+
         if (isLocalPlayer)
         {
             LookAt();
+            Vector3 _currRotate = _rgbody.transform.eulerAngles;
+            Spin(_lastRotate, _currRotate);
+            CmdSpin(_lastRotate, _currRotate);
             if (_inp.IsBoosting())
             {
                 _rgbody.AddForce(transform.forward * _forwardSpeed * _multiplierSpeed);
+                if (!_animated)
+                {
+                    _animated = true;
+                    CmdBoost(true);
+                }
             }
+            else if (_animated)
+            {
+                _animated = false;
+                CmdBoost(false);
+            }
+        }
+    }
+
+    private void Spin(Vector3 _lastRotate, Vector3 _currRotate)
+    {
+        PlayerController = this.gameObject.transform.Find("SpaceFighter").GetComponent<Animator>();
+
+        _lastRotate.z = 1;
+        _currRotate.z = 1;
+
+        _lastRotate.x = 1;
+        _currRotate.x = 1;
+
+        _lastRotate.y = (int)_lastRotate.y;
+        _currRotate.y = (int)_currRotate.y;
+
+        Vector3 crossP = Vector3.Cross(_lastRotate, _currRotate).normalized;
+
+        if (_interpolation.Count != _frameNum)
+        {
+            _interpolation.Enqueue((float)System.Math.Round(crossP.z * 100f) / 100f);
+        }
+        if (_interpolation.Count == _frameNum)
+        {
+            _interpolation.Dequeue();
+            _interpolation.Enqueue((float)System.Math.Round(crossP.z * 100f) / 100f);
+
+            bool checkVal = true;
+
+            for (int i = 1; i < _frameNum && checkVal; i++)
+            {
+                if (_interpolation.ElementAt(0) != _interpolation.ElementAt(i))
+                    checkVal = false;
+            }
+
+            if (checkVal)
+            {
+                if (_interpolation.ElementAt(0) < 0) //turns left
+                {
+                    PlayerController.SetBool("BoolLeft", true);
+                    PlayerController.SetBool("BoolRight", false);
+                }
+                else if (_interpolation.ElementAt(0) > 0) //turn right
+                {
+                    PlayerController.SetBool("BoolRight", true);
+                    PlayerController.SetBool("BoolLeft", false);
+                }
+
+                else //idle
+                {
+                    PlayerController.SetBool("BoolRight", false);
+                    PlayerController.SetBool("BoolLeft", false);
+                }
+            }
+        }
+    }
+
+    [Command]
+    private void CmdBoost(bool boost)
+    {
+        RpcBoost(boost);
+    }
+
+    [ClientRpc]
+    private void RpcBoost(bool boost)
+    {
+        if (boost)
+        {
+            _flameShip1.Play();
+            _flameShip2.Play();
+        }
+        else
+        {
+            _flameShip1.Stop();
+            _flameShip2.Stop();
+        }
+    }
+
+    [Command]
+    private void CmdSpin(Vector3 _lastRotate, Vector3 _currRotate)
+    {
+        RpcSpin(_lastRotate, _currRotate);
+    }
+
+    [ClientRpc]
+    private void RpcSpin(Vector3 _lastRotate, Vector3 _currRotate)
+    {
+        if (!isLocalPlayer)
+        {
+            Spin(_lastRotate, _currRotate);
         }
     }
 

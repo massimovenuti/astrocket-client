@@ -10,6 +10,7 @@ public class MenuManager : NetworkBehaviour
     private GameObject menuCanvas;
 
     private Button resumeButton;
+    private Button settingsButton; // TODO
     private Button disconnectButton;
 
     private void Awake( )
@@ -19,16 +20,22 @@ public class MenuManager : NetworkBehaviour
         resumeButton = menuCanvas.FindObjectByName("ResumeButton").GetComponent<Button>();
         resumeButton.onClick.AddListener(SetMenuState);
 
+#if UNITY_ANDROID
+        resumeButton.onClick.AddListener(() => {
+            menuCanvas.transform.parent.Find("Canvas/MobileControls/Menu").gameObject.SetActive(true);
+        });
+#endif
+
+
         disconnectButton = menuCanvas.FindObjectByName("DisconnectButton").GetComponent<Button>();
-        disconnectButton.onClick.AddListener(GameObject.Find("NetworkManager").GetComponent<AsteroidNetworkManager>().StopClient);
+        disconnectButton.onClick.AddListener(GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StopClient);
     }
 
     private void Update()
     {
-        if(isLocalPlayer)
+        if(isLocalPlayer && InputManager.InputManagerInst.ShowMenu())
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-                SetMenuState();
+            SetMenuState();
         }
     }
 
