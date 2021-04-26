@@ -4,6 +4,13 @@ using System.Linq;
 
 class InputManager : MonoBehaviour
 {
+    public static readonly Dictionary<string, KeyCode> DefaultKeys =
+        new Dictionary<string, KeyCode>()
+        {
+            ["Score"] = KeyCode.Tab,
+            ["Boost"] = KeyCode.Space,
+            ["Shoot"] = KeyCode.Mouse0,
+        };
 
     private static InputManager _instance = null;
     
@@ -26,12 +33,7 @@ class InputManager : MonoBehaviour
         {
             _instance = this;
             _isUsingController = false;
-            _keys = new Dictionary<string, KeyCode>(2)
-            {
-                ["Boost"] = KeyCode.Space,
-                ["Shoot"] = KeyCode.Mouse0,
-                ["Score"] = KeyCode.Tab
-            };
+            _keys = DefaultKeys;
         }
         else
         {
@@ -125,15 +127,5 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public Keys SaveInputs( )
-    {
-        InputKey[] ks = {
-            new InputKey("Shoot", _keys["Shoot"]),
-            new InputKey("Boost", _keys["Boost"])
-        };
-
-        Keys k = new Keys(ks);
-
-        return k;
-    }
+    public Keys SaveInputs( ) => Keys.Instance(_keys);
 }

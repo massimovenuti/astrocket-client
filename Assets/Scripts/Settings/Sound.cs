@@ -3,6 +3,14 @@
 [System.Serializable]
 public class Sound : ISaveItem
 {
+    private static Sound SoundInstance = null;
+    public static Sound Instance(float master = 1f, float music = 1f, float vfx = 1f)
+    {
+        if(SoundInstance == null)
+            SoundInstance = new Sound(master, music, vfx);
+        return SoundInstance;
+    }
+
     public float master;
     public float effects;
     public float music;
@@ -42,7 +50,7 @@ public class Sound : ISaveItem
         }
     }
 
-    public Sound(float master = 1f, float effects = 1f, float music = 1f)
+    private Sound(float master = 1f, float effects = 1f, float music = 1f)
     {
         Master = master;
         Effects = effects;

@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using UnityEngine;
 
-class SaveManager
+class SaveManager : MonoBehaviour
 {
+    private void Awake( ) => Load();
+
     private static string _filename = @"/settings.json";
 
     public static void Save()
@@ -32,15 +34,15 @@ class SaveManager
             }
             catch
             {
-                GeneralSettings.keys = new Keys();
-                GeneralSettings.sound = new Sound();
+                GeneralSettings.keys = Keys.Instance();
+                GeneralSettings.sound = Sound.Instance();
                 Debug.LogError("Invalid JSON provided, getting new settings");
             }
         }
         else
         {
-            GeneralSettings.SetSettings(new Keys());
-            GeneralSettings.SetSettings(new Sound());
+            GeneralSettings.SetSettings(Keys.Instance());
+            GeneralSettings.SetSettings(Sound.Instance());
         }
     }
 }

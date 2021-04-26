@@ -63,9 +63,7 @@ public class SettingsScreenManager : ScreenManager
 
     private void saveSettings( )
     {
-        /*
-         * TODO
-         */
+
     }
 
     private void updateMusicValue(float value)
