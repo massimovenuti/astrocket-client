@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using Mirror;
 
@@ -16,7 +17,7 @@ public class ScoreTabManager : MonoBehaviour
         GameObject playerCell = Instantiate(pCell, transform.Find("Board/Players").transform);
         playerCell.name = name;
         playerCell.GetComponentInChildren<TMP_Text>().text = name;
-        //playerCell.GetComponentInChildren<Material>().color = color;
+        playerCell.GetComponentInChildren<Image>().color = player.GetComponent<PlayerSetup>().playerColor;
 
         GameObject scoreCell = Instantiate(dCell, transform.Find("Board/Score").transform);
         scoreCell.name = name;

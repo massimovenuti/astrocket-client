@@ -23,7 +23,7 @@ public class Ammo : NetworkBehaviour
     {
         GetComponent<Rigidbody>().velocity = transform.forward * _speed;
         Color c = NetworkIdentity.spawned[ownerId].GetComponent<PlayerSetup>().playerColor;
-        c += new Color(0.4f, 0.4f, 0.4f);
+        c += new Color(0.25f, 0.25f, 0.25f);
 
         if (this.name.Contains("Bullet"))
         {
@@ -37,7 +37,7 @@ public class Ammo : NetworkBehaviour
                 {
                     if (m.name.Contains("accent"))
                     {
-                        m.SetColor("_Color", c);
+                        m.color = c;
                     }
                 }
             }
