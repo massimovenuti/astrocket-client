@@ -41,7 +41,10 @@ public class TimeManager : NetworkBehaviour
         {
             int min = (int)(_timer / 60);
             int sec = (int)(_timer % 60);
-            _timerText.text = min.ToString()+":"+sec.ToString();
+            _timerText.text = min.ToString() + ":";
+            if (sec < 10)
+                _timerText.text += "0";
+            _timerText.text += sec.ToString();
         }
     }
 }
