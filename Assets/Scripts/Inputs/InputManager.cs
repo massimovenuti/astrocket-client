@@ -120,7 +120,7 @@ class InputManager : MonoBehaviour
         } else
             return false;
 #else
-        return Input.GetKey(KeyCode.Escape);
+        return Input.GetKeyDown(KeyCode.Escape);
 #endif
     }
 
