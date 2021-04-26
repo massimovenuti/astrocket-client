@@ -35,6 +35,7 @@ public class GunController : NetworkBehaviour
 
     private float _lastShootingTimeRef;
 
+    [SyncVar]
     public bool canShoot;
 
     private ShootingIndicator _shootingIndicator;
@@ -100,7 +101,9 @@ public class GunController : NetworkBehaviour
 
     private void DisplayShooting()
     {
-        if (_akimbo)
+        if (!canShoot)
+            _shootingIndicator.DisplayCantShoot();
+        else if (_akimbo)
             _shootingIndicator.DisplayAkimbo();
         else if (_bazooka)
             _shootingIndicator.DisplayBazooka();

@@ -9,45 +9,61 @@ public class ShootingIndicator : MonoBehaviour
     private Image _firingModeImage;
 
     [SerializeField]
-    private Sprite _singleFireSprite;
+    private Sprite[] _spriteList;
 
-    [SerializeField]
-    private Sprite _akimboSprite;
+    private int _lastFiringMode;
+    private enum _firingMode
+    {
+        cantShoot = 0,
+        singleFire = 1,
+        akimbo = 2,
+        bazooka = 3
+    }
 
-    [SerializeField]
-    private Sprite _bazookaSprite;
-
-    private string _lastFiringMode = "Can't Shoot";
+    private void Start( )
+    {
+        _lastFiringMode = (int)_firingMode.cantShoot;
+        SetFiringModeImage();
+    }
 
     public void DisplayCantShoot()
     {
-        Debug.Log("Can't Shoot");
+        if (_lastFiringMode != (int)_firingMode.cantShoot)
+        {
+            _lastFiringMode = (int)_firingMode.cantShoot;
+            SetFiringModeImage();
+        }
     }
 
     public void DisplaySingleFire( )
     {
-        if (!string.Equals(_lastFiringMode, "Single Fire"))
+        if (_lastFiringMode != (int)_firingMode.singleFire)
         {
-            _firingModeImage.sprite = _singleFireSprite;
-            _lastFiringMode = "Single Fire";
+            _lastFiringMode = (int)_firingMode.singleFire;
+            SetFiringModeImage();
         }
     }
 
     public void DisplayAkimbo( )
     {
-        if (!string.Equals(_lastFiringMode, "Akimbo"))
+        if (_lastFiringMode != (int)_firingMode.akimbo)
         {
-            _firingModeImage.sprite = _akimboSprite;
-            _lastFiringMode = "Akimbo";
+            _lastFiringMode = (int)_firingMode.akimbo;
+            SetFiringModeImage();
         }
     }
 
     public void DisplayBazooka( )
     {
-        if(!string.Equals(_lastFiringMode, "Bazooka"))
+        if (_lastFiringMode != (int)_firingMode.bazooka)
         {
-            _firingModeImage.sprite = _bazookaSprite;
-            _lastFiringMode = "Bazooka";
+            _lastFiringMode = (int)_firingMode.bazooka;
+            SetFiringModeImage();
         }
+    }
+
+    private void SetFiringModeImage( )
+    {
+        _firingModeImage.sprite = _spriteList[_lastFiringMode];
     }
 }
