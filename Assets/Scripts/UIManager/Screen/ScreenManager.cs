@@ -7,6 +7,8 @@ public class ScreenManager : MonoBehaviour
     public GameObject nextPage;
     public GameObject previousPage;
 
+    private GameObject m_popup;
+
     public void Start( ) // on start : footer handling
     {
         Button goBackButton, exitButton;
@@ -30,6 +32,8 @@ public class ScreenManager : MonoBehaviour
             }
         }
         catch { }
+
+        
     }
 
     protected void goToPage(GameObject page)
