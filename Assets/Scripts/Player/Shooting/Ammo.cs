@@ -23,8 +23,25 @@ public class Ammo : NetworkBehaviour
     {
         GetComponent<Rigidbody>().velocity = transform.forward * _speed;
         Color c = NetworkIdentity.spawned[ownerId].GetComponent<PlayerSetup>().playerColor;
-        GetComponent<Renderer>().material.SetColor("_Color", c);
-        GetComponent<Renderer>().material.SetColor("_EmissionColor", c);
+        c += new Color(0.4f, 0.4f, 0.4f);
+
+        if (this.name.Contains("Bullet"))
+        {
+            GetComponent<Renderer>().material.SetColor("_Color", c);
+            GetComponent<Renderer>().material.SetColor("_EmissionColor", c);
+        } else if (this.name.Contains("Rocket")) {
+            Renderer[] renders = GetComponentsInChildren<Renderer>();
+            foreach (Renderer r in renders)
+            {
+                foreach (Material m in r.materials)
+                {
+                    if (m.name.Contains("accent"))
+                    {
+                        m.SetColor("_Color", c);
+                    }
+                }
+            }
+        }
     }
 
     [Server]
