@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SettingsScreenManager : ScreenManager
 {
+    private GameObject _panelAudio;
     private GameObject _panelGraphics;
     private GameObject _panelControls;
-    private GameObject _panelAudio;
-    private Button _panelGraphicsButton;
-    private Button _panelControlsButton;
     private Button _panelAudioButton;
+    private Button _panelControlsButton;
+    private Button _panelGraphicsButton;
+    private Button _saveButton;
+
+    private TMP_Text _musicValue;
+    private TMP_Text _masterValue;
+    private TMP_Text _effectsValue;
+    private Slider _musicVolumeSlider;
+    private Slider _masterVolumeSlider;
+    private Slider _effectsVolumeSlider;
 
     void Start( )
     {
@@ -16,6 +25,8 @@ public class SettingsScreenManager : ScreenManager
         Screen.orientation = ScreenOrientation.Landscape;
 #endif
         base.Start();
+
+        _saveButton = transform.Find("Footer/SaveButton").GetComponent<Button>();
 
         _panelGraphics = GameObject.Find("GraphicsSettings").gameObject;
         _panelControls = GameObject.Find("ControlsSettings").gameObject;
@@ -29,12 +40,61 @@ public class SettingsScreenManager : ScreenManager
         _panelControlsButton.onClick.AddListener(( ) => { setPanelTo(Panel.Controls); });
         _panelAudioButton.onClick.AddListener(( ) => { setPanelTo(Panel.Audio); });
 
+        _musicValue = GameObject.Find("MusicVolumeValue").GetComponent<TMP_Text>();
+        _masterValue = GameObject.Find("MasterVolumeValue").GetComponent<TMP_Text>();
+        _effectsValue = GameObject.Find("EffectsVolumeValue").GetComponent<TMP_Text>();
+
+        _musicVolumeSlider = GameObject.Find("MusicVolumeSlider").GetComponent<Slider>();
+        _masterVolumeSlider = GameObject.Find("MasterVolumeSlider").GetComponent<Slider>();
+        _effectsVolumeSlider = GameObject.Find("EffectsVolumeSlider").GetComponent<Slider>();
+
+        _musicVolumeSlider.onValueChanged.AddListener(updateMusicValue);
+        _masterVolumeSlider.onValueChanged.AddListener(updateMasterValue);
+        _effectsVolumeSlider.onValueChanged.AddListener(updateEffectsValue);
+
+        _saveButton.onClick.AddListener(saveSettings);
+
         setPanelTo(Panel.Graphics);
+        updateMasterValue(_masterVolumeSlider.value);
+        updateMusicValue(_masterVolumeSlider.value);
+        updateEffectsValue(_masterVolumeSlider.value);
+
+    }
+
+    private void saveSettings()
+    {
+        /*
+         * TODO
+         */
+    }
+
+    private void updateMusicValue(float value)
+    {
+        _musicValue.text = value.ToString();
+    }
+    private void updateMasterValue(float value)
+    {
+        _masterValue.text = value.ToString();
+    }
+
+    private void updateEffectsValue(float value)
+    {
+        _effectsValue.text = value.ToString();
     }
 
     void Update( )
     {
 
+    }
+
+    public void SetMasterVolume(float val)
+    {
+        _masterVolumeSlider.value = val;
+    }
+
+    public void SetMusicVolume(float val)
+    {
+        _musicVolumeSlider.value = val;
     }
 
     private void setPanelTo(Panel panel)
