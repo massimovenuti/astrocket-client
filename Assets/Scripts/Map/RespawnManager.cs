@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Mirror;
 
-public class RespawnManager : MonoBehaviour
+public class RespawnManager : NetworkBehaviour
 {
     [SerializeField] string RespawnPointStorageTagName = "RespawnPointStorage";
 
