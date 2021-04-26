@@ -8,6 +8,8 @@ static class GeneralSettings
 {
     public static Keys keys;
     public static Sound sound;
+    public static VideoSettings video;
+
 
     private static List<ISaveItem> settings;
 
@@ -18,6 +20,7 @@ static class GeneralSettings
     }
     public static void SetSettings(Sound s) => sound = s; 
     public static void SetSettings(Keys ks) => keys = ks; 
+    public static void SetSettings(VideoSettings vs) => video = vs; 
     /// <summary>
     /// Get the JSON representation for every member of the class
     /// </summary>

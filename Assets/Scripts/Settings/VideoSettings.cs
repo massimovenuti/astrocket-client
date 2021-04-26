@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+[System.Serializable]
+class VideoSettings
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Vector2 Resolution;
+    public float AspectRation;
+    public AAMode AntiAliasing;
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum AAMode
+{
+    SMAA,
+    FXAA,
+    None
 }

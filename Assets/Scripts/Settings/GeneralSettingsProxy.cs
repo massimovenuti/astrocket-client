@@ -6,4 +6,5 @@ class GeneralSettingsProxy
 {
     public Keys keys;
     public Sound sound;
+    public VideoSettings video;
 }
