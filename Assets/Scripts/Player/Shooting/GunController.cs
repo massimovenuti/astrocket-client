@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Mirror;
+using TMPro;
 
 public class GunController : NetworkBehaviour
 {
@@ -15,6 +16,7 @@ public class GunController : NetworkBehaviour
     public string ShootingFrom = "Barrel";
     public string BulletStorageTagName = "BulletStorage";
 
+    [SyncVar]
     private bool _akimbo, _mitraillette, _bazooka, _homing, _heavy;
 
     private float _refShootRate, _mitrailletteShootRate, _bazookaShootRate, 
@@ -33,7 +35,10 @@ public class GunController : NetworkBehaviour
 
     private float _lastShootingTimeRef;
 
+    [SyncVar]
     public bool canShoot;
+
+    private ShootingIndicator _shootingIndicator;
 
     private void Start( )
     {
@@ -76,6 +81,8 @@ public class GunController : NetworkBehaviour
         _bazookaShootRate = shootRate * 2;
         _homingShootRate = shootRate * 3;
         _heavyLaserShootRate = shootRate * 4;
+
+        _shootingIndicator = GetComponent<ShootingIndicator>();
     }
 
     private void Update( )
@@ -87,7 +94,21 @@ public class GunController : NetworkBehaviour
                 CmdShoot();
                 _lastShootingTimeRef = Time.time + shootRate;
             }
+
+            DisplayShooting();
         }
+    }
+
+    private void DisplayShooting()
+    {
+        if (!canShoot)
+            _shootingIndicator.DisplayCantShoot();
+        else if (_akimbo)
+            _shootingIndicator.DisplayAkimbo();
+        else if (_bazooka)
+            _shootingIndicator.DisplayBazooka();
+        else
+            _shootingIndicator.DisplaySingleFire();
     }
 
     [Command]
