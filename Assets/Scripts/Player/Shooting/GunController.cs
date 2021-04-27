@@ -140,9 +140,7 @@ public class GunController : NetworkBehaviour
     private void Shoot( )
     {
         GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
-
         go.GetComponent<Ammo>().ownerId = netId;
-
         go.transform.parent = _bulletSpawn.transform;
         
         NetworkServer.Spawn(go);

@@ -9,6 +9,8 @@ public class PlayerSpawn : NetworkBehaviour
     public override void OnStartServer( )
     {
         Protect(true);
+        GetComponent<GunController>().DisableShoot();
+
         StartCoroutine(ProtectedOnSpawn());
     }
 
@@ -29,8 +31,6 @@ public class PlayerSpawn : NetworkBehaviour
         GetComponent<PlayerHealth>().Revive();
         GetComponent<PlayerHealth>().DesactivateShield();
         GetComponent<GunController>().ResetShooting();
-        //GetComponent<Movements>().ResetPowerUps();
-        //GetComponent<PlayerDrone>().DesactivateDrone();
 
         // Désactive le joueur chez tous les clients
         RpcActive(false);
@@ -55,9 +55,12 @@ public class PlayerSpawn : NetworkBehaviour
     {
         // TODO: change value
         yield return new WaitForSeconds(2f);
+
         // Active le joueur chez tous les clients
         RpcActive(true);
+
         // Protection au spawn
+        GetComponent<GunController>().DisableShoot();
         StartCoroutine(ProtectedOnSpawn());
     }
 
@@ -81,6 +84,5 @@ public class PlayerSpawn : NetworkBehaviour
     private void Protect(bool protection)
     {
         GetComponent<BoxCollider>().enabled = !protection;
-        GetComponent<GunController>().DisableShoot();
     }
 }
