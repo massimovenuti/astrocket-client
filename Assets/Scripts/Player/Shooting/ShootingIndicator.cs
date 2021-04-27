@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using Mirror;
 
-public class ShootingIndicator : MonoBehaviour
+public class ShootingIndicator : NetworkBehaviour
 {
     [SerializeField]
     private Image _firingModeImage;
@@ -20,10 +21,14 @@ public class ShootingIndicator : MonoBehaviour
         bazooka = 3
     }
 
+
     private void Start( )
     {
-        _lastFiringMode = (int)_firingMode.cantShoot;
-        SetFiringModeImage();
+        if (isLocalPlayer)
+        {
+            _lastFiringMode = (int)_firingMode.cantShoot;
+            SetFiringModeImage();
+        }
     }
 
     public void DisplayCantShoot()
@@ -65,5 +70,10 @@ public class ShootingIndicator : MonoBehaviour
     private void SetFiringModeImage( )
     {
         _firingModeImage.sprite = _spriteList[_lastFiringMode];
+    }
+
+    public void DisplayTimer(float timer)
+    {
+        Debug.Log(timer);
     }
 }

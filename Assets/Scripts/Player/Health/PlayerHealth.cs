@@ -15,7 +15,6 @@ public class PlayerHealth : NetworkBehaviour
     [SerializeField] Image fill;
 
     public GameObject shield;
-    public PlayerDrone accessDrone;
     public GameObject ui;
 
     private int _healValue = 40;

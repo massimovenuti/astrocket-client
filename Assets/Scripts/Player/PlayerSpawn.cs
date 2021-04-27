@@ -28,7 +28,7 @@ public class PlayerSpawn : NetworkBehaviour
         GetComponent<Movements>().RpcResetVelocity();
         GetComponent<PlayerHealth>().Revive();
         GetComponent<PlayerHealth>().DesactivateShield();
-        GetComponent<GunController>().ResetPowerUps();
+        GetComponent<GunController>().ResetShooting();
         //GetComponent<Movements>().ResetPowerUps();
         //GetComponent<PlayerDrone>().DesactivateDrone();
 
@@ -81,6 +81,6 @@ public class PlayerSpawn : NetworkBehaviour
     private void Protect(bool protection)
     {
         GetComponent<BoxCollider>().enabled = !protection;
-        GetComponent<GunController>().canShoot = !protection;
+        GetComponent<GunController>().DisableShoot();
     }
 }
