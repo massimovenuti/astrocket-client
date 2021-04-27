@@ -9,6 +9,29 @@ public class ScoreTabManager : MonoBehaviour
 {
     public GameObject pCell;
     public GameObject dCell;
+
+    private CanvasGroup scoreCanvasGroup;
+
+    private void Start( )
+    {
+        scoreCanvasGroup = GetComponent<CanvasGroup>();
+        scoreCanvasGroup.alpha = 0f;
+    }
+
+    private void Update( )
+    {
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            scoreCanvasGroup.alpha = 1f;
+            scoreCanvasGroup.blocksRaycasts = true;
+        }
+        else
+        {
+            scoreCanvasGroup.alpha = 0f;
+            scoreCanvasGroup.blocksRaycasts = false;
+        }
+    }
+
     public void addLigne(GameObject player)
     {
         string name = $"player_{player.GetComponent<NetworkIdentity>().netId}";
@@ -34,7 +57,9 @@ public class ScoreTabManager : MonoBehaviour
         GameObject asteroidsCell = Instantiate(dCell, transform.Find("Board/Asteroids").transform);
         asteroidsCell.name = name;
         asteroidsCell.GetComponentInChildren<TMP_Text>().text = score.nbAsteroids.ToString();
-        
+
+        //Debug.LogWarning("(ToString) NbAsteroids : " + score.nbAsteroids.ToString());
+
         GameObject puCell = Instantiate(dCell, transform.Find("Board/Power-ups").transform);
         puCell.name = name;
         puCell.GetComponentInChildren<TMP_Text>().text = score.nbPowerUps.ToString();

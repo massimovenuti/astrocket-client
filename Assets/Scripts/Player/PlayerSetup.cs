@@ -9,36 +9,21 @@ public class PlayerSetup : NetworkBehaviour
     [SyncVar(hook = "OnColorChange")]
     public Color playerColor;
 
-    [SerializeField] Behaviour[] toDisable;
+   [SerializeField] Behaviour[] toDisable;
 
-    private void Start( )
+    public override void OnStartClient( )
     {
+        GameObject canvas = GameObject.Find("ScoreCanvas");
+
         if (!isLocalPlayer)
         {
             foreach (Behaviour obj in toDisable)
             {
                 obj.enabled = false;
             }
-
-            foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
-                {
-                    p.GetComponentInChildren<ScoreTabManager>().addLigne(gameObject);
-                }
-            }
         }
         else
         {
-            GameObject canvas = transform.Find("ScoreCanvas").gameObject;
-
-            foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
-                {
-                    canvas.GetComponent<ScoreTabManager>().addLigne(p);
-                }
-            }
 
 #if UNITY_ANDROID
             Transform t = this.transform.Find("Canvas/MobileControls");
@@ -46,6 +31,8 @@ public class PlayerSetup : NetworkBehaviour
             InputManager.InputManagerInst.RegisterMobileUser(t.gameObject);
 #endif
         }
+
+        canvas.GetComponent<ScoreTabManager>().addLigne(gameObject);
     }
 
     [ClientCallback]
