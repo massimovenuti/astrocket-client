@@ -102,9 +102,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
         gamePlayer.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
         return true;
     }
-    
-    /*
-    public override void OnServerAddPlayer(NetworkConnection conn)
+   
+    public override void OnRoomServerAddPlayer(NetworkConnection conn)
     {
         Debug.Log("Add player");
         Transform startPos = GetStartPosition();
@@ -116,7 +115,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         NetworkServer.AddPlayerForConnection(conn, player);
     }
-    */
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
