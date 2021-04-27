@@ -25,10 +25,7 @@ public class PlayerHealth : NetworkBehaviour
     [SerializeField] int asteroidDmgRate = 10;
     private int _damageBullet = 20;
     private int _damageRocket = 40;
-    private int _damageHeavyLaser = 40;
-    private int _damageHomingMissile = 20;
     private int _damageExplosion = 30;
-    private int _damageMine = 50;
     private int _damageValue;
 
     [SyncVar(hook = "OnShieldChange")]
@@ -36,9 +33,6 @@ public class PlayerHealth : NetworkBehaviour
 
     [SyncVar(hook = "OnHealthChange")]
     public int health;
-
-    private bool _isFantome;
-    private bool _isHacked;
 
     private bool isDead = false;
 
@@ -60,22 +54,8 @@ public class PlayerHealth : NetworkBehaviour
         if (isServer)
         {
             this.health = this.maxPlayerHealth;
-            // initialise les booléens des power-ups 
-            // (fantome et jammer) à faux
-            _isFantome = false;
-            _isHacked = false;
             DesactivateShield();
         }
-
-        // pour accéder plus tard au drone du joueur
-        //accessDrone = this.GetComponent<PlayerDrone>();
-
-        //if (isLocalPlayer)
-        //{
-        //    // récupère l'UI du power-up jammer et la désactive
-        //    ui = GameObject.Find("PowerUpUI");
-        //    ui.SetActive(false);
-        //}
     }
 
     [ClientCallback]
@@ -153,36 +133,12 @@ public class PlayerHealth : NetworkBehaviour
             _damageValue = _damageRocket;
             Damage(_damageValue);
         }
-        // touché par un heavy laser (power-up)
-        else if (other.CompareTag("HeavyLaser") && go.GetComponent<Ammo>().ownerId != netId)
-        {
-            playerShoot = true;
-            otherNetId = go.GetComponent<Ammo>().ownerId;
-            _damageValue = _damageHeavyLaser;
-            Damage(_damageValue);
-            NetworkServer.Destroy(go);
-        }
-        // touché par un homing missile (power-up)
-        else if (other.CompareTag("HomingMissile") && go.GetComponent<Ammo>().ownerId != netId)
-        {
-            playerShoot = true;
-            otherNetId = go.GetComponent<Ammo>().ownerId;
-            _damageValue = _damageHomingMissile;
-            Damage(_damageValue);
-            NetworkServer.Destroy(go);
-        }
         else if (other.CompareTag("Asteroid"))
         {
             RpcParticuleDust(gameObject.transform.position);
             Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
             NetworkServer.Destroy(go);
             RpcResetVelocity();
-        }
-        else if (other.CompareTag("Mine"))
-        {
-            _damageValue = _damageMine;
-            Damage(_damageValue);
-            NetworkServer.Destroy(go);
         }
 
         if (isDead)
@@ -193,7 +149,6 @@ public class PlayerHealth : NetworkBehaviour
             }
 
             GetComponent<PlayerScore>().addDeath();
-
             GetComponent<PlayerSpawn>().Respawn();
         }
     }
@@ -244,32 +199,8 @@ public class PlayerHealth : NetworkBehaviour
     /// </summary>
     public void PowerUpShield( )
     {
-        //if (accessDrone.hasDrone)
-        //{
-        //    accessDrone.DesactivateDrone();
-        //}
         hasShield = true;
         shieldDurability = _shieldDurabilityMax;
-    }
-
-    /// <summary>
-    /// Fonction activant le power-up fantome
-    /// </summary>
-    public void PowerUpFantome( )
-    {
-        _isFantome = true;
-        this.GetComponent<BoxCollider>().enabled = false;
-        StartCoroutine(TimerFantome());
-    }
-
-    /// <summary>
-    /// Fonction activant l'UI du malus jammer
-    /// </summary>
-    public void PowerUpJammer( )
-    {
-        _isHacked = true;
-        ui.SetActive(true);
-        StartCoroutine(TimerJammer());
     }
 
     /// <summary>
@@ -281,32 +212,6 @@ public class PlayerHealth : NetworkBehaviour
     {
         hasShield = false;
         shieldDurability = 0;
-    }
-
-    /// <summary>
-    /// Fonction attendant 5 secondes avant de
-    /// désactiver le power-up fantome
-    /// </summary>
-    private IEnumerator TimerFantome( )
-    {
-        // OP /!\
-        yield return new WaitForSeconds(5);
-
-        this.GetComponent<BoxCollider>().enabled = true;
-        _isFantome = false;
-    }
-
-    /// <summary>
-    /// Fonction attendant 10 secondes avant de
-    /// désactiver le power-up jammer
-    /// </summary>
-    private IEnumerator TimerJammer( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(2f);
-
-        ui.SetActive(false);
-        _isHacked = false;
     }
 
     [TargetRpc]

@@ -74,6 +74,6 @@ public class ShootingIndicator : NetworkBehaviour
 
     public void DisplayTimer(float timer)
     {
-        Debug.Log(timer);
+        Debug.Log(""+timer);
     }
 }

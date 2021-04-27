@@ -23,11 +23,9 @@ public class GunController : NetworkBehaviour
 
     private InputManager _inp;
 
-    private GameObject _barrel, _barrelAkimbo1, _barrelAkimbo2;
+    private GameObject _barrel, _barrelAkimbo1, _barrelAkimbo2, _bulletSpawn;
 
     public GameObject rocket;
-
-    private GameObject _bulletSpawn;
 
     private float _lastShootingTimeRef;
 
@@ -37,7 +35,7 @@ public class GunController : NetworkBehaviour
     private ShootingIndicator _shootingIndicator;
 
     [SyncVar]
-    private float _timer, _timerStart;
+    private float _timer;
 
     private void Start( )
     {
