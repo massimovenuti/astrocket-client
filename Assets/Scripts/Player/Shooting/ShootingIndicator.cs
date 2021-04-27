@@ -7,7 +7,10 @@ using Mirror;
 public class ShootingIndicator : NetworkBehaviour
 {
     [SerializeField]
-    private Image _firingModeImage;
+    private int _minimum, _maximum, _current;
+
+    [SerializeField]
+    private Image _firingModeImage, _firingModeTimer;
 
     [SerializeField]
     private Sprite[] _spriteList;
@@ -21,7 +24,6 @@ public class ShootingIndicator : NetworkBehaviour
         bazooka = 3
     }
 
-
     private void Start( )
     {
         if (isLocalPlayer)
@@ -31,7 +33,7 @@ public class ShootingIndicator : NetworkBehaviour
         }
     }
 
-    public void DisplayCantShoot()
+    public void DisplayCantShoot( )
     {
         if (_lastFiringMode != (int)_firingMode.cantShoot)
         {
@@ -72,8 +74,12 @@ public class ShootingIndicator : NetworkBehaviour
         _firingModeImage.sprite = _spriteList[_lastFiringMode];
     }
 
-    public void DisplayTimer(float timer)
+    public void DisplayTimer(float refTimer, float timer)
     {
-        Debug.Log(""+timer);
+        float currentOffset = (int)(timer * _maximum / refTimer) - _minimum;
+        float maximumOffset = _maximum - _minimum;
+        float fillAmount = currentOffset / maximumOffset;
+
+        _firingModeTimer.fillAmount = fillAmount;
     }
 }

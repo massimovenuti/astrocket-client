@@ -35,7 +35,7 @@ public class GunController : NetworkBehaviour
     private ShootingIndicator _shootingIndicator;
 
     [SyncVar]
-    private float _timer;
+    private float _timer, _refTimer;
 
     private void Start( )
     {
@@ -84,12 +84,14 @@ public class GunController : NetworkBehaviour
         if (isLocalPlayer)
         {
             DisplayShooting();
+
             if (Time.time > _lastShootingTimeRef && _inp.IsShooting())
             {
                 CmdShoot();
                 _lastShootingTimeRef = Time.time + shootRate;
             }
         }
+
         if (!canShoot || _akimbo || _bazooka)
         {
             if (isServer)
@@ -100,23 +102,35 @@ public class GunController : NetworkBehaviour
                     ResetShooting();
                 }
             }
-            else if (isLocalPlayer)
+            else if(isLocalPlayer)
             {
-                _shootingIndicator.DisplayTimer(_timer);
+                _shootingIndicator.DisplayTimer(_refTimer, _timer);
             }
+        } 
+        else if (isLocalPlayer)
+        {
+            _shootingIndicator.DisplayTimer(_refTimer, 0.0f);
         }
     }
 
     private void DisplayShooting()
     {
         if (!canShoot)
+        {
             _shootingIndicator.DisplayCantShoot();
+        }
         else if (_akimbo)
+        {
             _shootingIndicator.DisplayAkimbo();
+        }
         else if (_bazooka)
+        {
             _shootingIndicator.DisplayBazooka();
+        }
         else
+        {
             _shootingIndicator.DisplaySingleFire();
+        }
     }
 
     [Command]
@@ -126,11 +140,17 @@ public class GunController : NetworkBehaviour
             return;
 
         if (_akimbo)
+        {
             ShootAkimbo();
+        }
         else if (_bazooka)
+        {
             ShootBazooka();
+        }
         else
+        {
             Shoot();
+        }
     }
 
     /// <summary>
@@ -187,7 +207,8 @@ public class GunController : NetworkBehaviour
     public void PowerUpAkimbo( )
     {
         ResetShooting();
-        _timer = 15;
+        _refTimer = 15;
+        _timer = _refTimer;
         _akimbo = true;
         shootRate = _refShootRate;
     }
@@ -200,7 +221,8 @@ public class GunController : NetworkBehaviour
     public void PowerUpBazooka( )
     {
         ResetShooting();
-        _timer = 15;
+        _refTimer = 15;
+        _timer = _refTimer;
         _bazooka = true;
         shootRate = _bazookaShootRate;
     }
@@ -208,7 +230,8 @@ public class GunController : NetworkBehaviour
     [Server]
     public void DisableShoot()
     {
-        _timer = 2;
+        _refTimer = 2;
+        _timer = _refTimer;
         canShoot = false;
     }
 
