@@ -30,7 +30,9 @@ public class ResolutionManager : MonoBehaviour
 
     void Start( )
     {
+#if !(UNITY_ANDROID)
         StartCoroutine(StartRoutine());
+#endif
     }
 
     private void printResolution( )

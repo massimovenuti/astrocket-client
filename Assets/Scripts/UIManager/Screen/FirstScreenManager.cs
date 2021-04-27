@@ -4,8 +4,7 @@ public class FirstScreenManager : ScreenManager
 {
     new void Start()
     {
-
-
+        SaveManager.Load();
         base.Start();
     }
 

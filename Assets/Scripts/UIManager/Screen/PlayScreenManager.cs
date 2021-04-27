@@ -12,11 +12,6 @@ public class PlayScreenManager : ScreenManager
         serveurButton.onClick.AddListener(runGame);
     }
 
-    void Update()
-    {
-        
-    }
-
     void runGame()
     {
         GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StartClient();

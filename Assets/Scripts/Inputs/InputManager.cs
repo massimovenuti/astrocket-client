@@ -4,9 +4,16 @@ using System.Linq;
 
 class InputManager : MonoBehaviour
 {
+    public static readonly Dictionary<string, KeyCode> DefaultKeys =
+        new Dictionary<string, KeyCode>()
+        {
+            ["Score"] = KeyCode.Tab,
+            ["Boost"] = KeyCode.Space,
+            ["Shoot"] = KeyCode.Mouse0,
+        };
 
     private static InputManager _instance = null;
-    
+
     private bool _isUsingController;
     private Dictionary<string, KeyCode> _keys;
 
@@ -26,12 +33,7 @@ class InputManager : MonoBehaviour
         {
             _instance = this;
             _isUsingController = false;
-            _keys = new Dictionary<string, KeyCode>(2)
-            {
-                ["Boost"] = KeyCode.Space,
-                ["Shoot"] = KeyCode.Mouse0,
-                ["Score"] = KeyCode.Tab
-            };
+            _keys = DefaultKeys;
         }
         else
         {
@@ -102,7 +104,7 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public bool ShowScoreboard()
+    public bool ShowScoreboard( )
     {
 #if UNITY_ANDROID
         return false;
@@ -111,10 +113,10 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public bool ShowMenu()
+    public bool ShowMenu( )
     {
 #if UNITY_ANDROID
-        if(_menu.IsClicked)
+        if (_menu.IsClicked)
         {
             _menu.gameObject.SetActive(false);
             return true;
@@ -125,15 +127,17 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public Keys SaveInputs( )
+    public Key[] SaveInputs( )
     {
-        InputKey[] ks = {
-            new InputKey("Shoot", _keys["Shoot"]),
-            new InputKey("Boost", _keys["Boost"])
-        };
-
-        Keys k = new Keys(ks);
-
-        return k;
+        Key[] arr = new Key[this._keys.Count];
+        int i = 0;
+        foreach(var v in _keys)
+        {
+            arr[i] = new Key();
+            arr[i].keyname = v.Key;
+            arr[i].key = v.Value;
+            i++;
+        }
+        return arr;   
     }
 }
