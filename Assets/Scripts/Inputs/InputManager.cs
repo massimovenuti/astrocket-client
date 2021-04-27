@@ -13,7 +13,7 @@ class InputManager : MonoBehaviour
         };
 
     private static InputManager _instance = null;
-    
+
     private bool _isUsingController;
     private Dictionary<string, KeyCode> _keys;
 
@@ -104,7 +104,7 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public bool ShowScoreboard()
+    public bool ShowScoreboard( )
     {
 #if UNITY_ANDROID
         return false;
@@ -113,10 +113,10 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public bool ShowMenu()
+    public bool ShowMenu( )
     {
 #if UNITY_ANDROID
-        if(_menu.IsClicked)
+        if (_menu.IsClicked)
         {
             _menu.gameObject.SetActive(false);
             return true;
@@ -127,5 +127,17 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public Keys SaveInputs( ) => Keys.Instance(_keys);
+    public Key[] SaveInputs( )
+    {
+        Key[] arr = new Key[this._keys.Count];
+        int i = 0;
+        foreach(var v in _keys)
+        {
+            arr[i] = new Key();
+            arr[i].keyname = v.Key;
+            arr[i].key = v.Value;
+            i++;
+        }
+        return arr;   
+    }
 }
