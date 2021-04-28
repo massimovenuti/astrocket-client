@@ -8,36 +8,39 @@ using Mirror;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    [SerializeField] int maxPlayerHealth = 100;
+    [SerializeField] 
+    int maxPlayerHealth = 100;
 
-    [SerializeField] Slider slider;
-    [SerializeField] Gradient gradient;
-    [SerializeField] Image fill;
+    [SerializeField] 
+    private int _asteroidRateDamage, _damageBullet, _damageRocket, _damageExplosion, _healValue;
 
-    public GameObject shield;
-    public GameObject ui;
+    [SerializeField]
+    private Slider slider;
 
-    private int _healValue = 40;
+    [SerializeField]
+    private Gradient gradient;
 
-    private int _shieldDurabilityMax = 2;
-    public int shieldDurability;
+    [SerializeField]
+    private Image fill;
 
-    [SerializeField] int asteroidDmgRate = 10;
-    private int _damageBullet = 20;
-    private int _damageRocket = 40;
-    private int _damageExplosion = 30;
-    private int _damageValue;
+    [SerializeField]
+    private Image[] _shieldBar;
 
-    [SyncVar(hook = "OnShieldChange")]
-    public bool hasShield;
+    [SerializeField]
+    public GameObject shield, DustVFX;
 
     [SyncVar(hook = "OnHealthChange")]
     public int health;
 
+    [SyncVar(hook = "OnShieldChange")]
+    public bool hasShield;
+
+    [SyncVar(hook = "OnShieldDurabilityChange")]
+    public int shieldDurability;
+
     private bool isDead = false;
 
-    public GameObject DustVFX;
-
+    private int _damageValue = 0, _shieldDurabilityMax = 3;
 
     private void Awake( )
     {
@@ -55,6 +58,19 @@ public class PlayerHealth : NetworkBehaviour
         {
             this.health = this.maxPlayerHealth;
             DesactivateShield();
+        } 
+        else if (isLocalPlayer)
+        {
+            FillShieldBar(0);
+        }
+    }
+
+    [ClientCallback]
+    private void OnHealthChange(int oldValue, int newValue)
+    {
+        if (isLocalPlayer)
+        {
+            slider.value = newValue;
         }
     }
 
@@ -62,6 +78,31 @@ public class PlayerHealth : NetworkBehaviour
     private void OnShieldChange(bool oldValue, bool newValue)
     {
         shield.SetActive(newValue);
+    }
+
+    [ClientCallback]
+    private void OnShieldDurabilityChange(int oldValue, int newValue)
+    {
+        if(isLocalPlayer)
+        {
+            Debug.Log("Changed Shield Durability : " +  oldValue + " -> " + newValue);
+            FillShieldBar(newValue);
+        }
+    }
+
+    [Client]
+    private void FillShieldBar(int shieldValue)
+    {
+        for (int i = 0; i < _shieldBar.Length; i++)
+        {
+            _shieldBar[i].enabled = DisplayShieldBar(shieldValue, i);
+        }
+    }
+
+    [Client]
+    private bool DisplayShieldBar(int shieldValue, int shieldBarIdx)
+    {
+        return shieldValue > shieldBarIdx;
     }
 
     [ClientCallback]
@@ -80,20 +121,20 @@ public class PlayerHealth : NetworkBehaviour
         if (shieldDurability <= 0)
         {
             health -= damageValue;
+
+            if (health <= 0)
+            {
+                health = 0;
+                isDead = true;
+            }
         }
         else
         {
-            health -= damageValue / 2;
             shieldDurability--;
             if (shieldDurability <= 0)
             {
                 DesactivateShield();
             }
-        }
-        if (health <= 0)
-        {
-            health = 0;
-            isDead = true;
         }
     }
 
@@ -136,7 +177,7 @@ public class PlayerHealth : NetworkBehaviour
         else if (other.CompareTag("Asteroid"))
         {
             RpcParticuleDust(gameObject.transform.position);
-            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            Damage(go.GetComponent<Asteroid>().GetSize() * _asteroidRateDamage);
             NetworkServer.Destroy(go);
             RpcResetVelocity();
         }
@@ -159,15 +200,6 @@ public class PlayerHealth : NetworkBehaviour
         // réinitialise la vie, et indique que le joueur est à nouveau vivant
         this.health = this.maxPlayerHealth;
         this.isDead = false;
-    }
-
-    [ClientCallback]
-    void OnHealthChange(int oldValue, int newValue)
-    {
-        if (isLocalPlayer)
-        {
-            slider.value = newValue;
-        }
     }
 
     /// <summary>
