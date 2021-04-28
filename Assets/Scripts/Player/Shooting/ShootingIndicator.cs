@@ -28,7 +28,7 @@ public class ShootingIndicator : NetworkBehaviour
 
     private _firingMode _lastFiringMode;
 
-    private float _lastTimer = 0;
+    private float _lastTimer = 0, _lastRefTimer = 0;
 
     private bool _toFill = true;
 
@@ -93,12 +93,13 @@ public class ShootingIndicator : NetworkBehaviour
     public void DisplayTimer(float refTimer, float timer)
     {
         // si on a pas de power-up ou qu'on a choppé un nouveau power-up ayant deja un power-up
-        if (!_toFill && timer <= 0.0f || _lastTimer < timer)
+        if (!_toFill && timer <= 0.0f || _lastRefTimer != refTimer || _lastTimer < timer)
         {
             _toFill = true;
         }
 
         _lastTimer = timer;
+        _lastRefTimer = refTimer;
 
         float currentOffset = (timer * _maximum / refTimer) - _minimum;
         float maximumOffset = _maximum - _minimum;
