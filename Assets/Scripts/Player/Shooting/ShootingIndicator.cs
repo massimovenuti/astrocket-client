@@ -108,7 +108,7 @@ public class ShootingIndicator : NetworkBehaviour
         // si on doit remplir instant et qu'on a un power-up
         if (_toFill && timer > 0.0f)
         {
-            _firingModeTimer.fillAmount = maximumOffset;
+            _firingModeTimer.fillAmount = 1;
             _toFill = false;
         }
 

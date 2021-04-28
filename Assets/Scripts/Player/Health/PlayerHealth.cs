@@ -9,13 +9,10 @@ using Mirror;
 public class PlayerHealth : NetworkBehaviour
 {
     [SerializeField] 
-    int maxPlayerHealth = 100;
+    private int _maxPlayerHealth;
 
     [SerializeField] 
     private int _asteroidRateDamage, _damageBullet, _damageRocket, _damageExplosion, _healValue;
-
-    [SerializeField]
-    private Slider slider;
 
     [SerializeField]
     private Gradient gradient;
@@ -43,15 +40,14 @@ public class PlayerHealth : NetworkBehaviour
 
     private bool isDead = false;
 
-    private int _damageValue = 0, _shieldDurabilityMax = 3;
+    private int _damageValue = 0, _shieldDurabilityMax = 3, _minPlayerHealth = 0;
 
     private void Awake( )
     {
         // récupère le bouclier du joueur
         shield = transform.Find("Shield").gameObject;
 
-        slider.maxValue = maxPlayerHealth;
-        slider.value = maxPlayerHealth;
+        fill.fillAmount = 1;
     }
 
 
@@ -59,7 +55,7 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (isServer)
         {
-            this.health = this.maxPlayerHealth;
+            this.health = this._maxPlayerHealth;
             DesactivateShield();
         } 
         else if (isLocalPlayer)
@@ -73,7 +69,10 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            slider.value = newValue;
+            float currentOffset = (float)newValue - _minPlayerHealth;
+            float maximumOffset = _maxPlayerHealth - _minPlayerHealth;
+            float fillAmount = currentOffset / maximumOffset;
+            fill.fillAmount = fillAmount;
         }
     }
 
@@ -88,7 +87,6 @@ public class PlayerHealth : NetworkBehaviour
     {
         if(isLocalPlayer)
         {
-            Debug.Log("Changed Shield Durability : " +  oldValue + " -> " + newValue);
             FillShieldBar(newValue);
         }
     }
@@ -96,27 +94,15 @@ public class PlayerHealth : NetworkBehaviour
     [Client]
     private void FillShieldBar(int shieldValue)
     {
-        if(shieldValue == 0)
+        for (int i = 0; i < _shieldBar.Length; i++)
         {
-            for (int i = 0; i < _shieldBar.Length; i++)
+            if (DisplayShieldBar(shieldValue, i))
             {
-                _shieldBar[i].enabled = false;
+                _shieldBar[i].color = _shieldActivedColor;
             }
-        }
-        else
-        {
-            for (int i = 0; i < _shieldBar.Length; i++)
+            else
             {
-                _shieldBar[i].enabled = true;
-
-                if (DisplayShieldBar(shieldValue, i))
-                {
-                    _shieldBar[i].color = _shieldActivedColor;
-                }
-                else
-                {
-                    _shieldBar[i].color = _shieldDisabledColor;
-                }
+                _shieldBar[i].color = _shieldDisabledColor;
             }
         }
     }
@@ -144,7 +130,7 @@ public class PlayerHealth : NetworkBehaviour
         {
             health -= damageValue;
 
-            if (health <= 0)
+            if (health <= _minPlayerHealth)
             {
                 health = 0;
                 isDead = true;
@@ -165,9 +151,9 @@ public class PlayerHealth : NetworkBehaviour
     public void Heal(int healValue)
     {
         health += healValue;
-        if (health > maxPlayerHealth)
+        if (health > _maxPlayerHealth)
         {
-            health = maxPlayerHealth;
+            health = _maxPlayerHealth;
         }
     }
 
@@ -220,7 +206,7 @@ public class PlayerHealth : NetworkBehaviour
     public void Revive( )
     {
         // réinitialise la vie, et indique que le joueur est à nouveau vivant
-        this.health = this.maxPlayerHealth;
+        this.health = this._maxPlayerHealth;
         this.isDead = false;
     }
 

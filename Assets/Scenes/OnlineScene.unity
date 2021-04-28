@@ -10909,8 +10909,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Game timer
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 97a9257087aabaf41a6ef163b14b5836, type: 2}
+  m_sharedMaterial: {fileID: 8997689235248344276, guid: 97a9257087aabaf41a6ef163b14b5836,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
