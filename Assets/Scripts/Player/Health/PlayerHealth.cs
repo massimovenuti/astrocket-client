@@ -27,6 +27,9 @@ public class PlayerHealth : NetworkBehaviour
     private Image[] _shieldBar;
 
     [SerializeField]
+    private Color _shieldActivedColor, _shieldDisabledColor;
+
+    [SerializeField]
     public GameObject shield, DustVFX;
 
     [SyncVar(hook = "OnHealthChange")]
@@ -93,9 +96,28 @@ public class PlayerHealth : NetworkBehaviour
     [Client]
     private void FillShieldBar(int shieldValue)
     {
-        for (int i = 0; i < _shieldBar.Length; i++)
+        if(shieldValue == 0)
         {
-            _shieldBar[i].enabled = DisplayShieldBar(shieldValue, i);
+            for (int i = 0; i < _shieldBar.Length; i++)
+            {
+                _shieldBar[i].enabled = false;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _shieldBar.Length; i++)
+            {
+                _shieldBar[i].enabled = true;
+
+                if (DisplayShieldBar(shieldValue, i))
+                {
+                    _shieldBar[i].color = _shieldActivedColor;
+                }
+                else
+                {
+                    _shieldBar[i].color = _shieldDisabledColor;
+                }
+            }
         }
     }
 
