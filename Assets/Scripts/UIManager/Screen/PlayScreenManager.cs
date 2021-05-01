@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayScreenManager : ScreenManager
 {
-    new void Start()
+    public override void Start()
     {
         base.Start();
 

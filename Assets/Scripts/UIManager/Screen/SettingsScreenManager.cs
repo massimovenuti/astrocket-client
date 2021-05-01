@@ -19,7 +19,7 @@ public class SettingsScreenManager : ScreenManager
     private Slider _masterVolumeSlider;
     private Slider _effectsVolumeSlider;
 
-    void Start( )
+    public override void Start( )
     {
 #if UNITY_ANDROID
         Screen.orientation = ScreenOrientation.Landscape;
@@ -59,6 +59,34 @@ public class SettingsScreenManager : ScreenManager
         updateMusicValue(_masterVolumeSlider.value);
         updateEffectsValue(_masterVolumeSlider.value);
 
+#if UNITY_ANDROID
+        setupMobileViewport();
+#else
+        setupStandardViewport();
+#endif
+    }
+
+    private void setupMobileViewport()
+    {
+        foreach (GameObject row in GameObject.FindGameObjectsWithTag("SettingRow"))
+        {
+            row.SetActive(false);
+        }
+    }
+
+    private void setupStandardViewport()
+    {
+        foreach (GameObject row in GameObject.FindGameObjectsWithTag("SettingRowMobile"))
+        {
+            row.SetActive(false);
+        }
+
+        foreach (GameObject cell in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+        {
+            // TODO : importer les paramètres, et initialiser le code des cellules
+            // ControlsSettingsManager csm = cell.GetComponent<ControlsSettingsManager>();
+            // csm.SetKeyCode(...);
+        }
     }
 
     private void saveSettings( )
@@ -84,7 +112,17 @@ public class SettingsScreenManager : ScreenManager
 
     void Update( )
     {
-
+        foreach (GameObject cell in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+        {
+            ControlsSettingsManager csm = cell.GetComponent<ControlsSettingsManager>();
+            if (csm.GetWaiting())
+            {
+                foreach (GameObject cell2 in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+                    cell2.GetComponent<ControlsSettingsManager>().SetListening(false);
+                csm.SetWaiting(false);
+                csm.SetListening(true);
+            }
+        }
     }
 
     public void SetMasterVolume(float val)

@@ -2,7 +2,7 @@
 
 public class FirstScreenManager : ScreenManager
 {
-    new void Start()
+    public override void Start()
     {
 
 

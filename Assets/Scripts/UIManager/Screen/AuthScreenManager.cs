@@ -12,7 +12,7 @@ public class AuthScreenManager : ScreenManager
 
     private AuthAPICall _auth = new AuthAPICall();
 
-    new void Start()
+    public override void Start()
     {
         base.Start();
 
@@ -61,7 +61,7 @@ public class AuthScreenManager : ScreenManager
         {
             UserToken tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
             Debug.Log($"{_auth.ErrorMessage}");
-            if (_auth.ErrorMessage.IsOk) // TODO : Delete the security breach when done testing
+            if (_auth.ErrorMessage.IsOk)
             {
                 tok.Name = user.text;
                 SharedInfo.userToken = tok;
