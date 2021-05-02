@@ -84,11 +84,17 @@ public class SettingsScreenManager : ScreenManager
             row.SetActive(false);
         }
 
-        foreach (GameObject cell in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+        ControlsSettingsManager[] csms = GetComponentsInChildren<ControlsSettingsManager>(true);
+        foreach (ControlsSettingsManager csm in csms)
         {
-            // TODO : importer les paramètres, et initialiser le code des cellules
-            // ControlsSettingsManager csm = cell.GetComponent<ControlsSettingsManager>();
-            // csm.SetKeyCode(...);
+            foreach (Key k in SaveManager.Settings.keys)
+            {
+                if (csm.controlName == k.keyname)
+                {
+                    Debug.Log($"{k.keyname}, {k.key}");
+                    csm.SetKeyCode(k.key);
+                }
+            }
         }
     }
 
@@ -98,6 +104,7 @@ public class SettingsScreenManager : ScreenManager
         SaveManager.Settings.audio.Effects = _effectsVolumeSlider.value;
         SaveManager.Settings.audio.Music = _musicVolumeSlider.value;
 
+        SaveManager.Settings.keys = InputManager.InputManagerInst.SaveInputs();
 
         SaveManager.Save();
     }

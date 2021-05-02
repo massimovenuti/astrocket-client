@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ControlsSettingsManager : MonoBehaviour
 {
     public string cellName;
+    public string controlName;
 
     private bool _isWaiting;
     private string _keyName;
@@ -13,8 +14,9 @@ public class ControlsSettingsManager : MonoBehaviour
     private GameObject _ctaEl;
     private TMP_Text _keyNameField;
 
-    void Start()
+    void Awake()
     {
+        Debug.Log("start");
         TMP_Text cellNameEl = transform.Find("Editor/KeyName").GetComponent<TMP_Text>();
         cellNameEl.text = cellName;
 
@@ -27,6 +29,7 @@ public class ControlsSettingsManager : MonoBehaviour
         listenButton.onClick.AddListener(toggleWaiting);
 
         _keyNameField = transform.Find("Editor/KeyChangerButton/KeyValue").GetComponent<TMP_Text>();
+        SetKeyCode(KeyCode.Space);
     }
 
     void Update()
@@ -48,8 +51,7 @@ public class ControlsSettingsManager : MonoBehaviour
         {
             if (Input.GetKey(key))
             {
-                _keyCode = key;
-                updateKeyName();
+                SetKeyCode(key);
                 SetListening(false);
                 break;
             }
@@ -86,7 +88,10 @@ public class ControlsSettingsManager : MonoBehaviour
 
     public void SetKeyCode(KeyCode keyCode)
     {
-        _keyCode = keyCode;
-        updateKeyName();
+        if(InputManager.InputManagerInst.SetKeyForAxis(controlName, keyCode))
+        {
+            _keyCode = keyCode;
+            updateKeyName();
+        }
     }
 }
