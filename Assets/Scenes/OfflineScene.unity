@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.0022769244, g: 0.0016639971, b: 0.009610238, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4144,6 +4144,11 @@ PrefabInstance:
     - target: {fileID: 6802829190779642337, guid: 516737622751051418880b0a8f0684ca,
         type: 3}
       propertyPath: cellName
+      value: Shoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802829190779642337, guid: 516737622751051418880b0a8f0684ca,
+        type: 3}
+      propertyPath: controlName
       value: Shoot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -11952,6 +11957,11 @@ PrefabInstance:
       propertyPath: isKeyboard
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6802829190779642337, guid: 516737622751051418880b0a8f0684ca,
+        type: 3}
+      propertyPath: controlName
+      value: Boost
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 516737622751051418880b0a8f0684ca, type: 3}
 --- !u!1 &898199582
@@ -13192,7 +13202,7 @@ MonoBehaviour:
   - {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
   - {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   showRoomGUI: 1
-  minPlayers: 2
+  minPlayers: 1
   roomPlayerPrefab: {fileID: 5837678946760945291, guid: a0422cc7d9e6077468246374f788d1c0,
     type: 3}
   RoomScene: Assets/Scenes/RoomScene.unity
@@ -14771,6 +14781,11 @@ PrefabInstance:
         type: 3}
       propertyPath: isKeyboard
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802829190779642337, guid: 516737622751051418880b0a8f0684ca,
+        type: 3}
+      propertyPath: controlName
+      value: Score
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 516737622751051418880b0a8f0684ca, type: 3}

@@ -48,7 +48,7 @@ public class Movements : NetworkBehaviour
     /// </summary>
     private void Awake()
     {
-        _inp = FindObjectOfType<InputManager>();
+        _inp = InputManager.InputManagerInst;
         //_mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);

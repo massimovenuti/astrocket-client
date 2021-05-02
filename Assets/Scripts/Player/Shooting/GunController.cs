@@ -51,7 +51,7 @@ public class GunController : NetworkBehaviour
         if (_barrelAkimbo2 == null)
             Debug.LogError($"GunController : Impossible to find player's barrelAkimbo2");
 
-        _inp = FindObjectOfType<InputManager>();
+        _inp = InputManager.InputManagerInst;
         if (_inp == null)
             Debug.LogError($"No InputManager object was found");
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-class InputManager : MonoBehaviour
+class InputManager
 {
     public static readonly Dictionary<string, KeyCode> DefaultKeys =
         new Dictionary<string, KeyCode>()
@@ -15,7 +15,7 @@ class InputManager : MonoBehaviour
     private static InputManager _instance = null;
 
     private bool _isUsingController;
-    private Dictionary<string, KeyCode> _keys;
+    private static Dictionary<string, KeyCode> _keys = null;
 
     private Joystick _joystick;
     private UIButtonPressHandler _menu;
@@ -24,23 +24,18 @@ class InputManager : MonoBehaviour
 
     public static InputManager InputManagerInst
     {
-        get => _instance;
-    }
-
-    private void Awake( )
-    {
-        if (_instance == null)
+        get
         {
-            _instance = this;
-            _isUsingController = false;
-            _keys = DefaultKeys;
+            if (_instance == null)
+            {
+                Debug.Log("Init InputManager");
+                _instance = new InputManager();
+                _instance._isUsingController = false;
+                if (_keys == null)
+                    _keys = DefaultKeys;
+            }
+            return _instance;
         }
-        else
-        {
-            Destroy(this);
-            Debug.LogError($"Only one InputManager may be present in the scene at a given time");
-        }
-        Debug.Log($"OnEnable ran {_instance == null}");
     }
 
     public void RegisterMobileUser(GameObject canvas)
@@ -56,8 +51,11 @@ class InputManager : MonoBehaviour
     public bool SetKeyForAxis(string axis, KeyCode key)
     {
         Debug.Assert(_keys.ContainsKey(axis));
-        if (key != KeyCode.Escape)
+        if (key != KeyCode.Escape && !(_keys.ContainsValue(key) && _keys[axis] != key))
+        {
+            Debug.Log($"inp set: {axis}, {key}");
             _keys[axis] = key;
+        }
         else
             return false;
         return true;
@@ -129,13 +127,14 @@ class InputManager : MonoBehaviour
 
     public Key[] SaveInputs( )
     {
-        Key[] arr = new Key[this._keys.Count];
+        Key[] arr = new Key[_keys.Count];
         int i = 0;
         foreach(var v in _keys)
         {
             arr[i] = new Key();
             arr[i].keyname = v.Key;
             arr[i].key = v.Value;
+            Debug.Log($"Saving : {v.Key} {v.Value}");
             i++;
         }
         return arr;   
