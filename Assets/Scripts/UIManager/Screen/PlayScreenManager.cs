@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayScreenManager : ScreenManager
 {
-    new void Start()
+    public override void Start( )
     {
         base.Start();
 
@@ -12,7 +12,7 @@ public class PlayScreenManager : ScreenManager
         serveurButton.onClick.AddListener(runGame);
     }
 
-    void runGame()
+    void runGame( )
     {
         GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StartClient();
     }

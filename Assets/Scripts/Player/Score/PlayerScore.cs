@@ -22,46 +22,13 @@ public class PlayerScore : NetworkBehaviour
     [SyncVar(hook = "updatePuUi")]
     public ushort nbPowerUps = 0;
 
-    [SerializeField]
-    private Canvas scoreCanvas;
-
-    private CanvasGroup scoreCanvasGroup;
     private ScoreTabManager scoreTabManager;
 
-    private void Awake( )
-    {
-        scoreCanvasGroup = scoreCanvas.GetComponent<CanvasGroup>();
-        scoreCanvasGroup.alpha = 0f;
-    }
 
     [ClientCallback]
     private void Start( )
     {
-        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (p.GetComponent<NetworkBehaviour>().isLocalPlayer)
-            {
-                scoreTabManager = p.transform.Find("ScoreCanvas").GetComponent<ScoreTabManager>();
-                break;
-            }
-        }
-    }
-
-    private void Update( )
-    {
-        if (isLocalPlayer)
-        {
-            if (Input.GetKey(KeyCode.Tab))
-            {
-                scoreCanvasGroup.alpha = 1f;
-                scoreCanvasGroup.blocksRaycasts = true;
-            }
-            else
-            {
-                scoreCanvasGroup.alpha = 0f;
-                scoreCanvasGroup.blocksRaycasts = false;
-            }                
-        }
+        scoreTabManager = GameObject.Find("ScoreCanvas").GetComponent<ScoreTabManager>();
     }
 
     [Server]

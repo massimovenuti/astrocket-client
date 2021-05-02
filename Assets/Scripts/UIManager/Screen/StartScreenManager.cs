@@ -7,8 +7,7 @@ public class StartScreenManager : ScreenManager
     public GameObject statsPage;
     public GameObject settingsPage;
 
-
-    new void Start()
+    public override void Start()
     {
         base.Start();
 

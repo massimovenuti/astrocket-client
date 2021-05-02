@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using Mirror;
 
-public class ShootingIndicator : MonoBehaviour
+public class ShootingIndicator : NetworkBehaviour
 {
     [SerializeField]
-    private Image _firingModeImage;
+    private int _minimum, _maximum, _current;
+
+    [SerializeField]
+    private float _lerpSpeed;
+
+    [SerializeField]
+    private Image _firingModeImage, _firingModeTimer;
 
     [SerializeField]
     private Sprite[] _spriteList;
 
-    private int _lastFiringMode;
     private enum _firingMode
     {
         cantShoot = 0,
@@ -20,50 +26,96 @@ public class ShootingIndicator : MonoBehaviour
         bazooka = 3
     }
 
+    private _firingMode _lastFiringMode;
+
+    private float _lastTimer = 0, _lastRefTimer = 0;
+
+    private bool _toFill = true;
+
     private void Start( )
     {
-        _lastFiringMode = (int)_firingMode.cantShoot;
-        SetFiringModeImage();
+        if (isLocalPlayer)
+        {
+            _lastFiringMode =_firingMode.cantShoot;
+            SetFiringModeImage();
+        }
     }
 
-    public void DisplayCantShoot()
+    private void Update( )
     {
-        if (_lastFiringMode != (int)_firingMode.cantShoot)
+        if(isLocalPlayer)
         {
-            _lastFiringMode = (int)_firingMode.cantShoot;
+            _lerpSpeed = 10.0f * Time.deltaTime;
+        }
+    }
+
+    public void DisplayCantShoot( )
+    {
+        if (_lastFiringMode != _firingMode.cantShoot)
+        {
+            _lastFiringMode =_firingMode.cantShoot;
             SetFiringModeImage();
         }
     }
 
     public void DisplaySingleFire( )
     {
-        if (_lastFiringMode != (int)_firingMode.singleFire)
+        if (_lastFiringMode != _firingMode.singleFire)
         {
-            _lastFiringMode = (int)_firingMode.singleFire;
+            _lastFiringMode =_firingMode.singleFire;
             SetFiringModeImage();
         }
     }
 
     public void DisplayAkimbo( )
     {
-        if (_lastFiringMode != (int)_firingMode.akimbo)
+        if (_lastFiringMode != _firingMode.akimbo)
         {
-            _lastFiringMode = (int)_firingMode.akimbo;
+            _lastFiringMode =_firingMode.akimbo;
             SetFiringModeImage();
         }
     }
 
     public void DisplayBazooka( )
     {
-        if (_lastFiringMode != (int)_firingMode.bazooka)
+        if (_lastFiringMode != _firingMode.bazooka)
         {
-            _lastFiringMode = (int)_firingMode.bazooka;
+            _lastFiringMode =_firingMode.bazooka;
             SetFiringModeImage();
         }
     }
 
     private void SetFiringModeImage( )
     {
-        _firingModeImage.sprite = _spriteList[_lastFiringMode];
+        _firingModeImage.sprite = _spriteList[(int)_lastFiringMode];
+    }
+
+    public void DisplayTimer(float refTimer, float timer)
+    {
+        // si on a pas de power-up ou qu'on a choppé un nouveau power-up ayant deja un power-up
+        if (!_toFill && timer <= 0.0f || _lastRefTimer != refTimer || _lastTimer < timer)
+        {
+            _toFill = true;
+        }
+
+        _lastTimer = timer;
+        _lastRefTimer = refTimer;
+
+        float currentOffset = (timer * _maximum / refTimer) - _minimum;
+        float maximumOffset = _maximum - _minimum;
+        float fillAmount = currentOffset / maximumOffset;
+
+        // si on doit remplir instant et qu'on a un power-up
+        if (_toFill && timer > 0.0f)
+        {
+            _firingModeTimer.fillAmount = 1;
+            _toFill = false;
+        }
+
+        // si on décroit
+        if (_firingModeTimer.fillAmount > fillAmount)
+        {
+            _firingModeTimer.fillAmount = Mathf.Lerp(_firingModeTimer.fillAmount, fillAmount, _lerpSpeed);
+        }
     }
 }

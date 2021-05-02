@@ -14,8 +14,6 @@ public class DestroyAsteroid : NetworkBehaviour
     [SerializeField] GameObject akimbo;
     [SerializeField] GameObject shield;
     [SerializeField] GameObject bazooka;
-    [SerializeField] GameObject heavy;
-    [SerializeField] GameObject homing;
 
     private GameObject _asteroidToDestroy;
 

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
-public class MenuManager : NetworkBehaviour
+public class MenuManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject menuCanvas;
@@ -33,7 +32,7 @@ public class MenuManager : NetworkBehaviour
 
     private void Update()
     {
-        if(isLocalPlayer && InputManager.InputManagerInst.ShowMenu())
+        if(InputManager.InputManagerInst.ShowMenu())
         {
             SetMenuState();
         }

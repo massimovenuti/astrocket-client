@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatsScreenManager : ScreenManager
 {
-    void Start()
+    public override void Start()
     {
         base.Start();
     }

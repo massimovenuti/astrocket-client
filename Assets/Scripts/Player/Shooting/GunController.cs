@@ -17,21 +17,15 @@ public class GunController : NetworkBehaviour
     public string BulletStorageTagName = "BulletStorage";
 
     [SyncVar]
-    private bool _akimbo, _mitraillette, _bazooka, _homing, _heavy;
+    private bool _akimbo, _bazooka;
 
-    private float _refShootRate, _mitrailletteShootRate, _bazookaShootRate, 
-                  _heavyLaserShootRate, _homingShootRate;
+    private float _refShootRate, _bazookaShootRate;
 
     private InputManager _inp;
 
-    private GameObject _barrel;
-    private GameObject _barrelAkimbo1;
-    private GameObject _barrelAkimbo2;
+    private GameObject _barrel, _barrelAkimbo1, _barrelAkimbo2, _bulletSpawn;
+
     public GameObject rocket;
-
-    public GameObject homingMissile;
-
-    private GameObject _bulletSpawn;
 
     private float _lastShootingTimeRef;
 
@@ -39,6 +33,9 @@ public class GunController : NetworkBehaviour
     public bool canShoot;
 
     private ShootingIndicator _shootingIndicator;
+
+    [SyncVar]
+    private float _timer, _refTimer;
 
     private void Start( )
     {
@@ -73,14 +70,11 @@ public class GunController : NetworkBehaviour
 
         if (isServer)
         {
-            _akimbo = _mitraillette = _bazooka = _homing = _heavy = false;
+            _akimbo = _bazooka = false;
         }
 
         _refShootRate = shootRate;
-        _mitrailletteShootRate = shootRate / 2;
         _bazookaShootRate = shootRate * 2;
-        _homingShootRate = shootRate * 3;
-        _heavyLaserShootRate = shootRate * 4;
 
         _shootingIndicator = GetComponent<ShootingIndicator>();
     }
@@ -89,46 +83,74 @@ public class GunController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            DisplayShooting();
+
             if (Time.time > _lastShootingTimeRef && _inp.IsShooting())
             {
                 CmdShoot();
                 _lastShootingTimeRef = Time.time + shootRate;
             }
+        }
 
-            DisplayShooting();
+        if (!canShoot || _akimbo || _bazooka)
+        {
+            if (isServer)
+            {
+                _timer -= Time.deltaTime;
+                if (_timer <= 0)
+                {
+                    ResetShooting();
+                }
+            }
+            else if(isLocalPlayer)
+            {
+                _shootingIndicator.DisplayTimer(_refTimer, _timer);
+            }
+        } 
+        else if (isLocalPlayer)
+        {
+            _shootingIndicator.DisplayTimer(_refTimer, 0.0f);
         }
     }
 
     private void DisplayShooting()
     {
         if (!canShoot)
+        {
             _shootingIndicator.DisplayCantShoot();
+        }
         else if (_akimbo)
+        {
             _shootingIndicator.DisplayAkimbo();
+        }
         else if (_bazooka)
+        {
             _shootingIndicator.DisplayBazooka();
+        }
         else
+        {
             _shootingIndicator.DisplaySingleFire();
+        }
     }
 
     [Command]
     private void CmdShoot()
     {
         if (!canShoot)
-        {
             return;
-        }
 
         if (_akimbo)
+        {
             ShootAkimbo();
+        }
         else if (_bazooka)
+        {
             ShootBazooka();
-        else if (_homing)
-            ShootHomingMissile();
-        else if (_heavy)
-            ShootHeavyLaser();
+        }
         else
+        {
             Shoot();
+        }
     }
 
     /// <summary>
@@ -138,9 +160,7 @@ public class GunController : NetworkBehaviour
     private void Shoot( )
     {
         GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
-
         go.GetComponent<Ammo>().ownerId = netId;
-
         go.transform.parent = _bulletSpawn.transform;
         
         NetworkServer.Spawn(go);
@@ -180,64 +200,17 @@ public class GunController : NetworkBehaviour
     }
 
     /// <summary>
-    /// Instancie un missile
-    /// </summary>
-    [Server]
-    private void ShootHomingMissile()
-    {
-        GameObject go = (GameObject)Instantiate(homingMissile, _barrel.transform.position, _barrel.transform.rotation);
-
-        go.GetComponent<Ammo>().ownerId = netId;
-        go.transform.parent = _bulletSpawn.transform;
-
-        NetworkServer.Spawn(go);
-    }
-
-    /// <summary>
-    /// Instancie un _heavy laser (laser puissant)
-    /// </summary>
-    [Server]
-    private void ShootHeavyLaser( )
-    {
-        GameObject go = (GameObject)Instantiate(bullet, _barrel.transform.position, _barrel.transform.rotation);
-
-        Vector3 bulletScale = bullet.transform.localScale;
-
-        go.transform.localScale = new Vector3(bulletScale.x * 3f, bulletScale.y * 3f, bulletScale.z);
-
-        go.GetComponent<Ammo>().ownerId = netId;
-        
-        go.transform.parent = _bulletSpawn.transform;
-        go.tag = "HeavyLaser";
-
-        NetworkServer.Spawn(go);
-    }
-
-    /// <summary>
-    /// Augmente la cadence de tir pour le power-up Mitraillette
-    /// et désactive tout les autres power-up de tir
-    /// </summary>
-    [Server]
-    public void PowerUpNewShootRate( )
-    {
-        // on ne peut avoir qu'un power-up de tir à la fois
-        ResetPowerUps();
-        _mitraillette = true;
-        shootRate = _mitrailletteShootRate;
-        StartCoroutine(TimerMitraillette());
-    }
-
-    /// <summary>
     /// Augmente la cadence de tir pour le power-up Akimbo
     /// et désactive tout les autres power-up de tir
     /// </summary>
     [Server]
     public void PowerUpAkimbo( )
     {
-        ResetPowerUps();
+        ResetShooting();
+        _refTimer = 15;
+        _timer = _refTimer;
         _akimbo = true;
         shootRate = _refShootRate;
-        StartCoroutine(TimerAkimbo());
     }
 
     /// <summary>
@@ -247,116 +220,29 @@ public class GunController : NetworkBehaviour
     [Server]
     public void PowerUpBazooka( )
     {
-        ResetPowerUps();
+        ResetShooting();
+        _refTimer = 15;
+        _timer = _refTimer;
         _bazooka = true;
         shootRate = _bazookaShootRate;
-        StartCoroutine(TimerBazooka());
     }
 
-    /// <summary>
-    /// Augmente la cadence de tir pour le power-up Homing Missile
-    /// et désactive tout les autres power-up de tir
-    /// </summary>
     [Server]
-    public void PowerUpHomingMissile()
+    public void DisableShoot()
     {
-        ResetPowerUps();
-        _homing = true;
-        shootRate = _homingShootRate;
-        StartCoroutine(TimerHomingMissile());
-    }
-
-    /// <summary>
-    /// Augmente la cadence de tir pour le power-up Heavy laser
-    /// et désactive tout les autres power-up de tir
-    /// </summary>
-    [Server]
-    public void PowerUpHeavyLaser( )
-    {
-        ResetPowerUps();
-        _heavy = true;
-        shootRate = _heavyLaserShootRate;
-        StartCoroutine(TimerHeavyLaser());
-    }
-
-    /// <summary>
-    /// Fonction attendant 10 secondes avant de
-    /// désactiver le power-up Akimbo
-    /// </summary>
-    [Server]
-    private IEnumerator TimerAkimbo( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(10);
-
-        _akimbo = false;
-        shootRate = _refShootRate;
-    }
-
-    /// <summary>
-    /// Fonction attendant 10 secondes avant de
-    /// désactiver le power-up _mitraillette
-    /// </summary>
-    [Server]
-    private IEnumerator TimerMitraillette( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(10);
-
-        _mitraillette = false;
-        shootRate = _refShootRate;
-    }
-
-    /// <summary>
-    /// Fonction attendant 30 secondes avant de
-    /// désactiver le power-up _bazooka
-    /// </summary>
-    [Server]
-    private IEnumerator TimerBazooka( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(30);
-
-        _bazooka = false;
-        shootRate = _refShootRate;
-    }
-
-    /// <summary>
-    /// Fonction attendant 30 secondes avant de
-    /// désactiver le power-up _homing missile
-    /// </summary>
-    [Server]
-    private IEnumerator TimerHomingMissile( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(30);
-        
-        _homing = false;
-        shootRate = _refShootRate;
-    }
-
-    /// <summary>
-    /// Fonction attendant 15 secondes avant de
-    /// désactiver le power-up _heavy laser
-    /// </summary>
-    [Server]
-    private IEnumerator TimerHeavyLaser( )
-    {
-        // TODO: change value
-        yield return new WaitForSeconds(15);
-
-        _heavy = false;
-        shootRate = _refShootRate;
+        _refTimer = 2;
+        _timer = _refTimer;
+        canShoot = false;
     }
 
     /// <summary>
     /// Supprime tout les tirs spéciaux liés aux power-up, utilisé quand un joueur meurt
     /// </summary>
     [Server]
-    public void ResetPowerUps( )
+    public void ResetShooting( )
     {
-        StopAllCoroutines();
-        _akimbo = _bazooka = _mitraillette = _homing = _heavy = false;
+        _akimbo = _bazooka = false;
+        canShoot = true;
         shootRate = _refShootRate;
     }
 }
