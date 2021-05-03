@@ -42,4 +42,11 @@ public class UIButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointer
         IsClicked = true;
         _isToggled = !_isToggled;
     }
+
+    private void OnEnable( )
+    {
+        _isPressed = false;
+        _isClicked = false;
+        _isToggled = false;
+    }
 }

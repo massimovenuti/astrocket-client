@@ -40,7 +40,7 @@ class InputManager
 
     public void RegisterMobileUser(GameObject canvas)
     {
-        _joystick = canvas.GetComponentInChildren<Joystick>();
+        _joystick = canvas.GetComponentInChildren<Joystick>(true);
         _boost = canvas.transform.Find("Boost").GetComponent<UIButtonPressHandler>();
         _shoot = canvas.transform.Find("Shoot").GetComponent<UIButtonPressHandler>();
         _menu = canvas.transform.Find("Menu").GetComponent<UIButtonPressHandler>();
