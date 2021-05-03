@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class LobbyScreenManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+#if UNITY_ANDROID
+        Screen.orientation = ScreenOrientation.Landscape;
+#endif
     }
 
-    // Update is called once per frame
     void Update()
     {
         

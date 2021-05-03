@@ -6,6 +6,9 @@ public class PlayScreenManager : ScreenManager
 {
     public override void Start( )
     {
+#if UNITY_ANDROID
+        Screen.orientation = ScreenOrientation.Landscape;
+#endif
         base.Start();
 
         Button serveurButton = GameObject.Find("ServerButton").GetComponent<Button>();
