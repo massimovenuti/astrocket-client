@@ -4,7 +4,9 @@ public class FirstScreenManager : ScreenManager
 {
     public override void Start()
     {
-        SaveManager.Load();
+#if UNITY_ANDROID
+        Screen.orientation = ScreenOrientation.Portrait;
+#endif
         base.Start();
     }
 

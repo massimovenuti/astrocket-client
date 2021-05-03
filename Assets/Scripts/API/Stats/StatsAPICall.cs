@@ -53,9 +53,11 @@ namespace API.Stats
         {
             HttpResponseMessage responseMessage = _httpClient.GetAsync($"stats/{name}").Result;
             ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
-            Debug.Log(responseMessage.Content.ReadAsStringAsync().Result);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Debug.Log("bad stats");
                 return null;
+            }
             else
                 return JsonUtility.FromJson<PlayerStats>(responseMessage.Content.ReadAsStringAsync().Result);
         }
