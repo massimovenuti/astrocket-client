@@ -96,7 +96,10 @@ class InputManager
     public bool IsShooting( )
     {
 #if UNITY_ANDROID
-        return _shoot.IsPressed;
+        if(true)
+            return _shoot.IsToggled;
+        else
+            return _shoot.IsPressed;
 #else
         return Input.GetKey(_keys["Shoot"]);
 #endif
