@@ -5,6 +5,7 @@ using Mirror;
 
 public class PlayerInfo : NetworkBehaviour
 {
+    [SyncVar]
     public string playerName;
 
     [SyncVar(hook = "OnColorChange")]

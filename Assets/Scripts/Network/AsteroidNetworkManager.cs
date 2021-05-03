@@ -79,27 +79,41 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public override void OnStartServer( )
     {
         base.OnStartServer();
-        Debug.Log("OnStartServer");
         NetworkServer.RegisterHandler<PlayerToken>(OnCreatePlayer, false);
     }
 
     void OnCreatePlayer(NetworkConnection conn, PlayerToken token)
     {
-        Debug.Log("OnCreatePlayer");
-        Debug.Log(token.token);
         AuthAPICall api = new AuthAPICall();
         UserRole userInfo = api.PostCheckUserToken(token.token);
-        Debug.Log(api.ErrorMessage);
-        Debug.Log(userInfo);
         if (userInfo == null)
         {
             conn.Disconnect();
         }
-        Debug.LogWarning(userInfo.Name);
-        base.OnServerAddPlayer(conn);
-        Debug.LogWarning(NetworkIdentity.spawned[conn.identity.netId]);
-        NetworkIdentity.spawned[conn.identity.netId].GetComponent<PlayerInfo>().playerName = userInfo.Name;
-        NetworkIdentity.spawned[conn.identity.netId].GetComponent<PlayerInfo>().color = getPlayerColor();
+
+        // increment the index before adding the player, so first player starts at 1
+        clientIndex++;
+
+        GameObject player;
+
+        if (IsSceneActive(RoomScene))
+        {
+            if (roomSlots.Count == maxConnections)
+                conn.Disconnect();
+
+            allPlayersReady = false;
+
+            player = Instantiate(roomPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+           player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        }
+
+        player.GetComponent<PlayerInfo>().playerName = userInfo.Name;
+        player.GetComponent<PlayerInfo>().color = getPlayerColor();
+
+        NetworkServer.AddPlayerForConnection(conn, player);
     }
 
     private Color getPlayerColor()
@@ -138,29 +152,13 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Debug.Log("Loaded for player");
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
-        gamePlayer.GetComponent<PlayerInfo>().name = roomPlayer.GetComponent<PlayerInfo>().playerName;
+        gamePlayer.GetComponent<PlayerInfo>().playerName = roomPlayer.GetComponent<PlayerInfo>().playerName;
         return true;
     }
-   
-/*    public override void OnRoomServerAddPlayer(NetworkConnection conn)
-    {
-        Debug.Log("Add player");
-        Transform startPos = GetStartPosition();
-        GameObject player = startPos != null
-            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
-            : Instantiate(playerPrefab);
-
-        player.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
-
-        NetworkServer.AddPlayerForConnection(conn, player);
-    }*/
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        Debug.Log("Player disconnect");
-
         NetworkIdentity[] clientObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];
         conn.clientOwnedObjects.CopyTo(clientObjects);
         
@@ -184,26 +182,18 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public override void OnServerConnect(NetworkConnection conn)
     {
-        Debug.Log("Player connect");
         if (numPlayers >= maxConnections)
         {
             conn.Disconnect();
             return;
         }
-
-        OnRoomServerConnect(conn);
+        //OnRoomServerConnect(conn);
     }
 
     public void StopGame()
     {
         StopAllCoroutines();
         ServerChangeScene(RoomScene);
-    }
-
-    public override void OnRoomClientAddPlayerFailed( ) 
-    {
-        Debug.Log("Fail");
-        base.OnRoomClientAddPlayerFailed();
     }
 
     public void StartGame()
