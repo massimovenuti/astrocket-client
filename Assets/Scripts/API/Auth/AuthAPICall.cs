@@ -98,7 +98,7 @@ namespace API.Auth
                 return null;
             else
             {
-                UserRole token = (UserRole)JsonUtility.FromJson(res, typeof(UserRole));
+                UserRole token = JsonUtility.FromJson<UserRole>(res);
                 if (token.Name == default)
                     return null;
                 else
