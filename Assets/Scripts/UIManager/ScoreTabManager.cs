@@ -34,13 +34,12 @@ public class ScoreTabManager : MonoBehaviour
 
     public void addLigne(GameObject player)
     {
-        string name = $"player_{player.GetComponent<NetworkIdentity>().netId}";
         PlayerScore score = player.GetComponent<PlayerScore>();
 
         GameObject playerCell = Instantiate(pCell, transform.Find("Board/Players").transform);
-        playerCell.name = name;
+        playerCell.name = player.GetComponent<PlayerInfo>().playerName;
         playerCell.GetComponentInChildren<TMP_Text>().text = name;
-        playerCell.GetComponentInChildren<Image>().color = player.GetComponent<PlayerSetup>().playerColor;
+        playerCell.GetComponentInChildren<Image>().color = player.GetComponent<PlayerInfo>().color;
 
         GameObject scoreCell = Instantiate(dCell, transform.Find("Board/Score").transform);
         scoreCell.name = name;

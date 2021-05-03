@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0022769244, g: 0.0016639971, b: 0.009610238, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13183,14 +13183,14 @@ MonoBehaviour:
   offlineScene: Assets/Scenes/OfflineScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
   transport: {fileID: 976059971}
-  networkAddress: aw.alexandre-vogel.fr
+  networkAddress: localhost
   maxConnections: 8
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2958615548390935055, guid: 59aebfaacadfe6b498f0010a344f43c8,
     type: 3}
-  autoCreatePlayer: 1
+  autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 4189700793373900163, guid: 15c0fdc5db04b4e478a81aacb3a9b7b5, type: 3}
@@ -13202,7 +13202,7 @@ MonoBehaviour:
   - {fileID: 4448886065787291303, guid: 6b9a6681978412944ae14f9155011a3b, type: 3}
   - {fileID: 6153223020417602258, guid: b687f7285cc1e9e4a8c73c5df09047ae, type: 3}
   showRoomGUI: 1
-  minPlayers: 8
+  minPlayers: 2
   roomPlayerPrefab: {fileID: 5837678946760945291, guid: a0422cc7d9e6077468246374f788d1c0,
     type: 3}
   RoomScene: Assets/Scenes/RoomScene.unity
@@ -13212,6 +13212,7 @@ MonoBehaviour:
   clientIndex: 0
   _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
   _asteroidSpawnerName: AsteroidSpawner
+  token: 
   _timeManagerPrefab: {fileID: 4189700793373900163, guid: 15c0fdc5db04b4e478a81aacb3a9b7b5,
     type: 3}
 --- !u!4 &976059974

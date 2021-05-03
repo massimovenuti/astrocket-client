@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using API.Auth;
 using Mirror;
 
 public class AsteroidNetworkManager : NetworkRoomManager
@@ -21,6 +22,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
     private int _randomIndex = 0;
 
     private float precision = 20; // variation de la précision en degré
+
+    public string token;
 
     private Tuple<bool, Color>[] playersColor = { 
         new Tuple<bool, Color>(true, Color.red), 
@@ -62,6 +65,43 @@ public class AsteroidNetworkManager : NetworkRoomManager
         base.OnStopServer();
     }
 
+    public struct PlayerToken : NetworkMessage
+    {
+        public string token;
+    }
+
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        base.OnClientConnect(conn);
+        conn.Send<PlayerToken>(new PlayerToken { token = this.token });
+    }
+
+    public override void OnStartServer( )
+    {
+        base.OnStartServer();
+        Debug.Log("OnStartServer");
+        NetworkServer.RegisterHandler<PlayerToken>(OnCreatePlayer, false);
+    }
+
+    void OnCreatePlayer(NetworkConnection conn, PlayerToken token)
+    {
+        Debug.Log("OnCreatePlayer");
+        Debug.Log(token.token);
+        AuthAPICall api = new AuthAPICall();
+        UserRole userInfo = api.PostCheckUserToken(token.token);
+        Debug.Log(api.ErrorMessage);
+        Debug.Log(userInfo);
+        if (userInfo == null)
+        {
+            conn.Disconnect();
+        }
+        Debug.LogWarning(userInfo.Name);
+        base.OnServerAddPlayer(conn);
+        Debug.LogWarning(NetworkIdentity.spawned[conn.identity.netId]);
+        NetworkIdentity.spawned[conn.identity.netId].GetComponent<PlayerInfo>().playerName = userInfo.Name;
+        NetworkIdentity.spawned[conn.identity.netId].GetComponent<PlayerInfo>().color = getPlayerColor();
+    }
+
     private Color getPlayerColor()
     {
         for (int i = 0; i < playersColor.Length; i++)
@@ -99,11 +139,12 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         Debug.Log("Loaded for player");
-        gamePlayer.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
+        gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
+        gamePlayer.GetComponent<PlayerInfo>().name = roomPlayer.GetComponent<PlayerInfo>().playerName;
         return true;
     }
    
-    public override void OnRoomServerAddPlayer(NetworkConnection conn)
+/*    public override void OnRoomServerAddPlayer(NetworkConnection conn)
     {
         Debug.Log("Add player");
         Transform startPos = GetStartPosition();
@@ -114,7 +155,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         player.GetComponent<PlayerSetup>().playerColor = getPlayerColor();
 
         NetworkServer.AddPlayerForConnection(conn, player);
-    }
+    }*/
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
@@ -128,7 +169,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
             GameObject go = NetworkIdentity.spawned[co.netId].gameObject;
             if (go.tag == "Player")
             {
-                freePlayerColor(go.GetComponent<PlayerSetup>().playerColor);
+                freePlayerColor(go.GetComponent<PlayerInfo>().color);
                 break;
             }
         }
