@@ -9,6 +9,7 @@ namespace Mirror.Examples.NetworkRoom
     {
         private int _playersNum = 0;
         private TMP_Text _statusField;
+        private Button _readyBtn;
 
         public override void OnStartClient( )
         {
@@ -18,18 +19,22 @@ namespace Mirror.Examples.NetworkRoom
             leaveBtn.onClick.AddListener(exitLobby); // Bind button click to exitLobby()
 
             _statusField = GameObject.Find("RoomStatus").GetComponent<TMP_Text>();
+            _readyBtn = GameObject.Find("ReadyButton").GetComponent<Button>();
+            _readyBtn.onClick.AddListener(setPlayerReady);
+
             updateLobbyStatus();
         }
 
         public override void OnClientEnterRoom( )
         {
             _playersNum++;
-            
+            updateLobbyStatus();
         }
 
         public override void OnClientExitRoom( )
         {
             _playersNum--;
+            updateLobbyStatus();
         }
 
         private void updateLobbyStatus()
@@ -37,10 +42,11 @@ namespace Mirror.Examples.NetworkRoom
             _statusField.text = _playersNum.ToString() + "/8"; // TODO : ne pas hardcoder la valeur
         }
 
-        /*public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+        private void setPlayerReady()
         {
-            // Debug.LogFormat(LogType.Log, "ReadyStateChanged {0}", newReadyState);
-        }*/
+            CmdChangeReadyState(true);
+            _readyBtn.interactable = false;
+        }
 
         private void exitLobby()
         {
