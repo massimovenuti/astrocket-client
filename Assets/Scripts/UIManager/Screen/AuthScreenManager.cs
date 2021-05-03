@@ -10,6 +10,8 @@ public class AuthScreenManager : ScreenManager
     private Button _loginToggleButton;
     private Button _signupToggleButton;
 
+    private bool isOnLogin;
+
     private AuthAPICall _auth = new AuthAPICall();
 
     public override void Start()
@@ -31,12 +33,25 @@ public class AuthScreenManager : ScreenManager
 
         _loginToggleButton.onClick.AddListener(OnClickToggleLogIn);
         _signupToggleButton.onClick.AddListener(OnClickToggleSignUp);
-        
+
+        isOnLogin = true;
         _signupForm.SetActive(false);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            if (isOnLogin)
+                OnClickLogin();
+            else
+                OnClickSignUp();
+        }
+    }
+
     void OnClickToggleLogIn()
-    { 
+    {
+        isOnLogin = true;
         _loginForm.SetActive(true);
         _signupForm.SetActive(false);
         _loginToggleButton.interactable = false;
@@ -45,6 +60,7 @@ public class AuthScreenManager : ScreenManager
 
     void OnClickToggleSignUp()
     {
+        isOnLogin = false;
         _loginForm.SetActive(false);
         _signupForm.SetActive(true);
         _loginToggleButton.interactable = true;
