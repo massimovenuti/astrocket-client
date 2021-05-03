@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 31cbf31379204fd409628d6e297a7a47
+guid: 2427d4e60bbfe1e43b14380e30bb415f
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,23 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: default
-    second: {fileID: 2100000, guid: 0a8e92177a2350a49a4a130349503782, type: 2}
+      name: base_black
+    second: {fileID: 2100000, guid: 7e146c2404c28b74cb165561fc6ab051, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: inv
-    second: {fileID: 2100000, guid: 6398750f748f5f14fb1d00477484e651, type: 2}
+      name: base_grey
+    second: {fileID: 2100000, guid: 96f70ddcc6e539a4f98756ab12da0fc9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: mat1
-    second: {fileID: 2100000, guid: 05f1772c64c07164dbdc5de7221ebdd0, type: 2}
+      name: monitor_screen
+    second: {fileID: 2100000, guid: 6b77c9b576b16bd4fbd50986c48f2b8b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: mat2
-    second: {fileID: 2100000, guid: 08543ddb303a6e341bc9798f68d08736, type: 2}
+      name: window_glass
+    second: {fileID: 2100000, guid: f76e8ad4a1e2baf4691320e8014ebd8a, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
