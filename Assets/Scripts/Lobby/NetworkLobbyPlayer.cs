@@ -8,12 +8,10 @@ namespace Mirror.Examples.NetworkRoom
     {
         public override void OnStartClient( )
         {
-            // Debug.LogFormat(LogType.Log, "OnStartClient {0}", SceneManager.GetActiveScene().path);
-
             base.OnStartClient();
 
             Button leaveBtn = GameObject.Find("LeaveButton").GetComponent<Button>();
-            leaveBtn.onClick.AddListener(exitLobby);
+            leaveBtn.onClick.AddListener(exitLobby); // Bind button click to exitLobby()
         }
 
         public override void OnClientEnterRoom( )
