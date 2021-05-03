@@ -64,31 +64,31 @@ public class PlayerScore : NetworkBehaviour
     [Client]
     void updatePointsUi(short oldValue, short newValue)
     {
-        scoreTabManager.updateValue("Score", GetComponent<PlayerInfo>().name, newValue);
+        scoreTabManager.updateValue("Score", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
     void updateKillsUi(ushort oldValue, ushort newValue)
     {
-        scoreTabManager.updateValue("Kills", GetComponent<PlayerInfo>().name, newValue);
+        scoreTabManager.updateValue("Kills", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
     void updateDeathsUi(ushort oldValue, ushort newValue)
     {
-        scoreTabManager.updateValue("Deaths", GetComponent<PlayerInfo>().name, newValue);
+        scoreTabManager.updateValue("Deaths", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
     void updateAsteroidsUi(ushort oldValue, ushort newValue)
     {
-        scoreTabManager.updateValue("Asteroids", GetComponent<PlayerInfo>().name, newValue);
+        scoreTabManager.updateValue("Asteroids", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
     void updatePuUi(ushort oldValue, ushort newValue)
     {
-        scoreTabManager.updateValue("Power-ups", GetComponent<PlayerInfo>().name, newValue);
+        scoreTabManager.updateValue("Power-ups", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [ClientCallback]
@@ -96,7 +96,7 @@ public class PlayerScore : NetworkBehaviour
     {
         if (scoreTabManager != null)
         {
-            scoreTabManager.rmLigne(GetComponent<PlayerInfo>().name);
+            scoreTabManager.rmLigne(GetComponent<PlayerInfo>().playerName);
         }
     }
 }

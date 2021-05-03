@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using API.Auth;
+using API.Stats;
+using System.Linq;
 using Mirror;
 
 public class AsteroidNetworkManager : NetworkRoomManager
@@ -23,7 +25,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     private float precision = 20; // variation de la précision en degré
 
-    public string token;
+    public string playerToken;
+    private string serveurToken;
 
     private Tuple<bool, Color>[] playersColor = { 
         new Tuple<bool, Color>(true, Color.red), 
@@ -38,6 +41,16 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     [SerializeField]
     private GameObject _timeManagerPrefab;
+
+    [Server]
+    public override void Awake( )
+    {
+        base.Awake();
+        List<string> args = Environment.GetCommandLineArgs().ToList();
+
+        GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[1]);
+        serveurToken = args[2];
+    }
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
@@ -73,7 +86,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public override void OnClientConnect(NetworkConnection conn)
     {
         base.OnClientConnect(conn);
-        conn.Send<PlayerToken>(new PlayerToken { token = this.token });
+        conn.Send<PlayerToken>(new PlayerToken { token = this.playerToken });
     }
 
     public override void OnStartServer( )
@@ -193,6 +206,45 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public void StopGame()
     {
         StopAllCoroutines();
+
+        StatsAPICall api = new StatsAPICall();
+
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+        PlayerStats[] updateStats = new PlayerStats[allPlayers.Length];
+
+        PlayerInfo info;
+        PlayerScore score;
+
+        for (int i = 0; i < allPlayers.Length; i++)
+        {
+            info = allPlayers[i].GetComponent<PlayerInfo>();
+            score = allPlayers[i].GetComponent<PlayerScore>();
+
+            updateStats[i] = new PlayerStats()
+            {
+                username = info.name,
+                nbPoints = score.nbPoints,
+                nbKills = score.nbKills,
+                nbAsteroids = score.nbAsteroids,
+                nbDeaths = score.nbDeaths,
+                nbPowerUps = score.nbPowerUps,
+                nbGames = 1,
+                nbWins = 0,
+                maxKills = score.nbKills,
+                maxPoints = score.nbPoints,
+                maxPowerUps = score.nbPowerUps,
+                maxDeaths = score.nbDeaths,
+            };
+        }
+
+        updateStats.Where(e => e.nbPoints == updateStats.Max(f => f.nbPoints)).First().nbWins = 1;
+
+        foreach (PlayerStats newStats in updateStats)
+        {
+            api.PostModifyPlayerStats(newStats.username, serveurToken, updateStats);
+        }
+        
         ServerChangeScene(RoomScene);
     }
 

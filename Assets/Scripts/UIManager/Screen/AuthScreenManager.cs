@@ -66,7 +66,7 @@ public override void Start()
             if (_auth.ErrorMessage.IsOk)
             {
                 _tok.Name = user.text;
-                GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().token = _tok.Token;
+                GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().playerToken = _tok.Token;
                 SharedInfo.userToken = _tok;
                 goToNextPage();
             }
