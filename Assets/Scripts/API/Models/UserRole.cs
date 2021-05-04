@@ -1,14 +1,13 @@
-﻿namespace API.Auth
+﻿namespace API
 {
     [System.Serializable]
-    public class BanItem : IToken, IName
+    public class UserRole : IRole, IName
     {
         public string Name { get => username; set { username = value; } }
         [UnityEngine.SerializeField]
         private string username;
-
-        public string Token { get => token; set { token = value; } }
+        public int Role { get => role; set { role = value; } }
         [UnityEngine.SerializeField]
-        private string token;
+        private int role;
     }
 }
