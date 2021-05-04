@@ -1063,6 +1063,7 @@ GameObject:
   - component: {fileID: 8077729675791451200}
   - component: {fileID: 5898236677060916710}
   - component: {fileID: 7456881632704201249}
+  - component: {fileID: 4936056889942944205}
   m_Layer: 8
   m_Name: PlayerFinal
   m_TagString: Player
@@ -1166,7 +1167,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  playerColor: {r: 0, g: 0, b: 0, a: 0}
   toDisable:
   - {fileID: 6430325432716210984}
   - {fileID: 4658338705566255405}
@@ -1315,6 +1315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  name: 
   pointsKill: 100
   pointsAsteroids: 10
   pointsDeaths: -25
@@ -1377,6 +1378,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7da8564695c0b6e46a73017275755819, type: 3}
   - {fileID: 21300000, guid: 8a81615dcf4578246ba5f8e1aa85c6d3, type: 3}
   - {fileID: 21300000, guid: 743b65a9313c83946ab8b7b0b95e1c69, type: 3}
+--- !u!114 &4936056889942944205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2958615548390935055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf101c129c18754b99f23178d68e6a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  playerName: 
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &3055209649658576125
 GameObject:
   m_ObjectHideFlags: 0

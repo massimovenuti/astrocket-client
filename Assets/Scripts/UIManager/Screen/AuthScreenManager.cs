@@ -14,7 +14,9 @@ public class AuthScreenManager : ScreenManager
 
     private AuthAPICall _auth = new AuthAPICall();
 
-    public override void Start()
+    private UserToken _tok = null;
+
+public override void Start()
     {
         base.Start();
 
@@ -75,16 +77,18 @@ public class AuthScreenManager : ScreenManager
 
         if (user != null && mdp != null)
         {
-            UserToken tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
+            _tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
             Debug.Log($"{_auth.ErrorMessage}");
             if (_auth.ErrorMessage.IsOk)
             {
-                tok.Name = user.text;
-                SharedInfo.userToken = tok;
+                _tok.Name = user.text;
+                GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().playerToken = _tok.Token;
+                SharedInfo.userToken = _tok;
                 goToNextPage();
             }
             else 
             {
+                _tok = null;
                 Debug.Log($"{_auth.ErrorMessage}");
                 //showError(...); 
             }
@@ -103,13 +107,17 @@ public class AuthScreenManager : ScreenManager
         { 
             if (mdp.text == mdpConf.text)
             {
-                UserToken tok = _auth.PostAddUser(new UserRegister() { Name = user.text, Email = email.text, Password = mdp.text });
+                _tok = _auth.PostAddUser(new UserRegister() { Name = user.text, Email = email.text, Password = mdp.text });
                 Debug.Log($"{_auth.ErrorMessage}");
                 if (_auth.ErrorMessage.IsOk) // TODO : Signup API call -> if signup succeeded & auth token received
                 {
-                    tok.Name = user.text;
-                    SharedInfo.userToken = tok;
+                    _tok.Name = user.text;
+                    SharedInfo.userToken = _tok;
                     goToNextPage();
+                }
+                else
+                {
+                    _tok = null;
                 }
                 // else { showError(...); } 
             }

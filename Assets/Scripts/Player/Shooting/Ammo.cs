@@ -22,7 +22,7 @@ public class Ammo : NetworkBehaviour
     private void Start( )
     {
         GetComponent<Rigidbody>().velocity = transform.forward * _speed;
-        Color c = NetworkIdentity.spawned[ownerId].GetComponent<PlayerSetup>().playerColor;
+        Color c = NetworkIdentity.spawned[ownerId].GetComponent<PlayerInfo>().color;
         c += new Color(0.25f, 0.25f, 0.25f);
 
         if (this.name.Contains("Bullet"))
