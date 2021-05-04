@@ -42,7 +42,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     [SerializeField]
     private GameObject _timeManagerPrefab;
 
-    [Server]
+    /*
     public override void Awake( )
     {
         base.Awake();
@@ -51,6 +51,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[1]);
         serveurToken = args[2];
     }
+    */
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
@@ -206,7 +207,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public void StopGame()
     {
         StopAllCoroutines();
-
+        /*
         StatsAPICall api = new StatsAPICall();
 
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
@@ -244,6 +245,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         {
             api.PostModifyPlayerStats(newStats.username, serveurToken, updateStats);
         }
+        */
         
         ServerChangeScene(RoomScene);
     }
