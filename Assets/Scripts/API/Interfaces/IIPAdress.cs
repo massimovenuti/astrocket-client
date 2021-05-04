@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-public class SharedInfo
+namespace API
 {
-    public static API.UserToken userToken = null;
+    public interface IIPAdress
+    {
+        string IP { get; set; }
+    }
 }
-

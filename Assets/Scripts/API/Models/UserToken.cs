@@ -1,4 +1,4 @@
-﻿namespace API.Auth
+﻿namespace API
 {
     [System.Serializable]
     public class UserToken : IToken, IName

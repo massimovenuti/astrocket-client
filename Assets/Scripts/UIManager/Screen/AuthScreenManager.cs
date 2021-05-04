@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using API.Auth;
+using API;
 
 public class AuthScreenManager : ScreenManager
 {
