@@ -1,4 +1,4 @@
-﻿namespace API.Stats
+﻿namespace API
 {
     [System.Serializable]
     public class PlayerStats

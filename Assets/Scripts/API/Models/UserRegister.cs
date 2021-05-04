@@ -1,7 +1,7 @@
-﻿namespace API.Auth
+﻿namespace API
 {
     [System.Serializable]
-    public class UserLogin : IName, IPassword
+    public class UserRegister : IName,IPassword, IEmail 
     {
         public string Name { get => username; set { username = value; } }
         [UnityEngine.SerializeField]
@@ -9,5 +9,8 @@
         public string Password { get => password; set { password = value; } }
         [UnityEngine.SerializeField]
         private string password;
+        public string Email { get => email; set { email = value; } }
+        [UnityEngine.SerializeField]
+        private string email;
     }
 }

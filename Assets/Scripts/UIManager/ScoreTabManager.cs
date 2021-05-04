@@ -34,13 +34,13 @@ public class ScoreTabManager : MonoBehaviour
 
     public void addLigne(GameObject player)
     {
-        string name = $"player_{player.GetComponent<NetworkIdentity>().netId}";
         PlayerScore score = player.GetComponent<PlayerScore>();
+        string name = player.GetComponent<PlayerInfo>().playerName;
 
         GameObject playerCell = Instantiate(pCell, transform.Find("Board/Players").transform);
         playerCell.name = name;
         playerCell.GetComponentInChildren<TMP_Text>().text = name;
-        playerCell.GetComponentInChildren<Image>().color = player.GetComponent<PlayerSetup>().playerColor;
+        playerCell.GetComponentInChildren<Image>().color = player.GetComponent<PlayerInfo>().color;
 
         GameObject scoreCell = Instantiate(dCell, transform.Find("Board/Score").transform);
         scoreCell.name = name;
@@ -57,8 +57,6 @@ public class ScoreTabManager : MonoBehaviour
         GameObject asteroidsCell = Instantiate(dCell, transform.Find("Board/Asteroids").transform);
         asteroidsCell.name = name;
         asteroidsCell.GetComponentInChildren<TMP_Text>().text = score.nbAsteroids.ToString();
-
-        //Debug.LogWarning("(ToString) NbAsteroids : " + score.nbAsteroids.ToString());
 
         GameObject puCell = Instantiate(dCell, transform.Find("Board/Power-ups").transform);
         puCell.name = name;
