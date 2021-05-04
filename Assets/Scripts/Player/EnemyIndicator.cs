@@ -30,7 +30,7 @@ public class EnemyIndicator : NetworkBehaviour
             {
                 if(closest != _lastPlayer)
                 {
-                    Color c = closest.GetComponent<PlayerSetup>().playerColor;
+                    Color c = closest.GetComponent<PlayerInfo>().color;
                     _enemyIndicator.color = c;
                     _lastPlayer = closest;
                 }
