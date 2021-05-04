@@ -21,12 +21,16 @@ public class AsteroidNetworkManager : NetworkRoomManager
     private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
+    private int _roomSpawnerRadius = 320;
+
     private int _randomIndex = 0;
 
     private float precision = 20; // variation de la précision en degré
 
     public string playerToken;
     private string serveurToken;
+
+    private List<Transform> _roomPlayerSpawnsList;
 
     private Tuple<bool, Color>[] playersColor = { 
         new Tuple<bool, Color>(true, Color.red), 
@@ -63,6 +67,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         else if (sceneName == RoomScene)
         {
             FreeAllColors();
+            InstantiateRoomPlayerSpawners();
         }
     }
 
@@ -117,7 +122,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
             allPlayersReady = false;
 
-            player = Instantiate(roomPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity);
+            Transform spawnPoint = _roomPlayerSpawnsList[clientIndex - 1];
+            player = Instantiate(roomPlayerPrefab.gameObject, spawnPoint.position, spawnPoint.rotation);
         }
         else
         {
@@ -284,6 +290,45 @@ public class AsteroidNetworkManager : NetworkRoomManager
             go.transform.rotation = Quaternion.LookRotation((Vector3.zero - go.transform.position).normalized);
             _asteroidSpawnerList.Add(go);
         }
+    }
+
+    [Server]
+    private void InstantiateRoomPlayerSpawners()
+    {
+        _roomPlayerSpawnsList = new List<Transform>();
+        Transform camTransform = Camera.main.transform;
+
+        foreach (Transform t in GameObject.Find("SpawnPoints").transform)
+        {
+            Vector3 direction = (camTransform.position - t.position).normalized;
+
+            //create the rotation we need to be in to look at the target
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+
+            //rotate us over time according to speed until we are in the required rotation
+            t.rotation = lookRotation;
+
+            //t.rotation = Quaternion.LookRotation(( - transform.position).normalized);
+            _roomPlayerSpawnsList.Add(t);
+        }
+        /*
+        float angleStep = 140f / maxConnections;
+        Vector3 pos = Camera.main.transform.position;
+        GameObject roomPlayerSpawners = GameObject.Find("SpawnPoints");
+
+        for (int i = 0; i < maxConnections; i++)
+        {
+            float theta = i * angleStep;
+            pos.x = _roomSpawnerRadius * Mathf.Cos(theta * Mathf.Deg2Rad);
+            pos.z = _roomSpawnerRadius * Mathf.Sin(theta * Mathf.Deg2Rad);
+
+            GameObject go = new GameObject("RoomPlayerSpawnPoint" + (i + 1));
+            go.transform.parent = roomPlayerSpawners.transform;
+            go.transform.position = pos;
+            go.transform.rotation = ;
+            _roomPlayerSpawnsList.Add(go.transform);
+        }
+        */
     }
 
     [Server]
