@@ -17,7 +17,12 @@ public class AuthScreenManager : ScreenManager
 
     private UserToken _tok = null;
 
-public override void Start()
+    private void Awake( )
+    {
+        if (SharedInfo.HasValidatedToken)
+            goToNextPage();
+    }
+    public override void Start()
     {
         base.Start();
 

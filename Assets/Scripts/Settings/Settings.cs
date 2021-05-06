@@ -45,6 +45,8 @@ public class Audio
                 go.GetComponent<AudioSource>().volume = (int)(value * (music / 100));
             }
         }
+
+        get => master / 100;
     }
 
     public float Effects
@@ -52,12 +54,9 @@ public class Audio
         set
         {
             effects = value;
-            IEnumerable e = GameObject.FindGameObjectsWithTag("SoundFX");
-            foreach(GameObject go in e)
-            {
-                go.GetComponent<AudioSource>().volume = (int)(master * (value / 100));
-            }
         }
+
+        get => effects * Master;
     }
     public float Music
     {
@@ -70,6 +69,8 @@ public class Audio
                 go.GetComponent<AudioSource>().volume = (int)(master * (value / 100));
             }
         }
+
+        get => music * Master;
     }
 
     public Audio(float master = 1f, float effects = 1f, float music = 1f)
