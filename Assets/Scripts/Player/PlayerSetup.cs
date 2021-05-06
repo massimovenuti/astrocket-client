@@ -19,7 +19,8 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-
+            ResolutionManager sm = ResolutionManager.Instance;
+            sm.SetResolution(sm.WindowedResolutions.Count - 1, false);
 #if UNITY_ANDROID
             Transform t = this.transform.Find("Canvas/MobileControls");
             t.gameObject.SetActive(true);
