@@ -9,7 +9,7 @@ public class ScreenManager : MonoBehaviour
 
     private GameObject m_popup;
 
-    public void Start( ) // on start : footer handling
+    public virtual void Start( ) // on start : footer handling
     {
         Button goBackButton, exitButton;
 

@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 
-class InputManager : MonoBehaviour
+class InputManager
 {
+    public static readonly Dictionary<string, KeyCode> DefaultKeys =
+        new Dictionary<string, KeyCode>()
+        {
+            ["Score"] = KeyCode.Tab,
+            ["Boost"] = KeyCode.Space,
+            ["Shoot"] = KeyCode.Mouse0,
+        };
 
     private static InputManager _instance = null;
-    
+
     private bool _isUsingController;
-    private Dictionary<string, KeyCode> _keys;
+    private static Dictionary<string, KeyCode> _keys = null;
 
     private Joystick _joystick;
     private UIButtonPressHandler _menu;
@@ -17,33 +24,23 @@ class InputManager : MonoBehaviour
 
     public static InputManager InputManagerInst
     {
-        get => _instance;
-    }
-
-    private void Awake( )
-    {
-        if (_instance == null)
+        get
         {
-            _instance = this;
-            _isUsingController = false;
-            _keys = new Dictionary<string, KeyCode>(2)
+            if (_instance == null)
             {
-                ["Boost"] = KeyCode.Space,
-                ["Shoot"] = KeyCode.Mouse0,
-                ["Score"] = KeyCode.Tab
-            };
+                Debug.Log("Init InputManager");
+                _instance = new InputManager();
+                _instance._isUsingController = false;
+                if (_keys == null)
+                    _keys = DefaultKeys;
+            }
+            return _instance;
         }
-        else
-        {
-            Destroy(this);
-            Debug.LogError($"Only one InputManager may be present in the scene at a given time");
-        }
-        Debug.Log($"OnEnable ran {_instance == null}");
     }
 
     public void RegisterMobileUser(GameObject canvas)
     {
-        _joystick = canvas.GetComponentInChildren<Joystick>();
+        _joystick = canvas.GetComponentInChildren<Joystick>(true);
         _boost = canvas.transform.Find("Boost").GetComponent<UIButtonPressHandler>();
         _shoot = canvas.transform.Find("Shoot").GetComponent<UIButtonPressHandler>();
         _menu = canvas.transform.Find("Menu").GetComponent<UIButtonPressHandler>();
@@ -54,8 +51,11 @@ class InputManager : MonoBehaviour
     public bool SetKeyForAxis(string axis, KeyCode key)
     {
         Debug.Assert(_keys.ContainsKey(axis));
-        if (key != KeyCode.Escape)
+        if (key != KeyCode.Escape && !(_keys.ContainsValue(key) && _keys[axis] != key))
+        {
+            Debug.Log($"inp set: {axis}, {key}");
             _keys[axis] = key;
+        }
         else
             return false;
         return true;
@@ -96,13 +96,16 @@ class InputManager : MonoBehaviour
     public bool IsShooting( )
     {
 #if UNITY_ANDROID
-        return _shoot.IsPressed;
+        if(true)
+            return _shoot.IsToggled;
+        else
+            return _shoot.IsPressed;
 #else
         return Input.GetKey(_keys["Shoot"]);
 #endif
     }
 
-    public bool ShowScoreboard()
+    public bool ShowScoreboard( )
     {
 #if UNITY_ANDROID
         return false;
@@ -111,10 +114,10 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public bool ShowMenu()
+    public bool ShowMenu( )
     {
 #if UNITY_ANDROID
-        if(_menu.IsClicked)
+        if (_menu.IsClicked)
         {
             _menu.gameObject.SetActive(false);
             return true;
@@ -125,15 +128,18 @@ class InputManager : MonoBehaviour
 #endif
     }
 
-    public Keys SaveInputs( )
+    public Key[] SaveInputs( )
     {
-        InputKey[] ks = {
-            new InputKey("Shoot", _keys["Shoot"]),
-            new InputKey("Boost", _keys["Boost"])
-        };
-
-        Keys k = new Keys(ks);
-
-        return k;
+        Key[] arr = new Key[_keys.Count];
+        int i = 0;
+        foreach(var v in _keys)
+        {
+            arr[i] = new Key();
+            arr[i].keyname = v.Key;
+            arr[i].key = v.Value;
+            Debug.Log($"Saving : {v.Key} {v.Value}");
+            i++;
+        }
+        return arr;   
     }
 }

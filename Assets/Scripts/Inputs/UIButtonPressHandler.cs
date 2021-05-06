@@ -7,7 +7,13 @@ public class UIButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointer
 {
     private bool _isPressed = false;
     private bool _isClicked = false;
-    public bool IsPressed { get => _isPressed; private set { _isPressed = value; }}
+    private bool _isToggled = false;
+    public bool IsPressed { 
+        get => _isPressed; 
+        private set { 
+            _isPressed = value; 
+        }
+    }
 
     public bool IsClicked { 
         get {
@@ -24,8 +30,23 @@ public class UIButtonPressHandler : MonoBehaviour, IPointerDownHandler, IPointer
         } 
     }
 
+    public bool IsToggled
+    {
+        get => _isToggled;
+    }
+
     public void OnPointerDown(PointerEventData data) => IsPressed = true;
     public void OnPointerUp(PointerEventData data) => IsPressed = false;
-    public void OnPointerClick(PointerEventData data) => IsClicked = true;
+    public void OnPointerClick(PointerEventData data)
+    {
+        IsClicked = true;
+        _isToggled = !_isToggled;
+    }
 
+    private void OnEnable( )
+    {
+        _isPressed = false;
+        _isClicked = false;
+        _isToggled = false;
+    }
 }

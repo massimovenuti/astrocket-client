@@ -7,9 +7,11 @@ public class StartScreenManager : ScreenManager
     public GameObject statsPage;
     public GameObject settingsPage;
 
-
-    new void Start()
+    public override void Start()
     {
+#if UNITY_ANDROID
+        Screen.orientation = ScreenOrientation.Landscape;
+#endif
         base.Start();
 
         Button playButton, statsButton, settingsButton;

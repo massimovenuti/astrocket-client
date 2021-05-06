@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using API.Auth;
+using API;
 
 public class AuthScreenManager : ScreenManager
 {
@@ -10,9 +11,18 @@ public class AuthScreenManager : ScreenManager
     private Button _loginToggleButton;
     private Button _signupToggleButton;
 
+    private bool isOnLogin;
+
     private AuthAPICall _auth = new AuthAPICall();
 
-    new void Start()
+    private UserToken _tok = null;
+
+    private void Awake( )
+    {
+        if (SharedInfo.HasValidatedToken)
+            goToNextPage();
+    }
+    public override void Start()
     {
         base.Start();
 
@@ -31,12 +41,25 @@ public class AuthScreenManager : ScreenManager
 
         _loginToggleButton.onClick.AddListener(OnClickToggleLogIn);
         _signupToggleButton.onClick.AddListener(OnClickToggleSignUp);
-        
+
+        isOnLogin = true;
         _signupForm.SetActive(false);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            if (isOnLogin)
+                OnClickLogin();
+            else
+                OnClickSignUp();
+        }
+    }
+
     void OnClickToggleLogIn()
-    { 
+    {
+        isOnLogin = true;
         _loginForm.SetActive(true);
         _signupForm.SetActive(false);
         _loginToggleButton.interactable = false;
@@ -45,6 +68,7 @@ public class AuthScreenManager : ScreenManager
 
     void OnClickToggleSignUp()
     {
+        isOnLogin = false;
         _loginForm.SetActive(false);
         _signupForm.SetActive(true);
         _loginToggleButton.interactable = true;
@@ -59,16 +83,18 @@ public class AuthScreenManager : ScreenManager
 
         if (user != null && mdp != null)
         {
-            UserToken tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
+            _tok = _auth.PostLoginUser(new UserLogin() { Name = user.text, Password = mdp.text});
             Debug.Log($"{_auth.ErrorMessage}");
-            if (_auth.ErrorMessage.IsOk) // TODO : Delete the security breach when done testing
+            if (_auth.ErrorMessage.IsOk)
             {
-                tok.Name = user.text;
-                SharedInfo.userToken = tok;
+                _tok.Name = user.text;
+                GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().playerToken = _tok.Token;
+                SharedInfo.userToken = _tok;
                 goToNextPage();
             }
             else 
             {
+                _tok = null;
                 Debug.Log($"{_auth.ErrorMessage}");
                 //showError(...); 
             }
@@ -87,13 +113,17 @@ public class AuthScreenManager : ScreenManager
         { 
             if (mdp.text == mdpConf.text)
             {
-                UserToken tok = _auth.PostAddUser(new UserRegister() { Name = user.text, Email = email.text, Password = mdp.text });
+                _tok = _auth.PostAddUser(new UserRegister() { Name = user.text, Email = email.text, Password = mdp.text });
                 Debug.Log($"{_auth.ErrorMessage}");
                 if (_auth.ErrorMessage.IsOk) // TODO : Signup API call -> if signup succeeded & auth token received
                 {
-                    tok.Name = user.text;
-                    SharedInfo.userToken = tok;
+                    _tok.Name = user.text;
+                    SharedInfo.userToken = _tok;
                     goToNextPage();
+                }
+                else
+                {
+                    _tok = null;
                 }
                 // else { showError(...); } 
             }

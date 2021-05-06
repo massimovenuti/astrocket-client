@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 public class SharedInfo
 {
-    public static API.Auth.UserToken userToken = null;
+    public static API.UserToken userToken = null;
+    public static bool HasValidatedToken = false;
 }
 

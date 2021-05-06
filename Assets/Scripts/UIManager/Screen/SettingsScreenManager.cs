@@ -19,13 +19,13 @@ public class SettingsScreenManager : ScreenManager
     private Slider _masterVolumeSlider;
     private Slider _effectsVolumeSlider;
 
-    void Start( )
+    public override void Start( )
     {
 #if UNITY_ANDROID
         Screen.orientation = ScreenOrientation.Landscape;
 #endif
         base.Start();
-
+        SaveManager.Load();
         _saveButton = transform.Find("Footer/SaveButton").GetComponent<Button>();
 
         _panelGraphics = GameObject.Find("GraphicsSettings").gameObject;
@@ -59,13 +59,54 @@ public class SettingsScreenManager : ScreenManager
         updateMusicValue(_masterVolumeSlider.value);
         updateEffectsValue(_masterVolumeSlider.value);
 
+        SetMasterVolume(SaveManager.Settings.audio.master);
+        SetMusicVolume(SaveManager.Settings.audio.music);
+        SetEffectsVolume(SaveManager.Settings.audio.effects);
+#if UNITY_ANDROID
+        setupMobileViewport();
+#else
+        setupStandardViewport();
+#endif
+    }
+
+    private void setupMobileViewport( )
+    {
+        foreach (GameObject row in GameObject.FindGameObjectsWithTag("SettingRow"))
+        {
+            row.SetActive(false);
+        }
+    }
+
+    private void setupStandardViewport( )
+    {
+        foreach (GameObject row in GameObject.FindGameObjectsWithTag("SettingRowMobile"))
+        {
+            row.SetActive(false);
+        }
+
+        ControlsSettingsManager[] csms = GetComponentsInChildren<ControlsSettingsManager>(true);
+        foreach (ControlsSettingsManager csm in csms)
+        {
+            foreach (Key k in SaveManager.Settings.keys)
+            {
+                if (csm.controlName == k.keyname)
+                {
+                    Debug.Log($"{k.keyname}, {k.key}");
+                    csm.SetKeyCode(k.key);
+                }
+            }
+        }
     }
 
     private void saveSettings( )
     {
-        /*
-         * TODO
-         */
+        SaveManager.Settings.audio.Master = _masterVolumeSlider.value;
+        SaveManager.Settings.audio.Effects = _effectsVolumeSlider.value;
+        SaveManager.Settings.audio.Music = _musicVolumeSlider.value;
+
+        SaveManager.Settings.keys = InputManager.InputManagerInst.SaveInputs();
+
+        SaveManager.Save();
     }
 
     private void updateMusicValue(float value)
@@ -84,7 +125,17 @@ public class SettingsScreenManager : ScreenManager
 
     void Update( )
     {
-
+        foreach (GameObject cell in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+        {
+            ControlsSettingsManager csm = cell.GetComponent<ControlsSettingsManager>();
+            if (csm.GetWaiting())
+            {
+                foreach (GameObject cell2 in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
+                    cell2.GetComponent<ControlsSettingsManager>().SetListening(false);
+                csm.SetWaiting(false);
+                csm.SetListening(true);
+            }
+        }
     }
 
     public void SetMasterVolume(float val)
@@ -95,6 +146,11 @@ public class SettingsScreenManager : ScreenManager
     public void SetMusicVolume(float val)
     {
         _musicVolumeSlider.value = val;
+    }
+
+    public void SetEffectsVolume(float val)
+    {
+        _effectsVolumeSlider.value = val;
     }
 
     private void setPanelTo(Panel panel)

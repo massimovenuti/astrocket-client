@@ -53,19 +53,23 @@ namespace API.Stats
         {
             HttpResponseMessage responseMessage = _httpClient.GetAsync($"stats/{name}").Result;
             ErrorMessage = new ErrorMessage(APICallFunction.FetchStats, responseMessage.StatusCode);
-            Debug.Log(responseMessage.Content.ReadAsStringAsync().Result);
             if (responseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Debug.Log("bad stats");
                 return null;
+            }
             else
                 return JsonUtility.FromJson<PlayerStats>(responseMessage.Content.ReadAsStringAsync().Result);
         }
 
-        public bool PostModifyPlayerStats(IName name, IToken token)
-            => PostModifyPlayerStats(name.Name, token.Token);
-        public bool PostModifyPlayerStats(string name, string token)
+        public bool PostModifyPlayerStats(IName name, IToken token, PlayerStats[] updateStats)
+            => PostModifyPlayerStats(name.Name, token.Token, updateStats);
+        public bool PostModifyPlayerStats(string name, string token, PlayerStats[] updateStats)
         {
             using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"stats/{name}"))
             {
+                string s = JsonUtility.ToJson(updateStats);
+                message.Content = new StringContent(s, System.Text.Encoding.UTF8, "application/json");
                 message.Headers.Add("serverToken", token);
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
                 ErrorMessage = new ErrorMessage(APICallFunction.UpdateStats, responseMessage.StatusCode);

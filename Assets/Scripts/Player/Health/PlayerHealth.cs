@@ -8,44 +8,46 @@ using Mirror;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    [SerializeField] int maxPlayerHealth = 100;
+    [SerializeField] 
+    private int _maxPlayerHealth;
 
-    [SerializeField] Slider slider;
-    [SerializeField] Gradient gradient;
-    [SerializeField] Image fill;
+    [SerializeField] 
+    private int _asteroidRateDamage, _damageBullet, _damageRocket, _damageExplosion, _healValue;
 
-    public GameObject shield;
-    public GameObject ui;
+    [SerializeField]
+    private Gradient gradient;
 
-    private int _healValue = 40;
+    [SerializeField]
+    private Image fill;
 
-    private int _shieldDurabilityMax = 2;
-    public int shieldDurability;
+    [SerializeField]
+    private Image[] _shieldBar;
 
-    [SerializeField] int asteroidDmgRate = 10;
-    private int _damageBullet = 20;
-    private int _damageRocket = 40;
-    private int _damageExplosion = 30;
-    private int _damageValue;
+    [SerializeField]
+    private Color _shieldActivedColor, _shieldDisabledColor;
 
-    [SyncVar(hook = "OnShieldChange")]
-    public bool hasShield;
+    [SerializeField]
+    public GameObject shield, DustVFX;
 
     [SyncVar(hook = "OnHealthChange")]
     public int health;
 
+    [SyncVar(hook = "OnShieldChange")]
+    public bool hasShield;
+
+    [SyncVar(hook = "OnShieldDurabilityChange")]
+    public int shieldDurability;
+
     private bool isDead = false;
 
-    public GameObject DustVFX;
-
+    private int _damageValue = 0, _shieldDurabilityMax = 3, _minPlayerHealth = 0;
 
     private void Awake( )
     {
         // récupère le bouclier du joueur
         shield = transform.Find("Shield").gameObject;
 
-        slider.maxValue = maxPlayerHealth;
-        slider.value = maxPlayerHealth;
+        fill.fillAmount = 1;
     }
 
 
@@ -53,8 +55,24 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (isServer)
         {
-            this.health = this.maxPlayerHealth;
+            this.health = this._maxPlayerHealth;
             DesactivateShield();
+        } 
+        else if (isLocalPlayer)
+        {
+            FillShieldBar(0);
+        }
+    }
+
+    [ClientCallback]
+    private void OnHealthChange(int oldValue, int newValue)
+    {
+        if (isLocalPlayer)
+        {
+            float currentOffset = (float)newValue - _minPlayerHealth;
+            float maximumOffset = _maxPlayerHealth - _minPlayerHealth;
+            float fillAmount = currentOffset / maximumOffset;
+            fill.fillAmount = fillAmount;
         }
     }
 
@@ -62,6 +80,37 @@ public class PlayerHealth : NetworkBehaviour
     private void OnShieldChange(bool oldValue, bool newValue)
     {
         shield.SetActive(newValue);
+    }
+
+    [ClientCallback]
+    private void OnShieldDurabilityChange(int oldValue, int newValue)
+    {
+        if(isLocalPlayer)
+        {
+            FillShieldBar(newValue);
+        }
+    }
+
+    [Client]
+    private void FillShieldBar(int shieldValue)
+    {
+        for (int i = 0; i < _shieldBar.Length; i++)
+        {
+            if (DisplayShieldBar(shieldValue, i))
+            {
+                _shieldBar[i].color = _shieldActivedColor;
+            }
+            else
+            {
+                _shieldBar[i].color = _shieldDisabledColor;
+            }
+        }
+    }
+
+    [Client]
+    private bool DisplayShieldBar(int shieldValue, int shieldBarIdx)
+    {
+        return shieldValue > shieldBarIdx;
     }
 
     [ClientCallback]
@@ -80,20 +129,20 @@ public class PlayerHealth : NetworkBehaviour
         if (shieldDurability <= 0)
         {
             health -= damageValue;
+
+            if (health <= _minPlayerHealth)
+            {
+                health = 0;
+                isDead = true;
+            }
         }
         else
         {
-            health -= damageValue / 2;
             shieldDurability--;
             if (shieldDurability <= 0)
             {
                 DesactivateShield();
             }
-        }
-        if (health <= 0)
-        {
-            health = 0;
-            isDead = true;
         }
     }
 
@@ -102,9 +151,9 @@ public class PlayerHealth : NetworkBehaviour
     public void Heal(int healValue)
     {
         health += healValue;
-        if (health > maxPlayerHealth)
+        if (health > _maxPlayerHealth)
         {
-            health = maxPlayerHealth;
+            health = _maxPlayerHealth;
         }
     }
 
@@ -136,7 +185,7 @@ public class PlayerHealth : NetworkBehaviour
         else if (other.CompareTag("Asteroid"))
         {
             RpcParticuleDust(gameObject.transform.position);
-            Damage(go.GetComponent<Asteroid>().GetSize() * asteroidDmgRate);
+            Damage(go.GetComponent<Asteroid>().GetSize() * _asteroidRateDamage);
             NetworkServer.Destroy(go);
             RpcResetVelocity();
         }
@@ -157,17 +206,8 @@ public class PlayerHealth : NetworkBehaviour
     public void Revive( )
     {
         // réinitialise la vie, et indique que le joueur est à nouveau vivant
-        this.health = this.maxPlayerHealth;
+        this.health = this._maxPlayerHealth;
         this.isDead = false;
-    }
-
-    [ClientCallback]
-    void OnHealthChange(int oldValue, int newValue)
-    {
-        if (isLocalPlayer)
-        {
-            slider.value = newValue;
-        }
     }
 
     /// <summary>

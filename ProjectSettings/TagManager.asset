@@ -21,6 +21,9 @@ TagManager:
   - HomingMissile
   - SoundMusic
   - SoundFX
+  - ControlsSettingsCell
+  - SettingRowMobile
+  - SettingRow
   layers:
   - Default
   - TransparentFX

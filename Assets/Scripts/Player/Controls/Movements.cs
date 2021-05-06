@@ -6,8 +6,6 @@ using Mirror;
 
 public class Movements : NetworkBehaviour
 {
-    public Texture2D crosshair;
-
     private float _forwardSpeed = 5f;
     private float _rotationSpeed = 10f;
 
@@ -38,9 +36,6 @@ public class Movements : NetworkBehaviour
     // Start is called before the first frame update
     private void Start( )
     {
-        //Vector2 hotSpot = new Vector2(crosshair.width / 2f, crosshair.height / 2f);
-        //Cursor.SetCursor(crosshair, hotSpot, CursorMode.Auto);
-
         flash = false;
         slow = false;
         _refSpeed = _forwardSpeed;
@@ -51,24 +46,27 @@ public class Movements : NetworkBehaviour
     /// <summary>
     /// Trouver le rigidbody du vaisseau
     /// </summary>
-    private void Awake()
+    private void Awake( )
     {
-        _inp = FindObjectOfType<InputManager>();
+        _inp = InputManager.InputManagerInst;
         //_mainCamera = GameObject.FindGameObjectsWithTag("MainCamera").First().GetComponent<Camera>();
         _rgbody = gameObject.GetComponent<Rigidbody>();
         _groundPlane = new Plane(Vector3.up, Vector3.zero);
 
         // GET IN CHILDREN
         _mainCamera = gameObject.GetComponentInChildren<Camera>();
-        
-        _flameShip1 = GameObject.Find("flametrail_left").GetComponent<ParticleSystem>();
-        _flameShip2 = GameObject.Find("flametrail_right").GetComponent<ParticleSystem>();
+
+
+        _flameShip1 = transform.Find("SpaceFighter/boosters1/flametrail_left").GetComponent<ParticleSystem>();
+        _flameShip2 = transform.Find("SpaceFighter/boosters1/flametrail_right").GetComponent<ParticleSystem>();
+        _flameShip1.Stop();
+        _flameShip2.Stop();
         _animated = false;
 
         _interpolation = new Queue<float>(_frameNum);
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate( )
     {
         Vector3 _lastRotate = _rgbody.transform.eulerAngles;
 
@@ -158,16 +156,16 @@ public class Movements : NetworkBehaviour
     [ClientRpc]
     private void RpcBoost(bool boost)
     {
-        if (boost)
-        {
-            _flameShip1.Play();
-            _flameShip2.Play();
-        }
-        else
-        {
-            _flameShip1.Stop();
-            _flameShip2.Stop();
-        }
+            if (boost)
+            {
+                _flameShip1.Play();
+                _flameShip2.Play();
+            }
+            else
+            {
+                _flameShip1.Stop();
+                _flameShip2.Stop();
+            }
     }
 
     [Command]

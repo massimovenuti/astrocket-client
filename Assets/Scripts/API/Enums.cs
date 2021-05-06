@@ -11,10 +11,13 @@
         None,
         Login,
         Register,
+        AddServer,
         FetchStats,
         ServerList,
         UpdateStats,
         NetworkError,
+        DeleteServer,
+        UpdatePlayerCount,
     }
 
     public enum OrderByData
