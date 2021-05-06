@@ -7,7 +7,6 @@ namespace Mirror.Examples.NetworkRoom
     [AddComponentMenu("")]
     public class NetworkLobbyPlayer : NetworkRoomPlayer
     {
-        private int _playersNum = 0;
         private TMP_Text _statusField;
         private Button _readyBtn;
 
@@ -22,24 +21,25 @@ namespace Mirror.Examples.NetworkRoom
             _readyBtn = GameObject.Find("ReadyButton").GetComponent<Button>();
             _readyBtn.onClick.AddListener(setPlayerReady);
 
-            updateLobbyStatus();
+            updateLobbyStatus(GameObject.FindGameObjectsWithTag("Player").Length);
+
+            if (isLocalPlayer)
+            {
+                CmdChangeReadyState(false);
+                _readyBtn.interactable = true;
+            }
         }
 
-        public override void OnClientEnterRoom( )
+        private void OnDestroy( )
         {
-            _playersNum++;
-            updateLobbyStatus();
+            updateLobbyStatus(GameObject.FindGameObjectsWithTag("Player").Length);
         }
 
-        public override void OnClientExitRoom( )
-        {
-            _playersNum--;
-            updateLobbyStatus();
-        }
 
-        private void updateLobbyStatus()
+        private void updateLobbyStatus(int curPlayers)
         {
-            _statusField.text = _playersNum.ToString() + "/8"; // TODO : ne pas hardcoder la valeur
+            int maxPlayers = GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().maxConnections;
+            _statusField.text = curPlayers.ToString() + "/" + maxPlayers.ToString(); // TODO : ne pas hardcoder la valeur
         }
 
         private void setPlayerReady()
