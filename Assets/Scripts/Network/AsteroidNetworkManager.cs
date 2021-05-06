@@ -1,6 +1,7 @@
 ﻿using API;
 using API.Auth;
 using API.Stats;
+using API.MainServer;
 using Mirror;
 using System;
 using System.Collections;
@@ -29,6 +30,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public string playerToken;
     private string serveurToken;
+    private string serveurName;
 
     private List<Transform> _roomPlayerSpawnsList;
 
@@ -46,16 +48,17 @@ public class AsteroidNetworkManager : NetworkRoomManager
     [SerializeField]
     private GameObject _timeManagerPrefab;
 
-    /*
-    public override void Awake( )
+
+/*    public override void Awake( )
     {
         base.Awake();
         List<string> args = Environment.GetCommandLineArgs().ToList();
 
-        GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[1]);
-        serveurToken = args[2];
+        name = args[1];
+        GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[2]);
+        serveurToken = args[3];
     }
-    */
+*/
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
@@ -109,6 +112,9 @@ public class AsteroidNetworkManager : NetworkRoomManager
         {
             conn.Disconnect();
         }
+
+/*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = clientIndex + 1 });*/
 
         // increment the index before adding the player, so first player starts at 1
         clientIndex++;
@@ -193,6 +199,9 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
 
         base.OnServerDisconnect(conn);
+
+/*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = clientIndex + 1 });*/
 
         if (numPlayers < minPlayers)
         {
