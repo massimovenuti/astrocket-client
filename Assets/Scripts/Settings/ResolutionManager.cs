@@ -10,10 +10,10 @@ public class ResolutionManager : MonoBehaviour
 
     // Fixed aspect ratio parameters
     static public bool FixedAspectRatio = true;
-    static public float TargetAspectRatio = 4 / 3f;
+    static public float TargetAspectRatio = 16 / 9f;
 
     // Windowed aspect ratio when FixedAspectRatio is false
-    static public float WindowedAspectRatio = 4f / 3f;
+    static public float WindowedAspectRatio = 16f / 9f;
 
     // List of horizontal resolutions to include
     int[] resolutions = new int[] { 600, 800, 1024, 1280, 1366, 1400, 1440, 1600, 1920, 2048, 2160, 2560, 3440, 3840, 5120, 7680 };
