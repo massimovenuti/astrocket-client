@@ -155,6 +155,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
             conn.Disconnect();
         }
 
+        /*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
+
+
         if (IsSceneActive(RoomScene))
         {
             Debug.Log("We are in room scene : roomslots = " + roomSlots.Count);
@@ -230,6 +234,9 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
 
         base.OnServerDisconnect(conn);
+
+        /*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
