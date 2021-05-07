@@ -17,7 +17,7 @@ namespace API.MainServer
         public MainServerAPI( )
         {
             // Default URL for Auth API call
-            UriBuilder uri = new UriBuilder("https", MAIN_SERVER_API_URL, 3000);
+            UriBuilder uri = new UriBuilder("https", MAIN_SERVER_API_URL);
             _httpClient = new HttpClient()
             {
                 BaseAddress = uri.Uri

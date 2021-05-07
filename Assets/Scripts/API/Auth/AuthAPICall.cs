@@ -20,7 +20,7 @@ namespace API.Auth
         public AuthAPICall( )
         {
             // Default URL for Auth API call
-            UriBuilder uri = new UriBuilder("https", AUTH_API_URL, 3010);
+            UriBuilder uri = new UriBuilder("https", AUTH_API_URL);
             _httpClient = new HttpClient()
             {
                 BaseAddress = uri.Uri
