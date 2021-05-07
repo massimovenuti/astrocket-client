@@ -189,7 +189,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         base.OnServerDisconnect(conn);
 
         /*        MainServerAPI mainApi = new MainServerAPI();
-        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = clientIndex + 1 });*/
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
