@@ -91,6 +91,7 @@ public class PlayerScore : NetworkBehaviour
         scoreTabManager.updateValue("Power-ups", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
+    /*
     [ClientCallback]
     private void OnDestroy( )
     {
@@ -99,4 +100,5 @@ public class PlayerScore : NetworkBehaviour
             scoreTabManager.rmLigne(GetComponent<PlayerInfo>().playerName);
         }
     }
+    */
 }

@@ -13595,7 +13595,8 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 4189700793373900163, guid: 15c0fdc5db04b4e478a81aacb3a9b7b5, type: 3}
+  - {fileID: 5690619982562071004, guid: b74003118f60ab442abf82005500a808, type: 3}
+  - {fileID: 1902870924988785388, guid: c0bc909b6f208d14daa5a36b0786da8d, type: 3}
   - {fileID: 8559033464605830586, guid: f7d23cdc73ec8d24797df52fe3ef9961, type: 3}
   - {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
   - {fileID: 5023371703109089499, guid: 6f0c34fbee585e1489afac1ff5c73f29, type: 3}
@@ -13615,7 +13616,9 @@ MonoBehaviour:
   _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
   _asteroidSpawnerName: AsteroidSpawner
   playerToken: 
-  _timeManagerPrefab: {fileID: 4189700793373900163, guid: 15c0fdc5db04b4e478a81aacb3a9b7b5,
+  _roomTimerPrefab: {fileID: 1902870924988785388, guid: c0bc909b6f208d14daa5a36b0786da8d,
+    type: 3}
+  _gameTimerPrefab: {fileID: 5690619982562071004, guid: b74003118f60ab442abf82005500a808,
     type: 3}
   roomPlayers: 0
 --- !u!4 &976059974

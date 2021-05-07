@@ -12,6 +12,8 @@ public class ScoreTabManager : MonoBehaviour
 
     private CanvasGroup scoreCanvasGroup;
 
+    private bool _endGame = false;
+
     private void Start( )
     {
         scoreCanvasGroup = GetComponent<CanvasGroup>();
@@ -20,16 +22,34 @@ public class ScoreTabManager : MonoBehaviour
 
     private void Update( )
     {
-        if (Input.GetKey(KeyCode.Tab))
+        if (!_endGame)
         {
-            scoreCanvasGroup.alpha = 1f;
-            scoreCanvasGroup.blocksRaycasts = true;
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                DisplayScore();
+            }
+            else
+            {
+                HideScore();
+            }
         }
-        else
-        {
-            scoreCanvasGroup.alpha = 0f;
-            scoreCanvasGroup.blocksRaycasts = false;
-        }
+    }
+
+    public void SetEndGame(bool endGame)
+    {
+        _endGame = endGame;
+    }
+
+    public void DisplayScore()
+    {
+        scoreCanvasGroup.alpha = 1f;
+        scoreCanvasGroup.blocksRaycasts = true;
+    }
+
+    public void HideScore()
+    {
+        scoreCanvasGroup.alpha = 0f;
+        scoreCanvasGroup.blocksRaycasts = false;
     }
 
     public void addLigne(GameObject player)

@@ -22,7 +22,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
     private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
-
     private int _randomIndex = 0;
 
     private float precision = 20; // variation de la précision en degré
@@ -45,7 +44,13 @@ public class AsteroidNetworkManager : NetworkRoomManager
     };
 
     [SerializeField]
-    private GameObject _timeManagerPrefab;
+    private GameObject _roomTimerPrefab;
+    
+    [SerializeField]
+    private GameObject _gameTimerPrefab;
+
+    private RoomTimer _roomTimer;
+    private GameTimer _gameTimer;
 
     public int roomPlayers = 0;
 
@@ -66,14 +71,42 @@ public class AsteroidNetworkManager : NetworkRoomManager
         //start game
         if (sceneName == GameplayScene)
         {
-            StartGame();
+            GameObject go = Instantiate(_gameTimerPrefab);
+            _gameTimer = go.GetComponent<GameTimer>();
+            NetworkServer.Spawn(go);
+
+            SpawnAsteroids();
+
         }
         else if (sceneName == RoomScene)
         {
+            GameObject go = Instantiate(_roomTimerPrefab);
+            _roomTimer = go.GetComponent<RoomTimer>();
+            NetworkServer.Spawn(go);
+
+            if (roomSlots.Count >= minPlayers)
+            {
+                _roomTimer.StartTimer();
+            }
+
             ChangeRoomSpawnersOrientation();
         }
     }
 
+    /*
+    public override void OnRoomClientSceneChanged(NetworkConnection conn)
+    {
+        _timeManager = GameObject.Find("TimeManager(Clone)").GetComponent<TimeManager>();
+        if (IsSceneActive(RoomScene))
+        {
+            _timeManager.StartRoomTimer();
+        }
+        else if (IsSceneActive(GameplayScene))
+        {
+            _timeManager.StartGameTimer();
+        }
+    }
+    */
     [Server]
     public override void OnStopServer( )
     {
@@ -107,8 +140,14 @@ public class AsteroidNetworkManager : NetworkRoomManager
         NetworkServer.RegisterHandler<PlayerToken>(OnCreatePlayer, false);
     }
 
+    public override void OnRoomServerPlayersReady( )
+    {
+        _roomTimer.SetTimer(6); // TODO : ne pas hardcoder la valeur
+    }
+
     void OnCreatePlayer(NetworkConnection conn, PlayerToken token)
     {
+        Debug.Log("New player joins");
         AuthAPICall api = new AuthAPICall();
         UserRole userInfo = api.PostCheckUserToken(token.token);
         if (userInfo == null)
@@ -118,11 +157,19 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         if (IsSceneActive(RoomScene))
         {
+            Debug.Log("We are in room scene : roomslots = " + roomSlots.Count);
+
             // increment the index before adding the player, so first player starts at 1
             clientIndex++;
 
             if (roomSlots.Count == maxConnections)
+            { 
                 conn.Disconnect();
+            }
+            else if (roomSlots.Count == (minPlayers - 1))
+            {
+                _roomTimer.StartTimer();
+            }
 
             allPlayersReady = false;
 
@@ -175,7 +222,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         foreach (NetworkIdentity co in clientObjects)
         {
             GameObject go = NetworkIdentity.spawned[co.netId].gameObject;
-            if (go.tag == "Player")
+            if (go.tag == "Player" || go.tag == "RoomPlayer")
             {
                 freePlayerColor(go.GetComponent<PlayerInfo>().color);
                 break;
@@ -186,7 +233,11 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
-            StopGame();
+            _gameTimer.SetTimer(0);
+        }
+        else if (IsSceneActive(RoomScene) && (roomSlots.Count < minPlayers))
+        {
+            _roomTimer.StopTimer();
         }
     }
 
@@ -238,6 +289,11 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public void StartGame()
     {
+        ServerChangeScene(GameplayScene);
+    }
+
+    private void SpawnAsteroids()
+    {
         GameObject go = GameObject.FindGameObjectsWithTag(_asteroidSpawnerStorageTagName)[0];
         if (go == null)
             Debug.LogError($"There were no GameObjects with tag {_asteroidSpawnerStorageTagName} assigned self");
@@ -249,7 +305,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         InstantiateAsteroidSpawners();
         StartCoroutine(SpawnAsteroid());
 
-        NetworkServer.Spawn(Instantiate(_timeManagerPrefab));
+        // NetworkServer.Spawn(Instantiate(_timeManagerPrefab));
     }
 
     [Server]

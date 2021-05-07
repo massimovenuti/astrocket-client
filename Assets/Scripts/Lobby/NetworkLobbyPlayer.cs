@@ -34,9 +34,9 @@ public class NetworkLobbyPlayer : NetworkRoomPlayer
 
     private void OnDestroy( )
     {
+        _roomManager.roomPlayers--;
         if (_lobbyScreen != null)
         {
-            _roomManager.roomPlayers--;
             _lobbyScreen.setPlayers(_roomManager.roomPlayers);
         }
     }
