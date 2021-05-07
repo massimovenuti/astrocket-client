@@ -116,6 +116,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
             conn.Disconnect();
         }
 
+        /*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
+
+
         if (IsSceneActive(RoomScene))
         {
             // increment the index before adding the player, so first player starts at 1
@@ -183,6 +187,9 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
 
         base.OnServerDisconnect(conn);
+
+        /*        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = clientIndex + 1 });*/
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
