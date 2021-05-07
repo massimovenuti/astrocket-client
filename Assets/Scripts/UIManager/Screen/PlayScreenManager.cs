@@ -16,7 +16,7 @@ public class PlayScreenManager : ScreenManager
 #endif
         base.Start();
 
-        /*Button serveurButton = GameObject.Find("ServerButton").GetComponent<Button>();
+       /* Button serveurButton = GameObject.Find("ServerButton").GetComponent<Button>();
         serveurButton.onClick.AddListener(runGame);*/
 
         _servContainer = GameObject.Find("PlayUI").gameObject;
