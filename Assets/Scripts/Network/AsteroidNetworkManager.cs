@@ -1,6 +1,7 @@
 ﻿using API;
 using API.Auth;
 using API.Stats;
+using API.MainServer;
 using Mirror;
 using System;
 using System.Collections;
@@ -28,6 +29,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public string playerToken;
     private string serveurToken;
+    private string serveurName;
 
     private List<Transform> _roomPlayerSpawnsList;
 
@@ -53,10 +55,11 @@ public class AsteroidNetworkManager : NetworkRoomManager
         base.Awake();
         List<string> args = Environment.GetCommandLineArgs().ToList();
 
-        GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[1]);
-        serveurToken = args[2];
+        name = args[1];
+        GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[2]);
+        serveurToken = args[3];
     }
-    */
+*/
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {

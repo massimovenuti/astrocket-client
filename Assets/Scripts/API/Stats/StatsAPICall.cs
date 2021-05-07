@@ -18,7 +18,7 @@ namespace API.Stats
         public StatsAPICall( )
         {
             // Default URL for Auth API call
-            UriBuilder uri = new UriBuilder("https", STATS_API_URL, 3000);
+            UriBuilder uri = new UriBuilder("https", STATS_API_URL);
             _httpClient = new HttpClient()
             {
                 BaseAddress = uri.Uri
