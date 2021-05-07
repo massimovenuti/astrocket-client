@@ -21,7 +21,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
     private int _mapRadiusLen = 160;
     private float _yAxis = 0f;
 
-    private int _roomSpawnerRadius = 320;
 
     private int _randomIndex = 0;
 
@@ -46,6 +45,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
     [SerializeField]
     private GameObject _timeManagerPrefab;
 
+    public int roomPlayers = 0;
+
     /*
     public override void Awake( )
     {
@@ -66,8 +67,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
         else if (sceneName == RoomScene)
         {
-            FreeAllColors();
-            InstantiateRoomPlayerSpawners();
+            ChangeRoomSpawnersOrientation();
         }
     }
 
@@ -76,9 +76,12 @@ public class AsteroidNetworkManager : NetworkRoomManager
     {
         StopAllCoroutines();
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
+        if (IsSceneActive(GameplayScene))
         {
-            NetworkServer.Destroy(go);
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Asteroid"))
+            {
+                NetworkServer.Destroy(go);
+            }
         }
 
         base.OnStopServer();
@@ -110,30 +113,22 @@ public class AsteroidNetworkManager : NetworkRoomManager
             conn.Disconnect();
         }
 
-        // increment the index before adding the player, so first player starts at 1
-        clientIndex++;
-
-        GameObject player;
-
         if (IsSceneActive(RoomScene))
         {
+            // increment the index before adding the player, so first player starts at 1
+            clientIndex++;
+
             if (roomSlots.Count == maxConnections)
                 conn.Disconnect();
 
             allPlayersReady = false;
 
-            Transform spawnPoint = _roomPlayerSpawnsList[clientIndex - 1];
-            player = Instantiate(roomPlayerPrefab.gameObject, spawnPoint.position, spawnPoint.rotation);
+            Transform spawnPoint = _roomPlayerSpawnsList[(clientIndex - 1)%maxConnections];
+            GameObject player = Instantiate(roomPlayerPrefab.gameObject, spawnPoint.position, spawnPoint.rotation);
+            player.GetComponent<PlayerInfo>().playerName = userInfo.Name;
+            player.GetComponent<PlayerInfo>().color = getPlayerColor();
+            NetworkServer.AddPlayerForConnection(conn, player);
         }
-        else
-        {
-           player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        }
-
-        player.GetComponent<PlayerInfo>().playerName = userInfo.Name;
-        player.GetComponent<PlayerInfo>().color = getPlayerColor();
-
-        NetworkServer.AddPlayerForConnection(conn, player);
     }
 
     private Color getPlayerColor()
@@ -162,14 +157,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
     }
 
-    private void FreeAllColors()
-    {
-        for (int i = 0; i < playersColor.Length; i++)
-        {
-            playersColor[i] = new Tuple<bool, Color>(true, playersColor[i].Item2);
-        }
-    }
-
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
@@ -194,20 +181,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         base.OnServerDisconnect(conn);
 
-        if (numPlayers < minPlayers)
+        if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
             StopGame();
         }
-    }
-
-    public override void OnServerConnect(NetworkConnection conn)
-    {
-        if (numPlayers >= maxConnections)
-        {
-            conn.Disconnect();
-            return;
-        }
-        //OnRoomServerConnect(conn);
     }
 
     public void StopGame()
@@ -293,7 +270,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     }
 
     [Server]
-    private void InstantiateRoomPlayerSpawners()
+    private void ChangeRoomSpawnersOrientation()
     {
         _roomPlayerSpawnsList = new List<Transform>();
         Transform camTransform = Camera.main.transform;
@@ -311,24 +288,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
             //t.rotation = Quaternion.LookRotation(( - transform.position).normalized);
             _roomPlayerSpawnsList.Add(t);
         }
-        /*
-        float angleStep = 140f / maxConnections;
-        Vector3 pos = Camera.main.transform.position;
-        GameObject roomPlayerSpawners = GameObject.Find("SpawnPoints");
-
-        for (int i = 0; i < maxConnections; i++)
-        {
-            float theta = i * angleStep;
-            pos.x = _roomSpawnerRadius * Mathf.Cos(theta * Mathf.Deg2Rad);
-            pos.z = _roomSpawnerRadius * Mathf.Sin(theta * Mathf.Deg2Rad);
-
-            GameObject go = new GameObject("RoomPlayerSpawnPoint" + (i + 1));
-            go.transform.parent = roomPlayerSpawners.transform;
-            go.transform.position = pos;
-            go.transform.rotation = ;
-            _roomPlayerSpawnsList.Add(go.transform);
-        }
-        */
     }
 
     [Server]

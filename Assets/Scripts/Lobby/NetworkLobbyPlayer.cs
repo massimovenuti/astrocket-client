@@ -1,56 +1,54 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using Mirror;
 
-namespace Mirror.Examples.NetworkRoom
+public class NetworkLobbyPlayer : NetworkRoomPlayer
 {
-    [AddComponentMenu("")]
-    public class NetworkLobbyPlayer : NetworkRoomPlayer
+    private Button _readyBtn;
+    private bool _firstRoom = true;
+    private AsteroidNetworkManager _roomManager;
+    private LobbyScreenManager _lobbyScreen;
+
+    public override void OnStartClient( )
     {
-        private TMP_Text _statusField;
-        private Button _readyBtn;
+        base.OnStartClient();
 
-        public override void OnStartClient( )
+        Button leaveBtn = GameObject.Find("LeaveButton").GetComponent<Button>();
+        leaveBtn.onClick.AddListener(exitLobby); // Bind button click to exitLobby()
+
+        _readyBtn = GameObject.Find("ReadyButton").GetComponent<Button>();
+        _readyBtn.onClick.AddListener(setPlayerReady);
+
+        _lobbyScreen = GameObject.Find("LobbyScreen").GetComponent<LobbyScreenManager>();
+        _roomManager = GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>();
+
+        _roomManager.roomPlayers++;
+        _lobbyScreen.setPlayers(_roomManager.roomPlayers);
+
+        if (isLocalPlayer)
         {
-            base.OnStartClient();
-
-            Button leaveBtn = GameObject.Find("LeaveButton").GetComponent<Button>();
-            leaveBtn.onClick.AddListener(exitLobby); // Bind button click to exitLobby()
-
-            _statusField = GameObject.Find("RoomStatus").GetComponent<TMP_Text>();
-            _readyBtn = GameObject.Find("ReadyButton").GetComponent<Button>();
-            _readyBtn.onClick.AddListener(setPlayerReady);
-
-            updateLobbyStatus(GameObject.FindGameObjectsWithTag("Player").Length);
-
-            if (isLocalPlayer)
-            {
-                CmdChangeReadyState(false);
-                _readyBtn.interactable = true;
-            }
+            CmdChangeReadyState(false);
+            _readyBtn.interactable = true;
         }
+    }
 
-        private void OnDestroy( )
+    private void OnDestroy( )
+    {
+        if (_lobbyScreen != null)
         {
-            updateLobbyStatus(GameObject.FindGameObjectsWithTag("Player").Length);
+            _roomManager.roomPlayers--;
+            _lobbyScreen.setPlayers(_roomManager.roomPlayers);
         }
+    }
 
+    private void setPlayerReady()
+    {
+        CmdChangeReadyState(true);
+        _readyBtn.interactable = false;
+    }
 
-        private void updateLobbyStatus(int curPlayers)
-        {
-            int maxPlayers = GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().maxConnections;
-            _statusField.text = curPlayers.ToString() + "/" + maxPlayers.ToString(); // TODO : ne pas hardcoder la valeur
-        }
-
-        private void setPlayerReady()
-        {
-            CmdChangeReadyState(true);
-            _readyBtn.interactable = false;
-        }
-
-        private void exitLobby()
-        {
-            GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StopClient();
-        }
+    private void exitLobby()
+    {
+        GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StopClient();
     }
 }

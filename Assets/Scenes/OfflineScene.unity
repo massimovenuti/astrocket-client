@@ -13617,6 +13617,7 @@ MonoBehaviour:
   playerToken: 
   _timeManagerPrefab: {fileID: 4189700793373900163, guid: 15c0fdc5db04b4e478a81aacb3a9b7b5,
     type: 3}
+  roomPlayers: 0
 --- !u!4 &976059974
 Transform:
   m_ObjectHideFlags: 0
