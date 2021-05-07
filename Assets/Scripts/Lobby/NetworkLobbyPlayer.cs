@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 public class NetworkLobbyPlayer : NetworkRoomPlayer
 {
     private Button _readyBtn;
-    private bool _firstRoom = true;
     private AsteroidNetworkManager _roomManager;
     private LobbyScreenManager _lobbyScreen;
+
+    [SerializeField]
+    private Sprite _checkSprite, _crossSprite;
+    private TMP_Text _playerReadyStatusText;
 
     public override void OnStartClient( )
     {
@@ -30,6 +34,9 @@ public class NetworkLobbyPlayer : NetworkRoomPlayer
             CmdChangeReadyState(false);
             _readyBtn.interactable = true;
         }
+
+        _playerReadyStatusText = transform.Find("Canvas/ReadyStatus/TextStatus").GetComponent<TMP_Text>();
+        _playerReadyStatusText.text = (readyToBegin) ? "Ready" : "Not Ready";
     }
 
     private void OnDestroy( )
@@ -50,5 +57,25 @@ public class NetworkLobbyPlayer : NetworkRoomPlayer
     private void exitLobby()
     {
         GameObject.Find("RoomManager").GetComponent<AsteroidNetworkManager>().StopClient();
+    }
+
+    public override void ReadyStateChanged(bool _, bool newReadyState)
+    {
+        base.ReadyStateChanged(_, newReadyState);
+
+        TMP_Text readyStatusText = transform.Find("Canvas/ReadyStatus/TextStatus").GetComponent<TMP_Text>();
+        Image readyStatusImage = transform.Find("Canvas/ReadyStatus/ImageStatus").GetComponent<Image>();
+
+        if (newReadyState)
+        {
+            readyStatusText.text = "Ready";
+            readyStatusImage.sprite = _checkSprite;
+        }
+        else
+        {
+            readyStatusText.text = "Not Ready";
+            readyStatusImage.sprite = _crossSprite;
+            _readyBtn.interactable = true;
+        }
     }
 }

@@ -62,5 +62,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _gameDuration: 10
+  _gameDuration: 300
   endGameDuration: 6
