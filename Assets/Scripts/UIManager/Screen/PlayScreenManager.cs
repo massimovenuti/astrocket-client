@@ -16,27 +16,29 @@ public class PlayScreenManager : ScreenManager
 #endif
         base.Start();
 
-        Button serveurButton = GameObject.Find("ServerButton").GetComponent<Button>();
-        serveurButton.onClick.AddListener(runGame);
+        /*Button serveurButton = GameObject.Find("ServerButton").GetComponent<Button>();
+        serveurButton.onClick.AddListener(runGame);*/
 
         _servContainer = GameObject.Find("PlayUI").gameObject;
+
+        getServerList();
     }
 
     private void getServerList()
     {
         MainServerAPI mainApi = new MainServerAPI();
-        API.ServerListItem[] serverListItems = mainApi.GetServerList(); // TODO
+        API.ServerListItem[] serverListItems = mainApi.GetServerList(SharedInfo.userToken); // TODO
+        Debug.LogWarning(mainApi.ErrorMessage);
 
         foreach (API.ServerListItem server in serverListItems)
         {
-            GameObject servBtn = Instantiate(serverButtonPrefab);
+            Debug.Log(server.IP);
+            GameObject servBtn = Instantiate(serverButtonPrefab, _servContainer.transform);
             PlayButtonManager pbm = servBtn.GetComponent<PlayButtonManager>();
             pbm.ip = server.IP;
             pbm.port = server.Port;
-            pbm.name = server.Name;
-            pbm.numPlayers = server.PlayerCount;
-            pbm.maxPlayers = 4; // TODO
-            servBtn.transform.parent = _servContainer.transform;
+            servBtn.transform.Find("name").GetComponent<TMPro.TMP_Text>().text = server.Name;
+            servBtn.transform.Find("numPlayer").GetComponent<TMPro.TMP_Text>().text = $"{server.PlayerCount}/4";
         }
     }
 

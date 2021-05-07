@@ -7,10 +7,6 @@ public class PlayButtonManager : MonoBehaviour
     public string ip;
     public int port;
 
-    public string name;
-    public int numPlayers;
-    public int maxPlayers;
-
     void Start()
     {
         gameObject.GetComponent<Button>().onClick.AddListener(runGame);

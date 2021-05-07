@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -13616,10 +13616,8 @@ MonoBehaviour:
   _asteroidSpawnerStorageTagName: AsteroidSpawnerStorage
   _asteroidSpawnerName: AsteroidSpawner
   playerToken: 
-  _roomTimerPrefab: {fileID: 1902870924988785388, guid: c0bc909b6f208d14daa5a36b0786da8d,
-    type: 3}
-  _gameTimerPrefab: {fileID: 5690619982562071004, guid: b74003118f60ab442abf82005500a808,
-    type: 3}
+  _roomTimerPrefab: {fileID: 0}
+  _gameTimerPrefab: {fileID: 0}
   roomPlayers: 0
 --- !u!4 &976059974
 Transform:
@@ -14343,7 +14341,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 117.505, y: -31.605}
+  m_AnchoredPosition: {x: 117.505005, y: -31.605}
   m_SizeDelta: {x: 185.01, y: 43.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1059014396
@@ -17552,7 +17550,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -960}
+  m_AnchoredPosition: {x: 0, y: -1081.5038}
   m_SizeDelta: {x: 1920.0001, y: 60}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1360811238
@@ -21841,6 +21839,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextPage: {fileID: 0}
   previousPage: {fileID: 98209357}
+  serverButtonPrefab: {fileID: 5563229832917625746, guid: 68c18bc5cedaa1c4da0d291dbdfa5bd5,
+    type: 3}
+  token: 
 --- !u!1 &1716981854
 GameObject:
   m_ObjectHideFlags: 0
@@ -23492,8 +23493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960.00006, y: -498.80002}
-  m_SizeDelta: {x: 1920.0001, y: 802.4}
+  m_AnchoredPosition: {x: 960.00006, y: -559.5519}
+  m_SizeDelta: {x: 1920.0001, y: 923.9038}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1850565405
 MonoBehaviour:

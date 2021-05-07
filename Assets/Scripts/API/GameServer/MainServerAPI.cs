@@ -98,13 +98,14 @@ namespace API.MainServer
 
         public ServerListItem[] GetServerList(UserToken token)
         {
-            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, $"list"))
+            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, $"main/list"))
             {
                 message.Headers.Add("user_token", token.Token);
                 HttpResponseMessage responseMessage = _httpClient.SendAsync(message).Result;
                 ErrorMessage = new ErrorMessage(APICallFunction.None, responseMessage.StatusCode);
                 if (responseMessage.IsSuccessStatusCode)
                 {
+                    Debug.Log($"{JsonHelper.FromJson<ServerListItem>(JsonHelper.fixJson(responseMessage.Content.ReadAsStringAsync().Result))} \n {responseMessage.Content.ReadAsStringAsync().Result}");
                     return JsonHelper.FromJson<ServerListItem>(JsonHelper.fixJson(responseMessage.Content.ReadAsStringAsync().Result));
                 }
 

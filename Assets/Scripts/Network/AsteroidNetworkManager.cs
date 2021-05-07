@@ -54,7 +54,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public int roomPlayers = 0;
 
-    /*
+    [Server]
     public override void Awake( )
     {
         base.Awake();
@@ -64,7 +64,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         GetComponent<IgnoranceTransport>().CommunicationPort = Int32.Parse(args[2]);
         serveurToken = args[3];
     }
-*/
+
 
     public override void OnRoomServerSceneChanged(string sceneName)
     {
@@ -155,8 +155,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
             conn.Disconnect();
         }
 
-        /*        MainServerAPI mainApi = new MainServerAPI();
-        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
+        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });
 
 
         if (IsSceneActive(RoomScene))
@@ -235,8 +235,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         base.OnServerDisconnect(conn);
 
-        /*        MainServerAPI mainApi = new MainServerAPI();
-        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
+        MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
