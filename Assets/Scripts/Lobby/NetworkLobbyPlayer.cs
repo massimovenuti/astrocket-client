@@ -39,6 +39,7 @@ public class NetworkLobbyPlayer : NetworkRoomPlayer
         _playerReadyStatusText.text = (readyToBegin) ? "Ready" : "Not Ready";
     }
 
+    [ClientCallback]
     private void OnDestroy( )
     {
         _roomManager.roomPlayers--;
