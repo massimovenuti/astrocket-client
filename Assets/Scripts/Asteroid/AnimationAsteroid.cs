@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class AnimationAsteroid : NetworkBehaviour
+public class AnimationAsteroid : MonoBehaviour
 {
     [SerializeField]
     private float speed = 50f;
