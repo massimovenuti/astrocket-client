@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 public class PlayerScore : NetworkBehaviour
 {
@@ -23,13 +24,22 @@ public class PlayerScore : NetworkBehaviour
     [SyncVar(hook = "updatePuUi")]
     public ushort nbPowerUps = 0;
 
+    [SyncVar(hook = "updateRankUi")]
+    public ushort rank = 0;
+
     private ScoreTabManager scoreTabManager;
 
+    private TextMeshProUGUI _rankText;
 
-    [ClientCallback]
-    private void Start( )
+    public override void OnStartClient( )
     {
         scoreTabManager = GameObject.Find("ScoreCanvas").GetComponent<ScoreTabManager>();
+        _rankText = GameObject.Find("Rank").GetComponent<TextMeshProUGUI>();
+        if (isLocalPlayer)
+        {
+            Debug.Log("Rank : " + rank);
+            updateRankUi(0, rank);
+        }
     }
 
     [Server]
@@ -37,6 +47,7 @@ public class PlayerScore : NetworkBehaviour
     {
         nbKills++;
         nbPoints += pointsKill;
+        UpdateRank();
     }
 
     [Server]
@@ -44,6 +55,7 @@ public class PlayerScore : NetworkBehaviour
     {
         nbAsteroids++;
         nbPoints += pointsAsteroids;
+        UpdateRank();
     }
 
     [Server]
@@ -52,6 +64,7 @@ public class PlayerScore : NetworkBehaviour
         nbDeaths++;
         nbPoints += pointsDeaths;
         nbPoints = (nbPoints < (short)0) ? (short)0 : nbPoints;
+        UpdateRank();
     }
 
     [Server]
@@ -59,36 +72,65 @@ public class PlayerScore : NetworkBehaviour
     {
         nbPowerUps++;
         nbPoints += pointsPowerUps;
+        UpdateRank();
+    }
+
+    [Server]
+    private void UpdateRank()
+    {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            PlayerScore score = go.GetComponent<PlayerScore>();
+            if (score.rank > rank && score.nbPoints < nbPoints)
+            {
+                score.rank--;
+                rank++;
+            }
+            else if (score.rank < rank && score.nbPoints > nbPoints)
+            {
+                score.rank++;
+                rank--;
+            }
+        }
     }
 
     [Client]
-    void updatePointsUi(short oldValue, short newValue)
+    void updatePointsUi(short _, short newValue)
     {
         scoreTabManager.updateValue("Score", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
-    void updateKillsUi(ushort oldValue, ushort newValue)
+    void updateKillsUi(ushort _, ushort newValue)
     {
         scoreTabManager.updateValue("Kills", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
-    void updateDeathsUi(ushort oldValue, ushort newValue)
+    void updateDeathsUi(ushort _, ushort newValue)
     {
         scoreTabManager.updateValue("Deaths", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
-    void updateAsteroidsUi(ushort oldValue, ushort newValue)
+    void updateAsteroidsUi(ushort _, ushort newValue)
     {
         scoreTabManager.updateValue("Asteroids", GetComponent<PlayerInfo>().playerName, newValue);
     }
 
     [Client]
-    void updatePuUi(ushort oldValue, ushort newValue)
+    void updatePuUi(ushort _, ushort newValue)
     {
         scoreTabManager.updateValue("Power-ups", GetComponent<PlayerInfo>().playerName, newValue);
+    }
+
+    [Client]
+    void updateRankUi(ushort _, ushort newValue)
+    {
+        if (isLocalPlayer && _rankText != null)
+        {
+            _rankText.text = newValue.ToString();
+        }
     }
 
     /*

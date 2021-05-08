@@ -77,24 +77,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
                 _roomTimer.StartTimer();
             }
 
-            ChangeRoomSpawnersOrientation();
+            InitRoomSpawners();
         }
     }
 
-    /*
-    public override void OnRoomClientSceneChanged(NetworkConnection conn)
-    {
-        _timeManager = GameObject.Find("TimeManager(Clone)").GetComponent<TimeManager>();
-        if (IsSceneActive(RoomScene))
-        {
-            _timeManager.StartRoomTimer();
-        }
-        else if (IsSceneActive(GameplayScene))
-        {
-            _timeManager.StartGameTimer();
-        }
-    }
-    */
     [Server]
     public override void OnStopServer( )
     {
@@ -141,7 +127,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     void OnCreatePlayer(NetworkConnection conn, PlayerToken token)
     {
-        Debug.Log("New player joins");
         AuthAPICall api = new AuthAPICall();
         UserRole userInfo = api.PostCheckUserToken(token.token);
         if (userInfo == null)
@@ -155,8 +140,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         if (IsSceneActive(RoomScene))
         {
-            Debug.Log("We are in room scene : roomslots = " + roomSlots.Count);
-
             // increment the index before adding the player, so first player starts at 1
             clientIndex++;
 
@@ -205,10 +188,16 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
     }
 
+    public override void OnRoomStopClient( )
+    {
+        roomPlayers = 0;
+    }
+
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
         gamePlayer.GetComponent<PlayerInfo>().playerName = roomPlayer.GetComponent<PlayerInfo>().playerName;
+        gamePlayer.GetComponent<PlayerScore>().rank = (ushort)(roomPlayer.GetComponent<NetworkRoomPlayer>().index + 1);
         return true;
     }
 
@@ -330,7 +319,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     }
 
     [Server]
-    private void ChangeRoomSpawnersOrientation()
+    private void InitRoomSpawners()
     {
         _roomPlayerSpawnsList = new List<Transform>();
         Transform camTransform = Camera.main.transform;
