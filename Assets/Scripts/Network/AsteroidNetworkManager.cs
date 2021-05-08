@@ -133,7 +133,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     void OnCreatePlayer(NetworkConnection conn, PlayerToken token)
     {
-        Debug.Log("New player joins");
         AuthAPICall api = new AuthAPICall();
         UserRole userInfo = api.PostCheckUserToken(token.token);
         if (userInfo == null)
@@ -147,8 +146,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         if (IsSceneActive(RoomScene))
         {
-            Debug.Log("We are in room scene : roomslots = " + roomSlots.Count);
-
             // increment the index before adding the player, so first player starts at 1
             clientIndex++;
 
@@ -201,10 +198,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     {
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
         gamePlayer.GetComponent<PlayerInfo>().playerName = roomPlayer.GetComponent<PlayerInfo>().playerName;
-        Debug.Log("Room player index : " + roomPlayer.GetComponent<NetworkRoomPlayer>().index);
-        Debug.Log("Game player rank : " + gamePlayer.GetComponent<PlayerScore>().rank);
         gamePlayer.GetComponent<PlayerScore>().rank = (ushort)(roomPlayer.GetComponent<NetworkRoomPlayer>().index + 1);
-        Debug.Log("Game player new rank : " + gamePlayer.GetComponent<PlayerScore>().rank);
         return true;
     }
 
