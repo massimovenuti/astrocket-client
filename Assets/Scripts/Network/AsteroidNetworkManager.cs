@@ -194,6 +194,11 @@ public class AsteroidNetworkManager : NetworkRoomManager
         }
     }
 
+    public override void OnRoomStopClient( )
+    {
+        roomPlayers = 0;
+    }
+
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
