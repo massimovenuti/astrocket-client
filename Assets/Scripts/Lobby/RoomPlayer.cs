@@ -31,7 +31,7 @@ public class RoomPlayer : NetworkRoomPlayer
 
         _roomManager.roomPlayers++;
         _lobbyScreen.setPlayers(_roomManager.roomPlayers);
-        _playerReadyStatusText.text = (readyToBegin) ? "Ready" : "Not Ready";
+        _playerReadyStatusText.text = GetComponent<PlayerInfo>().playerName;
     }
 
     [ClientCallback]
@@ -79,12 +79,10 @@ public class RoomPlayer : NetworkRoomPlayer
 
         if (newReadyState)
         {
-            readyStatusText.text = "Ready";
             readyStatusImage.sprite = _checkSprite;
         }
         else
         {
-            readyStatusText.text = "Not Ready";
             readyStatusImage.sprite = _crossSprite;
         }
     }

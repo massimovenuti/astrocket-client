@@ -89,24 +89,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
                 _roomTimer.StartTimer();
             }
 
-            ChangeRoomSpawnersOrientation();
+            InitRoomSpawners();
         }
     }
 
-    /*
-    public override void OnRoomClientSceneChanged(NetworkConnection conn)
-    {
-        _timeManager = GameObject.Find("TimeManager(Clone)").GetComponent<TimeManager>();
-        if (IsSceneActive(RoomScene))
-        {
-            _timeManager.StartRoomTimer();
-        }
-        else if (IsSceneActive(GameplayScene))
-        {
-            _timeManager.StartGameTimer();
-        }
-    }
-    */
     [Server]
     public override void OnStopServer( )
     {
@@ -215,6 +201,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
     {
         gamePlayer.GetComponent<PlayerInfo>().color = roomPlayer.GetComponent<PlayerInfo>().color;
         gamePlayer.GetComponent<PlayerInfo>().playerName = roomPlayer.GetComponent<PlayerInfo>().playerName;
+        Debug.Log("Room player index : " + roomPlayer.GetComponent<NetworkRoomPlayer>().index);
+        Debug.Log("Game player rank : " + gamePlayer.GetComponent<PlayerScore>().rank);
+        gamePlayer.GetComponent<PlayerScore>().rank = (ushort)(roomPlayer.GetComponent<NetworkRoomPlayer>().index + 1);
+        Debug.Log("Game player new rank : " + gamePlayer.GetComponent<PlayerScore>().rank);
         return true;
     }
 
@@ -336,7 +326,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     }
 
     [Server]
-    private void ChangeRoomSpawnersOrientation()
+    private void InitRoomSpawners()
     {
         _roomPlayerSpawnsList = new List<Transform>();
         Transform camTransform = Camera.main.transform;
