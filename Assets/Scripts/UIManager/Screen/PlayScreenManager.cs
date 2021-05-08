@@ -21,7 +21,10 @@ public class PlayScreenManager : ScreenManager
 
         _servContainer = GameObject.Find("PlayUI").gameObject;
 
-        getServerList();
+        Button refreshButton = GameObject.Find("RefreshButton").GetComponent<Button>();
+        refreshButton.onClick.AddListener(refresh);
+
+        refresh();
     }
 
     private void getServerList()
@@ -38,8 +41,18 @@ public class PlayScreenManager : ScreenManager
             pbm.ip = server.IP;
             pbm.port = server.Port;
             servBtn.transform.Find("name").GetComponent<TMPro.TMP_Text>().text = server.Name;
-            servBtn.transform.Find("numPlayer").GetComponent<TMPro.TMP_Text>().text = $"{server.PlayerCount}/4";
+            //servBtn.transform.Find("numPlayer").GetComponent<TMPro.TMP_Text>().text = $"{server.PlayerCount}/4";
         }
+    }
+
+    private void refresh ()
+    {
+        foreach(Transform c in _servContainer.transform)
+        {
+            GameObject.Destroy(c.gameObject);
+        }
+
+        getServerList();
     }
 
     void runGame( )

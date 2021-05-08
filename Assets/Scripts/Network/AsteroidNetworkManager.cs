@@ -134,8 +134,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
             conn.Disconnect();
         }
 
-        MainServerAPI mainApi = new MainServerAPI();
-        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });
+        /*MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
 
 
         if (IsSceneActive(RoomScene))
@@ -218,8 +218,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
         base.OnServerDisconnect(conn);
 
-        MainServerAPI mainApi = new MainServerAPI();
-        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });
+        /*MainServerAPI mainApi = new MainServerAPI();
+        mainApi.PutPlayerCount(new ServerToken { Token = serveurToken }, new SeverNameAndPlayerCount { Name = serveurName, PlayerCount = numPlayers });*/
 
         if (IsSceneActive(GameplayScene) && (numPlayers < minPlayers))
         {
@@ -234,8 +234,8 @@ public class AsteroidNetworkManager : NetworkRoomManager
     public void StopGame()
     {
         StopAllCoroutines();
-        /*
-        StatsAPICall api = new StatsAPICall();
+
+        /*StatsAPICall api = new StatsAPICall();
 
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
@@ -273,7 +273,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
             api.PostModifyPlayerStats(newStats.username, serveurToken, updateStats);
         }
         */
-        
+
         ServerChangeScene(RoomScene);
     }
 

@@ -28,40 +28,40 @@ public class SettingsScreenManager : ScreenManager
         SaveManager.Load();
         _saveButton = transform.Find("Footer/SaveButton").GetComponent<Button>();
 
-        _panelGraphics = GameObject.Find("GraphicsSettings").gameObject;
+        //_panelGraphics = GameObject.Find("GraphicsSettings").gameObject;
         _panelControls = GameObject.Find("ControlsSettings").gameObject;
-        _panelAudio = GameObject.Find("AudioSettings").gameObject;
+        //_panelAudio = GameObject.Find("AudioSettings").gameObject;
 
-        _panelGraphicsButton = GameObject.Find("GraphicsTabToggler").GetComponent<Button>();
+        //_panelGraphicsButton = GameObject.Find("GraphicsTabToggler").GetComponent<Button>();
         _panelControlsButton = GameObject.Find("ControlsTabToggler").GetComponent<Button>();
-        _panelAudioButton = GameObject.Find("AudioTabToggler").GetComponent<Button>();
+        //_panelAudioButton = GameObject.Find("AudioTabToggler").GetComponent<Button>();
 
-        _panelGraphicsButton.onClick.AddListener(( ) => { setPanelTo(Panel.Graphics); });
+        //_panelGraphicsButton.onClick.AddListener(( ) => { setPanelTo(Panel.Graphics); });
         _panelControlsButton.onClick.AddListener(( ) => { setPanelTo(Panel.Controls); });
-        _panelAudioButton.onClick.AddListener(( ) => { setPanelTo(Panel.Audio); });
+        //_panelAudioButton.onClick.AddListener(( ) => { setPanelTo(Panel.Audio); });
 
-        _musicValue = GameObject.Find("MusicVolumeValue").GetComponent<TMP_Text>();
-        _masterValue = GameObject.Find("MasterVolumeValue").GetComponent<TMP_Text>();
-        _effectsValue = GameObject.Find("EffectsVolumeValue").GetComponent<TMP_Text>();
+        //_musicValue = GameObject.Find("MusicVolumeValue").GetComponent<TMP_Text>();
+        //_masterValue = GameObject.Find("MasterVolumeValue").GetComponent<TMP_Text>();
+        //_effectsValue = GameObject.Find("EffectsVolumeValue").GetComponent<TMP_Text>();
 
-        _musicVolumeSlider = GameObject.Find("MusicVolumeSlider").GetComponent<Slider>();
-        _masterVolumeSlider = GameObject.Find("MasterVolumeSlider").GetComponent<Slider>();
-        _effectsVolumeSlider = GameObject.Find("EffectsVolumeSlider").GetComponent<Slider>();
+        //_musicVolumeSlider = GameObject.Find("MusicVolumeSlider").GetComponent<Slider>();
+        //_masterVolumeSlider = GameObject.Find("MasterVolumeSlider").GetComponent<Slider>();
+        //_effectsVolumeSlider = GameObject.Find("EffectsVolumeSlider").GetComponent<Slider>();
 
-        _musicVolumeSlider.onValueChanged.AddListener(updateMusicValue);
-        _masterVolumeSlider.onValueChanged.AddListener(updateMasterValue);
-        _effectsVolumeSlider.onValueChanged.AddListener(updateEffectsValue);
+        //_musicVolumeSlider.onValueChanged.AddListener(updateMusicValue);
+        //_masterVolumeSlider.onValueChanged.AddListener(updateMasterValue);
+        //_effectsVolumeSlider.onValueChanged.AddListener(updateEffectsValue);
 
         _saveButton.onClick.AddListener(saveSettings);
 
-        setPanelTo(Panel.Graphics);
-        updateMasterValue(_masterVolumeSlider.value);
-        updateMusicValue(_masterVolumeSlider.value);
-        updateEffectsValue(_masterVolumeSlider.value);
+        setPanelTo(Panel.Controls);
+        //updateMasterValue(_masterVolumeSlider.value);
+        //updateMusicValue(_masterVolumeSlider.value);
+        //updateEffectsValue(_masterVolumeSlider.value);
 
-        SetMasterVolume(SaveManager.Settings.audio.master);
-        SetMusicVolume(SaveManager.Settings.audio.music);
-        SetEffectsVolume(SaveManager.Settings.audio.effects);
+        //SetMasterVolume(SaveManager.Settings.audio.master);
+        //SetMusicVolume(SaveManager.Settings.audio.music);
+        //SetEffectsVolume(SaveManager.Settings.audio.effects);
 #if UNITY_ANDROID
         setupMobileViewport();
 #else
@@ -91,7 +91,6 @@ public class SettingsScreenManager : ScreenManager
             {
                 if (csm.controlName == k.keyname)
                 {
-                    Debug.Log($"{k.keyname}, {k.key}");
                     csm.SetKeyCode(k.key);
                 }
             }
@@ -100,9 +99,9 @@ public class SettingsScreenManager : ScreenManager
 
     private void saveSettings( )
     {
-        SaveManager.Settings.audio.Master = _masterVolumeSlider.value;
-        SaveManager.Settings.audio.Effects = _effectsVolumeSlider.value;
-        SaveManager.Settings.audio.Music = _musicVolumeSlider.value;
+        //SaveManager.Settings.audio.Master = _masterVolumeSlider.value;
+        //SaveManager.Settings.audio.Effects = _effectsVolumeSlider.value;
+        //SaveManager.Settings.audio.Music = _musicVolumeSlider.value;
 
         SaveManager.Settings.keys = InputManager.InputManagerInst.SaveInputs();
 
@@ -155,7 +154,7 @@ public class SettingsScreenManager : ScreenManager
 
     private void setPanelTo(Panel panel)
     {
-        if (panel == Panel.Graphics)
+       /* if (panel == Panel.Graphics)
         {
             _panelGraphicsButton.interactable = false;
             _panelControlsButton.interactable = true;
@@ -164,7 +163,8 @@ public class SettingsScreenManager : ScreenManager
             _panelControls.SetActive(false);
             _panelAudio.SetActive(false);
         }
-        else if (panel == Panel.Controls)
+        else*/
+        if (panel == Panel.Controls)
         {
             _panelGraphicsButton.interactable = true;
             _panelControlsButton.interactable = false;
@@ -173,7 +173,7 @@ public class SettingsScreenManager : ScreenManager
             _panelControls.SetActive(true);
             _panelAudio.SetActive(false);
         }
-        else if (panel == Panel.Audio)
+        /*else if (panel == Panel.Audio)
         {
             _panelGraphicsButton.interactable = true;
             _panelControlsButton.interactable = true;
@@ -181,7 +181,7 @@ public class SettingsScreenManager : ScreenManager
             _panelGraphics.SetActive(false);
             _panelControls.SetActive(false);
             _panelAudio.SetActive(true);
-        }
+        }*/
     }
 
     enum Panel

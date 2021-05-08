@@ -127,7 +127,7 @@ PlayerSettings:
   bundleVersion: 0.5
   preloadedAssets:
   - {fileID: 2958615548390935055, guid: 59aebfaacadfe6b498f0010a344f43c8, type: 3}
-  - {fileID: 7975735016790354320, guid: 2d63d98bb0569154593640f8a617d47b, type: 3}
+  - {fileID: 8559033464605830586, guid: f7d23cdc73ec8d24797df52fe3ef9961, type: 3}
   - {fileID: 1529621894446456818, guid: 6f4ed8ca7a2e40746bb7af87eca44cba, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -270,7 +270,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: eedaf188af955ff418f7d5a43cf11724, type: 3}
+      m_Icon: {fileID: 2800000, guid: f290d1caa9bb7a44a9e4f06228a14a49, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
