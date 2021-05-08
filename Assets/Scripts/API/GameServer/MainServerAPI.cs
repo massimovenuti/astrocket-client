@@ -61,7 +61,7 @@ namespace API.MainServer
 
         public bool PutPlayerCount(ServerToken serverToken, SeverNameAndPlayerCount snpc)
         {
-            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, $"GameServer"))
+            using (HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, $"main/GameServer"))
             {
                 string s = JsonUtility.ToJson(snpc);
                 message.Headers.Add("server_token", serverToken.Token);
