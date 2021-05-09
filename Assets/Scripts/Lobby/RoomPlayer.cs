@@ -13,6 +13,9 @@ public class RoomPlayer : NetworkRoomPlayer
     
     private TMP_Text _playerReadyStatusText;
 
+    [SyncVar]
+    public int spawnNum;
+
     public override void OnStartClient( )
     {
         base.OnStartClient();
