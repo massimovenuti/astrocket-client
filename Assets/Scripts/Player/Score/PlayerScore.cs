@@ -34,7 +34,6 @@ public class PlayerScore : NetworkBehaviour
         _rankText = GameObject.Find("Rank").GetComponent<TextMeshProUGUI>();
         if (isLocalPlayer)
         {
-            Debug.Log("Rank : " + rank);
             updateRankUi(0, rank);
         }
     }
@@ -126,7 +125,7 @@ public class PlayerScore : NetworkBehaviour
     {
         if (isLocalPlayer && _rankText != null)
         {
-            _rankText.text = newValue.ToString();
+            _rankText.text = "#" + newValue.ToString();
         }
     }
 
