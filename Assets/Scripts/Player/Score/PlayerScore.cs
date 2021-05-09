@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Mirror;
+﻿using Mirror;
 using TMPro;
+using UnityEngine;
 
 public class PlayerScore : NetworkBehaviour
 {
-    public short pointsKill = 0;
-    public short pointsAsteroids = 0;
-    public short pointsDeaths = 0;
-    public short pointsPowerUps = 0;
+    public short pointsKill = 100;
+    public short pointsAsteroids = 10;
+    public short pointsDeaths = -35;
+    public short pointsPowerUps = 25;
 
 
     [SyncVar(hook = "updatePointsUi")]
