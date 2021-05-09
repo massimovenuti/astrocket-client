@@ -68,4 +68,8 @@ public class StatsScreenManager : ScreenManager
         }
     }
 
+    void Update()
+    {
+        checkBackKey();
+    }
 }

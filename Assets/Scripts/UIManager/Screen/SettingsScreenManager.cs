@@ -125,6 +125,8 @@ public class SettingsScreenManager : ScreenManager
 
     void Update( )
     {
+        checkBackKey();
+
         foreach (GameObject cell in GameObject.FindGameObjectsWithTag("ControlsSettingsCell"))
         {
             ControlsSettingsManager csm = cell.GetComponent<ControlsSettingsManager>();
