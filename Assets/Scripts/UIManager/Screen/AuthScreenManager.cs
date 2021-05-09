@@ -8,9 +8,9 @@ public class AuthScreenManager : ScreenManager
 {
     private GameObject _loginForm;
     private GameObject _signupForm;
+    private GameObject _warningModal;
     private Button _loginToggleButton;
     private Button _signupToggleButton;
-
     private bool isOnLogin;
 
     private AuthAPICall _auth = new AuthAPICall();
@@ -41,6 +41,12 @@ public class AuthScreenManager : ScreenManager
 
         _loginToggleButton.onClick.AddListener(OnClickToggleLogIn);
         _signupToggleButton.onClick.AddListener(OnClickToggleSignUp);
+
+        _warningModal = transform.Find("WarningModal").gameObject;
+        ModalManager mm = transform.Find("WarningModal").GetComponent<ModalManager>();
+        mm.SetTitleValue("Warning");
+        mm.SetContentValue("An error occured. Please try again.");
+        _warningModal.SetActive(false);
 
         isOnLogin = true;
         _signupForm.SetActive(false);
@@ -96,7 +102,8 @@ public class AuthScreenManager : ScreenManager
             {
                 _tok = null;
                 Debug.Log($"{_auth.ErrorMessage}");
-                //showError(...); 
+                _warningModal.SetActive(true);
+                mdp.text = "";
             }
         }
     }
@@ -124,10 +131,13 @@ public class AuthScreenManager : ScreenManager
                 else
                 {
                     _tok = null;
+                    _warningModal.SetActive(true);
                 }
-                // else { showError(...); } 
             }
-            // else { showError(...); }
+            else
+            {
+                _warningModal.SetActive(true);
+            }
         }
     }
 }
