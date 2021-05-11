@@ -77,15 +77,15 @@ public class PlayerScore : NetworkBehaviour
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
         {
             PlayerScore score = go.GetComponent<PlayerScore>();
-            if (score.rank > rank && score.nbPoints < nbPoints)
-            {
-                score.rank--;
-                rank++;
-            }
-            else if (score.rank < rank && score.nbPoints > nbPoints)
+            if (score.rank < rank && score.nbPoints < nbPoints)
             {
                 score.rank++;
                 rank--;
+            }
+            else if (score.rank > rank && score.nbPoints > nbPoints)
+            {
+                score.rank--;
+                rank++;
             }
         }
     }

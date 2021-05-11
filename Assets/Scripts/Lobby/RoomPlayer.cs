@@ -60,6 +60,7 @@ public class RoomPlayer : NetworkRoomPlayer
         _roomManager.roomPlayers--;
         if (_lobbyScreen != null)
         {
+            _readyBtn.interactable = true;
             _lobbyScreen.setPlayers(_roomManager.roomPlayers);
         }
     }
@@ -77,7 +78,6 @@ public class RoomPlayer : NetworkRoomPlayer
 
     public override void ReadyStateChanged(bool _, bool newReadyState)
     {
-        TMP_Text readyStatusText = transform.Find("Canvas/ReadyStatus/TextStatus").GetComponent<TMP_Text>();
         Image readyStatusImage = transform.Find("Canvas/ReadyStatus/ImageStatus").GetComponent<Image>();
 
         if (newReadyState)

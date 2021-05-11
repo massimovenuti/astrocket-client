@@ -54,6 +54,9 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
     public int roomPlayers = 0;
 
+    [SerializeField]
+    private GameObject asteroidPrefab;
+
     public override void OnRoomServerSceneChanged(string sceneName)
     {
         //start game
@@ -381,7 +384,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         Quaternion rot = new Quaternion(tf.rotation.x, tf.rotation.y, tf.rotation.z, tf.rotation.w);
         rot *= Quaternion.Euler(Vector3.up * UnityEngine.Random.Range(-precision, precision));
 
-        GameObject go = Instantiate(spawnPrefabs.Find(prefab => prefab.tag == "Asteroid"), tf.position, rot);
+        GameObject go = Instantiate(asteroidPrefab, tf.position, rot);
         NetworkServer.Spawn(go);
 
         yield return new WaitForSeconds(1f);

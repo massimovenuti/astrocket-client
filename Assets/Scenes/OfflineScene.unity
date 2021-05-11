@@ -13140,6 +13140,8 @@ MonoBehaviour:
   _gameTimerPrefab: {fileID: 5690619982562071004, guid: b74003118f60ab442abf82005500a808,
     type: 3}
   roomPlayers: 0
+  asteroidPrefab: {fileID: 8559033464605830586, guid: f7d23cdc73ec8d24797df52fe3ef9961,
+    type: 3}
 --- !u!4 &976059974
 Transform:
   m_ObjectHideFlags: 0
