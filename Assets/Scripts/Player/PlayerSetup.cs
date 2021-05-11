@@ -19,16 +19,17 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
+            /*
             ResolutionManager sm = ResolutionManager.Instance;
             sm.SetResolution(sm.WindowedResolutions.Count - 1, false);
-
-            Transform t = this.transform.Find("Canvas/MobileControls");
-            t.gameObject.SetActive(false);
-
+            */
             #if UNITY_ANDROID
+                Transform t = transform.Find("Canvas/MobileControls");
+                Debug.Log(t);
                 t.gameObject.SetActive(true);
                 InputManager.InputManagerInst.RegisterMobileUser(t.gameObject);
             #endif
+
         }
         GameObject.Find("ScoreCanvas").GetComponent<ScoreTabManager>().addLigne(gameObject);
     }
