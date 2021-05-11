@@ -36,6 +36,16 @@ public class ScreenManager : MonoBehaviour
         
     }
 
+    protected void checkBackKey()
+    {
+#if UNITY_ANDROID
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            goToPreviousPage();
+        }
+#endif
+    }
+
     protected void goToPage(GameObject page)
     {
         if (page == null) { return; }

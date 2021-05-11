@@ -119,7 +119,7 @@ public class DestroyAsteroid : NetworkBehaviour
     {
         // 1 chance sur 2 de faire apparaitre
         // un power-up
-        if (Random.value >= 0.5)
+        if (Random.value >= 0.75)
         {
             // Pourcentage de change d'avoir un power-up
             int drop = Random.Range(1, 100);
@@ -127,9 +127,9 @@ public class DestroyAsteroid : NetworkBehaviour
             // TODO: change values
             if (drop <= 20)
                 InstantiatePowerUp(medikit);
-            else if (drop <= 40)
+            else if (drop <= 50)
                 InstantiatePowerUp(shield);
-            else if (drop <= 60)
+            else if (drop <= 80)
                 InstantiatePowerUp(akimbo);
             else
                 InstantiatePowerUp(bazooka);

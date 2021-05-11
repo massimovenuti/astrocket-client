@@ -30,7 +30,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
     private string serveurToken;
     private string serveurName;
 
-    private List<Transform> _roomPlayerSpawnsList;
+    private List<(Transform, bool)> _roomPlayerSpawnsList;
 
     private Tuple<bool, Color>[] playersColor = { 
         new Tuple<bool, Color>(true, Color.red), 
@@ -62,7 +62,6 @@ public class AsteroidNetworkManager : NetworkRoomManager
             GameObject go = Instantiate(_gameTimerPrefab);
             _gameTimer = go.GetComponent<GameTimer>();
             NetworkServer.Spawn(go);
-
             SpawnAsteroids();
 
         }
@@ -71,13 +70,11 @@ public class AsteroidNetworkManager : NetworkRoomManager
             GameObject go = Instantiate(_roomTimerPrefab);
             _roomTimer = go.GetComponent<RoomTimer>();
             NetworkServer.Spawn(go);
-
+            InitRoomSpawners();
             if (roomSlots.Count >= minPlayers)
             {
                 _roomTimer.StartTimer();
             }
-
-            InitRoomSpawners();
         }
     }
 
@@ -154,15 +151,39 @@ public class AsteroidNetworkManager : NetworkRoomManager
 
             allPlayersReady = false;
 
-            Transform spawnPoint = _roomPlayerSpawnsList[(clientIndex - 1)%maxConnections];
-            GameObject player = Instantiate(roomPlayerPrefab.gameObject, spawnPoint.position, spawnPoint.rotation);
+            int spawnNum = GetRoomPlayerSpawn();
+            Transform spawnTrans = _roomPlayerSpawnsList[spawnNum].Item1;
+            GameObject player = Instantiate(roomPlayerPrefab.gameObject, spawnTrans.position, spawnTrans.rotation);
             player.GetComponent<PlayerInfo>().playerName = userInfo.Name;
-            player.GetComponent<PlayerInfo>().color = getPlayerColor();
+            player.GetComponent<PlayerInfo>().color = GetPlayerColor();
+            player.GetComponent<RoomPlayer>().spawnNum = spawnNum;
             NetworkServer.AddPlayerForConnection(conn, player);
         }
     }
 
-    private Color getPlayerColor()
+    private int GetRoomPlayerSpawn()
+    {
+        for (int i = 0; i < _roomPlayerSpawnsList.Count; i++)
+        {
+            if (_roomPlayerSpawnsList[i].Item2 == true)
+            {
+                _roomPlayerSpawnsList[i] = (_roomPlayerSpawnsList[i].Item1, false);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void FreeRoomSpawn(int spawn)
+    {
+        if (spawn >= _roomPlayerSpawnsList.Count)
+        {
+            return;
+        }
+        _roomPlayerSpawnsList[spawn] = (_roomPlayerSpawnsList[spawn].Item1, true);
+    }
+
+    private Color GetPlayerColor()
     {
         for (int i = 0; i < playersColor.Length; i++)
         {
@@ -176,7 +197,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
         return Color.white;
     }
 
-    private void freePlayerColor(Color playerColor)
+    private void FreePlayerColor(Color playerColor)
     {
         for (int i = 0; i < playersColor.Length; i++)
         {
@@ -209,9 +230,10 @@ public class AsteroidNetworkManager : NetworkRoomManager
         foreach (NetworkIdentity co in clientObjects)
         {
             GameObject go = NetworkIdentity.spawned[co.netId].gameObject;
-            if (go.tag == "Player" || go.tag == "RoomPlayer")
+            if (go.tag == "RoomPlayer")
             {
-                freePlayerColor(go.GetComponent<PlayerInfo>().color);
+                FreePlayerColor(go.GetComponent<PlayerInfo>().color);
+                FreeRoomSpawn(go.GetComponent<RoomPlayer>().spawnNum);
                 break;
             }
         }
@@ -321,11 +343,19 @@ public class AsteroidNetworkManager : NetworkRoomManager
     [Server]
     private void InitRoomSpawners()
     {
-        _roomPlayerSpawnsList = new List<Transform>();
-        Transform camTransform = Camera.main.transform;
-
-        foreach (Transform t in GameObject.Find("SpawnPoints").transform)
+        if (_roomPlayerSpawnsList == null)
         {
+            _roomPlayerSpawnsList = new List<(Transform, bool)>();
+            for (int i = 0; i < maxConnections; i++)
+            {
+                _roomPlayerSpawnsList.Add((null, true));
+            }
+        }
+        Transform camTransform = Camera.main.transform;
+        Transform spawnsTrans = GameObject.Find("SpawnPoints").transform;
+        for (int i = 0; i < maxConnections; i++)
+        {
+            Transform t = spawnsTrans.GetChild(i);
             Vector3 direction = (camTransform.position - t.position).normalized;
 
             //create the rotation we need to be in to look at the target
@@ -335,7 +365,7 @@ public class AsteroidNetworkManager : NetworkRoomManager
             t.rotation = lookRotation;
 
             //t.rotation = Quaternion.LookRotation(( - transform.position).normalized);
-            _roomPlayerSpawnsList.Add(t);
+            _roomPlayerSpawnsList[i] = (t, _roomPlayerSpawnsList[i].Item2);
         }
     }
 

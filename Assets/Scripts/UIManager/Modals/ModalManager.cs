@@ -10,18 +10,18 @@ public class ModalManager : MonoBehaviour
     void Start()
     {
         Button closeButton;
-        closeButton = transform.Find("CloseButton").GetComponent<Button>();
-        closeButton.onClick.AddListener(hide);
+        closeButton = transform.Find("ModalBody/Footer/CloseButton").GetComponent<Button>();
+        closeButton.onClick.AddListener(Hide);
     }
 
-    protected void setTitleValue(string newTitle)
+    public void SetTitleValue(string newTitle)
     {
-        changeTextElementValue("ModalTitle", newTitle);
+        changeTextElementValue("ModalBody/ModalTitle", newTitle);
     }
 
-    protected void setContentValue(string newContent)
+    public void SetContentValue(string newContent)
     {
-        changeTextElementValue("ModalContent", newContent);
+        changeTextElementValue("ModalBody/ModalContent", newContent);
     }
 
     private void changeTextElementValue(string elementName, string newValue)
@@ -36,7 +36,7 @@ public class ModalManager : MonoBehaviour
         catch (Exception) { }
     }
 
-    protected void hide()
+    public void Hide()
     {
         gameObject.SetActive(false);
     }

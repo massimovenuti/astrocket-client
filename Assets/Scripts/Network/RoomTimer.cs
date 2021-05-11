@@ -48,7 +48,7 @@ public class RoomTimer : NetworkBehaviour
             }
             else
             {
-                _timerText.text = ((int)_timer).ToString();
+                _timerText.text = "Starting in " + ((uint)_timer).ToString() + " seconds";
             }
         }
     }
