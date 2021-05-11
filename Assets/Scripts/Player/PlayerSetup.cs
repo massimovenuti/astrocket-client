@@ -21,11 +21,14 @@ public class PlayerSetup : NetworkBehaviour
         {
             ResolutionManager sm = ResolutionManager.Instance;
             sm.SetResolution(sm.WindowedResolutions.Count - 1, false);
-#if UNITY_ANDROID
+
             Transform t = this.transform.Find("Canvas/MobileControls");
-            t.gameObject.SetActive(true);
-            InputManager.InputManagerInst.RegisterMobileUser(t.gameObject);
-#endif
+            t.gameObject.SetActive(false);
+
+            #if UNITY_ANDROID
+                t.gameObject.SetActive(true);
+                InputManager.InputManagerInst.RegisterMobileUser(t.gameObject);
+            #endif
         }
         GameObject.Find("ScoreCanvas").GetComponent<ScoreTabManager>().addLigne(gameObject);
     }
